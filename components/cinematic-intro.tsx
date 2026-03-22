@@ -4,18 +4,12 @@ import { useEffect, useRef, useState, useCallback } from "react";
 
 const HERO_BG = "radial-gradient(ellipse 100% 90% at 50% 50%, #081530 0%, #020709 100%)";
 
-type Phase = "rollin" | "suck" | "orbit" | "disperse" | "portal" | "done";
+type Phase = "rollin" | "suck" | "orbit" | "disperse" | "done";
 
 interface Particle {
   x: number; y: number;
   vx: number; vy: number;
   alpha: number; size: number; gold: boolean; orbitR: number;
-}
-
-const MASK_DURATION = 1050;
-
-function portalEase(t: number): number {
-  return 1 - Math.pow(1 - t, 2.2);
 }
 
 export default function CinematicIntro() {
@@ -30,40 +24,12 @@ export default function CinematicIntro() {
   }, []);
 
   useEffect(() => {
-    addTimeout(() => { phaseRef.current = "suck";    setPhase("suck");    }, 1000);
-    addTimeout(() => { phaseRef.current = "orbit";   setPhase("orbit");   }, 1700);
-    addTimeout(() => { phaseRef.current = "disperse";setPhase("disperse");}, 2800);
-    addTimeout(() => { phaseRef.current = "portal";  setPhase("portal");  }, 3100);
-    addTimeout(() => { phaseRef.current = "done";    setPhase("done");    }, 4500);
+    addTimeout(() => { phaseRef.current = "suck";    setPhase("suck");    }, 1800);
+    addTimeout(() => { phaseRef.current = "orbit";   setPhase("orbit");   }, 2500);
+    addTimeout(() => { phaseRef.current = "disperse";setPhase("disperse");}, 3500);
+    addTimeout(() => { phaseRef.current = "done";    setPhase("done");    }, 3900);
     return () => { timers.current.forEach(clearTimeout); timers.current = []; };
   }, [addTimeout]);
-
-  // Portal mask — expands from center after logo fades
-  useEffect(() => {
-    if (phase !== "portal") return;
-    const overlay = overlayRef.current;
-    if (!overlay) return;
-    const w = window.innerWidth, h = window.innerHeight;
-    const maxR = Math.hypot(w / 2, h / 2) + 60;
-    overlay.style.setProperty("-webkit-mask-size", "100% 100%");
-    overlay.style.setProperty("mask-size", "100% 100%");
-    overlay.style.setProperty("-webkit-mask-repeat", "no-repeat");
-    overlay.style.setProperty("mask-repeat", "no-repeat");
-    const openAt = performance.now() + 280;
-    let raf = 0;
-    const tick = (now: number) => {
-      const elapsed = now - openAt;
-      if (elapsed < 0) { raf = requestAnimationFrame(tick); return; }
-      const t = Math.min(elapsed / MASK_DURATION, 1);
-      const r = portalEase(t) * maxR;
-      const m = `radial-gradient(circle at center, transparent ${r}px, black ${r + 18}px)`;
-      overlay.style.setProperty("-webkit-mask-image", m);
-      overlay.style.setProperty("mask-image", m);
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [phase]);
 
   // Canvas particles — spawn outside screen edges
   useEffect(() => {
@@ -102,7 +68,7 @@ export default function CinematicIntro() {
 
     const animate = () => {
       const cur = phaseRef.current;
-      if (cur === "portal" || cur === "done") return;
+      if (cur === "done") return;
       ctx.clearRect(0, 0, w, h);
       const cx = w / 2, cy = h / 2;
 
@@ -129,10 +95,10 @@ export default function CinematicIntro() {
           p.vx += (dx / dist) * pull; p.vy += (dy / dist) * pull;
           p.vx *= 0.985; p.vy *= 0.985;
         } else if (cur === "suck") {
-          const pull = Math.min(10, 700 / (dist + 20));
+          const pull = Math.min(14, 900 / (dist + 20));
           p.vx += (dx / dist) * pull; p.vy += (dy / dist) * pull;
           const spd = Math.hypot(p.vx, p.vy);
-          if (spd > 26) { p.vx = (p.vx / spd) * 26; p.vy = (p.vy / spd) * 26; }
+          if (spd > 28) { p.vx = (p.vx / spd) * 28; p.vy = (p.vy / spd) * 28; }
           p.vx *= 0.85; p.vy *= 0.85;
         } else if (cur === "orbit") {
           const grav = Math.min(2.5, 160 / dist);
@@ -173,15 +139,15 @@ export default function CinematicIntro() {
   }, []);
 
   const isDone     = phase === "done";
-  const isPortal   = phase === "portal" || phase === "done";
   const isSpinning = phase === "orbit" || phase === "disperse";
+  const isDisperse = phase === "disperse";
 
-  // Animation for the inner logo div:
-  // - rollin phase → kc-rollIn (slides from right with 3D flip)
-  // - portal phase → kc-portalBurst (scales up & fades, no translate — wrapper handles centering)
+  // Logo animation:
+  // - rollin  → kc-rollIn (slow smooth slide from right with 3D flip)
+  // - disperse → kc-logoDisperse (scales up + fades out with blur, matching particle disperse)
   const innerAnimation =
-    phase === "rollin" ? "kc-rollIn 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards" :
-    isPortal           ? "kc-portalBurst 0.45s cubic-bezier(0.4, 0, 1, 1) forwards" :
+    phase === "rollin"   ? "kc-rollIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards" :
+    isDisperse           ? "kc-logoDisperse 0.4s cubic-bezier(0.4, 0, 1, 1) forwards" :
     undefined;
 
   return (
@@ -200,30 +166,29 @@ export default function CinematicIntro() {
           0%, 100% { opacity: 0.4; transform: scale(1); }
           50%      { opacity: 0.9; transform: scale(1.2); }
         }
-        /* portalBurst: no translate — wrapper is always centered */
-        @keyframes kc-portalBurst {
-          0%   { opacity: 1; transform: scale(1); }
-          100% { opacity: 0; transform: scale(1.6); }
+        @keyframes kc-logoDisperse {
+          0%   { opacity: 1; transform: scale(1);   filter: blur(0px); }
+          100% { opacity: 0; transform: scale(2.8); filter: blur(6px); }
         }
       `}</style>
 
-      {/* Dark overlay with expanding circle mask */}
+      {/* Dark overlay — fades out when done, revealing the site */}
       <div
         ref={overlayRef}
         style={{
           position: "fixed", inset: 0, zIndex: 9996, background: HERO_BG,
           opacity: isDone ? 0 : 1,
-          transition: isDone ? "opacity 0.4s ease" : "none",
+          transition: isDone ? "opacity 0.9s ease" : "none",
           pointerEvents: isDone ? "none" : "auto",
           transform: "translateZ(0)",
-          willChange: "mask-image, opacity",
+          willChange: "opacity",
         }}
       />
 
       {/*
         WRAPPER: position fixed, ALWAYS centered via transform.
-        Never changes — prevents the freeze/jump on phase change.
-        perspective here makes the inner div's rotateY look 3D.
+        Never changes — prevents freeze/jump on phase change.
+        perspective makes the inner div's rotateY look 3D.
       */}
       <div
         style={{
@@ -255,9 +220,7 @@ export default function CinematicIntro() {
               width: "100%", height: "100%", objectFit: "cover",
               borderRadius: "50%", display: "block",
               animation: isSpinning ? "kc-coinSpin 5s linear infinite" : "none",
-              filter: isPortal
-                ? "none"
-                : "drop-shadow(0 0 35px rgba(201,168,76,0.9)) drop-shadow(0 0 90px rgba(26,58,143,0.75))",
+              filter: "drop-shadow(0 0 35px rgba(201,168,76,0.9)) drop-shadow(0 0 90px rgba(26,58,143,0.75))",
             }}
           />
         </div>

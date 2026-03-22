@@ -1,12 +1,12 @@
 "use client";
 
 const officers = [
-  { title: "President",     name: "Bisan Abdalla",        year: "Class of 2027", email: "president@lcisd.org",     quote: "I love engaging with different communities and making a positive impact by helping out!", image: "/officers/bisan.png" },
-  { title: "Vice President",name: "Takashi Orellana",     year: "Class of 2026", email: "vicepresident@lcisd.org", quote: "I love volunteering and getting to connect more with my community & friends.", image: "/officers/takashi.png" },
-  { title: "Secretary",     name: "Ziruo Yin",            year: "Class of 2027", email: "secretary@lcisd.org",     quote: "I love that we are able to provide volunteer opportunities and participate in them.", image: "/officers/ziruo.png" },
-  { title: "Treasurer",     name: "Max Brito",            year: "Class of 2027", email: "treasurer@lcisd.org",     quote: "I love connecting with members and providing a way to better our communities.", image: "/officers/max.png" },
-  { title: "Editor",        name: "Ahlon Steward",        year: "Class of 2027", email: "editor@lcisd.org",        quote: "I love how everyone in Key Club is one big community.", image: "/officers/ahlon.png" },
-  { title: "Webmaster",     name: "Sesandi Devanarayana", year: "Class of 2027", email: "webmaster@lcisd.org",     quote: "I love the impact we are able to leave behind on communities by helping out!", image: "/officers/sesandi.png" },
+  { title: "President",     name: "Bisan Abdalla",        year: "Class of 2027", email: "president@lcisd.org",     quote: "I love engaging with different communities and making a positive impact by helping out!", image: "/officers/bisan.png",   photoScale: "scale(2.1)", photoOrigin: "50% 38%" },
+  { title: "Vice President",name: "Takashi Orellana",     year: "Class of 2026", email: "vicepresident@lcisd.org", quote: "I love volunteering and getting to connect more with my community & friends.", image: "/officers/takashi.png", photoScale: "scale(2.1)", photoOrigin: "50% 38%" },
+  { title: "Secretary",     name: "Ziruo Yin",            year: "Class of 2027", email: "secretary@lcisd.org",     quote: "I love that we are able to provide volunteer opportunities and participate in them.", image: "/officers/ziruo.png",   photoScale: "scale(2.1)", photoOrigin: "50% 42%" },
+  { title: "Treasurer",     name: "Max Brito",            year: "Class of 2027", email: "treasurer@lcisd.org",     quote: "I love connecting with members and providing a way to better our communities.", image: "/officers/max.png",     photoScale: "scale(1.8)", photoOrigin: "50% 50%" },
+  { title: "Editor",        name: "Ahlon Steward",        year: "Class of 2027", email: "editor@lcisd.org",        quote: "I love how everyone in Key Club is one big community.", image: "/officers/ahlon.png",   photoScale: "scale(2.1)", photoOrigin: "50% 60%" },
+  { title: "Webmaster",     name: "Sesandi Devanarayana", year: "Class of 2027", email: "webmaster@lcisd.org",     quote: "I love the impact we are able to leave behind on communities by helping out!", image: "/officers/sesandi.png", photoScale: "scale(2.1)", photoOrigin: "50% 42%" },
 ];
 
 const colors: Record<string, { glow: string; border: string; fallback: string }> = {
@@ -83,9 +83,6 @@ export default function OfficersSection() {
           object-fit: cover;
           border-radius: 50%;
           display: block;
-          /* zoom into face area — slides have name/text above & below the headshot */
-          transform: scale(2.8);
-          transform-origin: 50% 42%;
         }
 
         .officer-title {
@@ -161,7 +158,7 @@ export default function OfficersSection() {
               >
                 <div className="officer-avatar">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={o.image} alt={o.name} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
+                  <img src={o.image} alt={o.name} style={{ transform: o.photoScale, transformOrigin: o.photoOrigin }} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
                 </div>
                 <div className="officer-title">{o.title}</div>
                 <div className="officer-name">{o.name}</div>

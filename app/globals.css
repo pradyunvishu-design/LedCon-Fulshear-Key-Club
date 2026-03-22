@@ -17,10 +17,10 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* ─── GOLDEN KEY CURSOR ─── */
-* { cursor: url('/cursor-key.svg') 10 16, auto !important; }
+* { cursor: url('/cursor-key.svg') 10 10, auto !important; }
 a, button, [role="button"], label, select,
 .quiz-option, .btn-matcher, .btn-matcher-back, .faq-q {
-  cursor: url('/cursor-key.svg') 10 16, pointer !important;
+  cursor: url('/cursor-key.svg') 10 10, pointer !important;
 }
 
 html { scroll-behavior: smooth; }

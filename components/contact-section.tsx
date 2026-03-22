@@ -149,8 +149,10 @@ export default function ContactSection() {
         }
         .footer-links a:hover { color:var(--gold); }
         .footer-copy { font-size: 0.72rem; color: var(--silver); opacity: 0.5; text-align: right; }
+        .contact-card-last { grid-column: 2; }
         @media (max-width: 900px) {
           .contact-grid { grid-template-columns: repeat(2, 1fr); }
+          .contact-card-last { grid-column: auto; }
           .footer-links { display:none; }
         }
         @media (max-width: 500px) {
@@ -165,11 +167,11 @@ export default function ContactSection() {
           <h2 className="section-heading">Contact Us</h2>
         </div>
         <div className="contact-grid">
-          {contacts.map((c) => (
+          {contacts.map((c, i) => (
             <a
               key={c.title}
               href={c.href}
-              className="contact-card glass-card fade-in"
+              className={`contact-card glass-card fade-in${i === contacts.length - 1 ? " contact-card-last" : ""}`}
               target={c.href.startsWith("http") ? "_blank" : undefined}
               rel="noopener noreferrer"
               style={{ "--cc-glow": c.glow, "--cc-border": c.border } as React.CSSProperties}

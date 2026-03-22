@@ -1,13 +1,34 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <!-- Dark outline for visibility on any background -->
-  <circle cx="10" cy="16" r="8.5" fill="none" stroke="rgba(5,13,26,0.55)" stroke-width="4"/>
-  <rect x="16.5" y="13" width="14" height="6" rx="3" fill="rgba(5,13,26,0.55)"/>
-  <rect x="24" y="18" width="4" height="6" rx="2" fill="rgba(5,13,26,0.55)"/>
-  <rect x="19" y="18" width="4" height="7" rx="2" fill="rgba(5,13,26,0.55)"/>
+  <defs>
+    <linearGradient id="kg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5d878"/>
+      <stop offset="45%" stop-color="#c9a84c"/>
+      <stop offset="100%" stop-color="#7a5c1e"/>
+    </linearGradient>
+  </defs>
+  <!-- Dark shadow outline for visibility on any background -->
+  <g transform="rotate(45,16,16)" fill="rgba(2,5,10,0.55)">
+    <circle cx="8" cy="16" r="7.2" fill="none" stroke="rgba(2,5,10,0.55)" stroke-width="4"/>
+    <rect x="13" y="13" width="17" height="6" rx="3"/>
+    <rect x="23" y="18" width="4.5" height="6.5" rx="2"/>
+    <rect x="18" y="18" width="4.5" height="8" rx="2"/>
+    <circle cx="8" cy="16" r="3.2" fill="rgba(2,5,10,0.55)"/>
+  </g>
   <!-- Golden key -->
-  <circle cx="10" cy="16" r="7" fill="rgba(201,168,76,0.08)" stroke="#c9a84c" stroke-width="2.5"/>
-  <circle cx="10" cy="16" r="2.5" fill="#c9a84c"/>
-  <rect x="17" y="14.5" width="13" height="3" rx="1.5" fill="#c9a84c"/>
-  <rect x="25" y="17.5" width="3" height="4" rx="1.2" fill="#c9a84c"/>
-  <rect x="21" y="17.5" width="3" height="5" rx="1.2" fill="#c9a84c"/>
+  <g transform="rotate(45,16,16)">
+    <!-- Bow ring -->
+    <circle cx="8" cy="16" r="6" fill="rgba(201,168,76,0.1)" stroke="url(#kg)" stroke-width="2.3"/>
+    <!-- Inner bow fill dot -->
+    <circle cx="8" cy="16" r="2.4" fill="url(#kg)"/>
+    <!-- Shaft -->
+    <rect x="14" y="14.5" width="15" height="3" rx="1.5" fill="url(#kg)"/>
+    <!-- Tooth 1 (closer to tip, shorter) -->
+    <rect x="24" y="17.4" width="3" height="4.5" rx="1.3" fill="url(#kg)"/>
+    <!-- Tooth 2 (longer) -->
+    <rect x="19" y="17.4" width="3" height="5.8" rx="1.3" fill="url(#kg)"/>
+    <!-- Metallic highlight on shaft -->
+    <rect x="14.5" y="14.5" width="14" height="1.1" rx="0.5" fill="rgba(255,245,180,0.6)"/>
+    <!-- Metallic sheen on bow (top-left arc) -->
+    <path d="M5 12.5 A6 6 0 0 1 11 10.5" stroke="rgba(255,245,180,0.55)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  </g>
 </svg>
