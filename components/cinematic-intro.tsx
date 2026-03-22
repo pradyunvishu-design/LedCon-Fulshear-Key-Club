@@ -108,11 +108,10 @@ export default function CinematicIntro() {
       ctx.clearRect(0, 0, w, h);
 
       const cx = w / 2, cy = h / 2;
-      const cur    = phaseRef.current;
-      const isBurst = cur === "disperse" || cur === "portal";
+      const cur = phaseRef.current;
 
-      // ── 2 shockwave rings (reduced from 3) ──
-      if (isBurst) {
+      // ── 2 shockwave rings (disperse only — already gone by portal phase) ──
+      if (cur === "disperse") {
         shockR += 12;
         const maxDim = Math.hypot(w, h);
         if (shockR < maxDim * 1.5) {
@@ -126,7 +125,7 @@ export default function CinematicIntro() {
         }
       }
 
-      // ── 2 portal edge rings (reduced from 5) ──
+      // ── Portal edge rings ──
       if (cur === "portal" && maskOpenRef.current > 0) {
         const elapsed = performance.now() - maskOpenRef.current;
         if (elapsed > 0) {
@@ -135,22 +134,22 @@ export default function CinematicIntro() {
           const r  = portalEase(t) * maxR;
           const ef = Math.max(0, 1 - t * 1.1);
 
-          // Gold glow band
           ctx.beginPath(); ctx.arc(cx, cy, r + 8, 0, Math.PI * 2);
           ctx.strokeStyle = `rgba(201,168,76,${ef * 0.7})`; ctx.lineWidth = 10; ctx.stroke();
 
-          // White leading edge
           ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
           ctx.strokeStyle = `rgba(255,248,220,${ef * 0.95})`; ctx.lineWidth = 2; ctx.stroke();
         }
+        raf = requestAnimationFrame(animate);
+        return;
       }
 
-      // ── Particles (no trails) ──
+      // ── Particles (roll + disperse only — skip during portal) ──
       for (const p of particles) {
         const dx   = cx - p.x, dy = cy - p.y;
         const dist = Math.hypot(dx, dy) || 1;
 
-        if (!isBurst) {
+        if (cur === "roll") {
           // Gravity + orbital tangential force
           const grav = Math.min(1.6, 130 / dist);
           p.vx += (dx / dist) * grav; p.vy += (dy / dist) * grav;
@@ -257,7 +256,7 @@ export default function CinematicIntro() {
         <div style={{
           position: "absolute", inset: "-38%", borderRadius: "50%", pointerEvents: "none",
           background: "radial-gradient(circle, rgba(201,168,76,0.72) 0%, rgba(26,58,143,0.52) 44%, transparent 70%)",
-          animation: "kc-halo 1.4s ease-in-out infinite",
+          animation: isPortal ? "none" : "kc-halo 1.4s ease-in-out infinite",
         }} />
 
         <div style={{
@@ -287,7 +286,7 @@ export default function CinematicIntro() {
           style={{
             position: "fixed", inset: 0, zIndex: 9999,
             width: "100%", height: "100%", display: "block",
-            pointerEvents: "none",
+            pointerEvents: "none", willChange: "contents",
           }}
         />
       )}
