@@ -2,40 +2,47 @@
   <defs>
     <linearGradient id="gk" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%"   stop-color="#fce97c"/>
-      <stop offset="28%"  stop-color="#d9b040"/>
-      <stop offset="65%"  stop-color="#c09030"/>
-      <stop offset="100%" stop-color="#7a5a1a"/>
+      <stop offset="30%"  stop-color="#d9ae3c"/>
+      <stop offset="68%"  stop-color="#b88a28"/>
+      <stop offset="100%" stop-color="#7a5518"/>
     </linearGradient>
   </defs>
 
-  <!-- Dark shadow for visibility on any background -->
-  <g transform="rotate(55,16,16)">
-    <circle cx="6.5" cy="16" r="6.4" fill="none" stroke="rgba(0,2,6,0.72)" stroke-width="4"/>
-    <rect x="10" y="13.6" width="18.8" height="4.4" rx="2.2" fill="rgba(0,2,6,0.72)"/>
-    <rect x="23" y="17.7" width="4" height="5.8" rx="1.6" fill="rgba(0,2,6,0.72)"/>
-    <rect x="16.8" y="17.7" width="4" height="7.2" rx="1.6" fill="rgba(0,2,6,0.72)"/>
-    <circle cx="6.5" cy="16" r="3.1" fill="rgba(0,2,6,0.72)"/>
+  <!--
+    Key orientation: shaft tip (with teeth) at upper-left = cursor hotspot
+    Bow (ring) at lower-right.
+    Designed horizontally then rotated 45° CW so tip goes upper-left.
+    Horizontal: bow at RIGHT (cx=25.5), shaft from x=5 to x=25, teeth at LEFT hanging down.
+  -->
+
+  <!-- Dark shadow layer -->
+  <g transform="rotate(45,16,16)">
+    <rect x="4.2" y="13.8" width="21.8" height="4.4" rx="2.2" fill="rgba(0,2,7,0.75)"/>
+    <rect x="4.2" y="18" width="3.4" height="5.2" rx="1.5" fill="rgba(0,2,7,0.75)"/>
+    <rect x="8.6" y="18" width="3.4" height="7" rx="1.5" fill="rgba(0,2,7,0.75)"/>
+    <circle cx="25.5" cy="16" r="6.3" fill="none" stroke="rgba(0,2,7,0.75)" stroke-width="4.2"/>
+    <circle cx="25.5" cy="16" r="3" fill="rgba(0,2,7,0.75)"/>
   </g>
 
   <!-- Golden key body -->
-  <g transform="rotate(55,16,16)">
-    <!-- Bow ring -->
-    <circle cx="6.5" cy="16" r="5.7" fill="rgba(201,168,76,0.06)" stroke="url(#gk)" stroke-width="2.55"/>
-    <!-- Keyhole (open center) -->
-    <circle cx="6.5" cy="16" r="2.4" fill="#010509"/>
-    <!-- Subtle rim on keyhole -->
-    <circle cx="6.5" cy="16" r="2.4" fill="none" stroke="rgba(201,168,76,0.22)" stroke-width="0.5"/>
+  <g transform="rotate(45,16,16)">
     <!-- Shaft -->
-    <rect x="11.2" y="14.6" width="16.2" height="2.8" rx="1.4" fill="url(#gk)"/>
-    <!-- Tooth 1 — shorter, near tip -->
-    <rect x="23.5" y="17.3" width="2.7" height="4.2" rx="1.1" fill="url(#gk)"/>
-    <!-- Tooth 2 — taller, mid shaft -->
-    <rect x="17.5" y="17.3" width="2.7" height="5.8" rx="1.1" fill="url(#gk)"/>
-    <!-- Highlight: top face of shaft -->
-    <rect x="11.8" y="14.6" width="14.8" height="0.85" rx="0.4" fill="rgba(255,246,178,0.72)"/>
-    <!-- Highlight: bow arc (upper-left) -->
-    <path d="M3.7 13.6 A5.7 5.7 0 0 1 9.4 11.2" stroke="rgba(255,246,178,0.68)" stroke-width="1.15" fill="none" stroke-linecap="round"/>
-    <!-- Small shoulder glint where shaft meets bow -->
-    <circle cx="11.4" cy="16" r="0.8" fill="rgba(255,246,178,0.45)"/>
+    <rect x="5" y="14.6" width="20" height="2.8" rx="1.4" fill="url(#gk)"/>
+    <!-- Tooth 1 — shorter, at very tip -->
+    <rect x="5" y="17.3" width="2.8" height="4" rx="1.1" fill="url(#gk)"/>
+    <!-- Tooth 2 — taller, just behind tooth 1 -->
+    <rect x="9" y="17.3" width="2.8" height="5.4" rx="1.1" fill="url(#gk)"/>
+    <!-- Bow ring -->
+    <circle cx="25.5" cy="16" r="5.6" fill="rgba(201,168,76,0.06)" stroke="url(#gk)" stroke-width="2.55"/>
+    <!-- Keyhole -->
+    <circle cx="25.5" cy="16" r="2.3" fill="#010509"/>
+    <!-- Rim on keyhole -->
+    <circle cx="25.5" cy="16" r="2.3" fill="none" stroke="rgba(201,168,76,0.3)" stroke-width="0.5"/>
+    <!-- Shaft top highlight -->
+    <rect x="5.5" y="14.6" width="18.5" height="0.85" rx="0.4" fill="rgba(255,246,178,0.72)"/>
+    <!-- Bow highlight arc (upper-left of bow in unrotated space → lower-right after rotation) -->
+    <path d="M22 11.4 A5.6 5.6 0 0 1 28.6 14.8" stroke="rgba(255,246,178,0.65)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+    <!-- Shoulder glint where shaft meets bow -->
+    <circle cx="20.2" cy="16" r="0.85" fill="rgba(255,246,178,0.5)"/>
   </g>
 </svg>

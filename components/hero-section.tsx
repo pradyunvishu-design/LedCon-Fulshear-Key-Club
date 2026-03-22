@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const logoRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const mousePos = useRef({ x: 0, y: 0 });
   const router = useRouter();
@@ -256,16 +255,6 @@ export default function HeroSection() {
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       mousePos.current = { x: e.clientX, y: e.clientY };
-
-      // Logo 3D parallax
-      const logo = logoRef.current;
-      if (!logo) return;
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      const dx = (e.clientX - cx) / cx;
-      const dy = (e.clientY - cy) / cy;
-      logo.style.setProperty("--rx", `${-dy * 25}deg`);
-      logo.style.setProperty("--ry", `${dx * 25}deg`);
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
@@ -679,33 +668,11 @@ export default function HeroSection() {
       {/* HERO */}
       <section id="hero" className="hero-section" ref={heroRef}>
         <canvas className="hero-canvas" ref={canvasRef} />
-        <div className="hero-center-glow" />
 
         <div className="hero-content">
           <p className="hero-district-label">
             Texas · Oklahoma District &nbsp;·&nbsp; Key Club International &nbsp;·&nbsp; Since 1925
           </p>
-
-          {/* LOGO */}
-          <div className="hero-logo-entrance">
-            <div className="hero-logo-outer" ref={logoRef}>
-              <div className="logo-ring logo-ring-4" />
-              <div className="logo-ring logo-ring-3" />
-              <div className="logo-ring logo-ring-2" />
-              <div className="logo-conic-ring" />
-              <div className="logo-ring logo-ring-1" />
-              <div className="hero-logo-coin">
-                <div className="coin-face coin-front">
-                  <img src="/screen_transparent.png" alt="Key Club International Badge" />
-                  <div className="logo-shimmer" />
-                </div>
-                <div className="coin-face coin-back">
-                  <img src="/screen_transparent.png" alt="Key Club International Badge" />
-                </div>
-                <div className="coin-edge" />
-              </div>
-            </div>
-          </div>
 
           <h1 className="hero-title">
             <span className="line1">FULSHEAR</span>

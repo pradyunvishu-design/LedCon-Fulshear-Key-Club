@@ -189,8 +189,8 @@ export default function CinematicIntro() {
 
       {/*
         WRAPPER: position fixed, ALWAYS centered via transform.
-        Never changes — prevents freeze/jump on phase change.
-        perspective makes the inner div's rotateY look 3D.
+        display:none when done so the logo vanishes instantly behind
+        the still-opaque overlay (which then fades over 0.9s).
       */}
       <div
         style={{
@@ -201,6 +201,7 @@ export default function CinematicIntro() {
           zIndex: 9998,
           perspective: "1200px",
           pointerEvents: "none",
+          display: isDone ? "none" : undefined,
         }}
       >
         {isSpinning && (

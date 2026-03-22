@@ -27,6 +27,7 @@ export default function Navbar() {
     { label: "Calendar", href: "/calendar" },
     { label: "About", href: "/about" },
     { label: "Officers", href: "/officers" },
+    { label: "Links", href: "/links" },
     { label: "Impact", href: "/impact" },
     { label: "Contact", href: "/contact" },
   ];
