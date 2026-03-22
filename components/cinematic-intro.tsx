@@ -28,6 +28,8 @@ export default function CinematicIntro() {
     addTimeout(() => { phaseRef.current = "orbit";   setPhase("orbit");   }, 2500);
     addTimeout(() => { phaseRef.current = "disperse";setPhase("disperse");}, 3500);
     addTimeout(() => { phaseRef.current = "done";    setPhase("done");    }, 3900);
+    // After overlay finishes fading (0.9s), mark intro complete so hero section appears
+    addTimeout(() => { document.body.classList.add("intro-done"); }, 4850);
     return () => { timers.current.forEach(clearTimeout); timers.current = []; };
   }, [addTimeout]);
 

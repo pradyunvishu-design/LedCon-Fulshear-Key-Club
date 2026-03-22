@@ -330,6 +330,10 @@ export default function HeroSection() {
           50%      { opacity:0.8; }
         }
 
+        /* ── Hide hero until cinematic intro finishes ── */
+        #hero { transition: opacity 0.7s ease; }
+        body:not(.intro-done) #hero { opacity: 0; }
+
         /* ───── NAV ───── */
         .kc-nav {
           position: fixed; top:0; left:0; right:0; z-index:100;

@@ -1,34 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
   <defs>
-    <linearGradient id="kg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f5d878"/>
-      <stop offset="45%" stop-color="#c9a84c"/>
-      <stop offset="100%" stop-color="#7a5c1e"/>
+    <linearGradient id="gk" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#fce97c"/>
+      <stop offset="28%"  stop-color="#d9b040"/>
+      <stop offset="65%"  stop-color="#c09030"/>
+      <stop offset="100%" stop-color="#7a5a1a"/>
     </linearGradient>
   </defs>
-  <!-- Dark shadow outline for visibility on any background -->
-  <g transform="rotate(45,16,16)" fill="rgba(2,5,10,0.55)">
-    <circle cx="8" cy="16" r="7.2" fill="none" stroke="rgba(2,5,10,0.55)" stroke-width="4"/>
-    <rect x="13" y="13" width="17" height="6" rx="3"/>
-    <rect x="23" y="18" width="4.5" height="6.5" rx="2"/>
-    <rect x="18" y="18" width="4.5" height="8" rx="2"/>
-    <circle cx="8" cy="16" r="3.2" fill="rgba(2,5,10,0.55)"/>
+
+  <!-- Dark shadow for visibility on any background -->
+  <g transform="rotate(55,16,16)">
+    <circle cx="6.5" cy="16" r="6.4" fill="none" stroke="rgba(0,2,6,0.72)" stroke-width="4"/>
+    <rect x="10" y="13.6" width="18.8" height="4.4" rx="2.2" fill="rgba(0,2,6,0.72)"/>
+    <rect x="23" y="17.7" width="4" height="5.8" rx="1.6" fill="rgba(0,2,6,0.72)"/>
+    <rect x="16.8" y="17.7" width="4" height="7.2" rx="1.6" fill="rgba(0,2,6,0.72)"/>
+    <circle cx="6.5" cy="16" r="3.1" fill="rgba(0,2,6,0.72)"/>
   </g>
-  <!-- Golden key -->
-  <g transform="rotate(45,16,16)">
+
+  <!-- Golden key body -->
+  <g transform="rotate(55,16,16)">
     <!-- Bow ring -->
-    <circle cx="8" cy="16" r="6" fill="rgba(201,168,76,0.1)" stroke="url(#kg)" stroke-width="2.3"/>
-    <!-- Inner bow fill dot -->
-    <circle cx="8" cy="16" r="2.4" fill="url(#kg)"/>
+    <circle cx="6.5" cy="16" r="5.7" fill="rgba(201,168,76,0.06)" stroke="url(#gk)" stroke-width="2.55"/>
+    <!-- Keyhole (open center) -->
+    <circle cx="6.5" cy="16" r="2.4" fill="#010509"/>
+    <!-- Subtle rim on keyhole -->
+    <circle cx="6.5" cy="16" r="2.4" fill="none" stroke="rgba(201,168,76,0.22)" stroke-width="0.5"/>
     <!-- Shaft -->
-    <rect x="14" y="14.5" width="15" height="3" rx="1.5" fill="url(#kg)"/>
-    <!-- Tooth 1 (closer to tip, shorter) -->
-    <rect x="24" y="17.4" width="3" height="4.5" rx="1.3" fill="url(#kg)"/>
-    <!-- Tooth 2 (longer) -->
-    <rect x="19" y="17.4" width="3" height="5.8" rx="1.3" fill="url(#kg)"/>
-    <!-- Metallic highlight on shaft -->
-    <rect x="14.5" y="14.5" width="14" height="1.1" rx="0.5" fill="rgba(255,245,180,0.6)"/>
-    <!-- Metallic sheen on bow (top-left arc) -->
-    <path d="M5 12.5 A6 6 0 0 1 11 10.5" stroke="rgba(255,245,180,0.55)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    <rect x="11.2" y="14.6" width="16.2" height="2.8" rx="1.4" fill="url(#gk)"/>
+    <!-- Tooth 1 — shorter, near tip -->
+    <rect x="23.5" y="17.3" width="2.7" height="4.2" rx="1.1" fill="url(#gk)"/>
+    <!-- Tooth 2 — taller, mid shaft -->
+    <rect x="17.5" y="17.3" width="2.7" height="5.8" rx="1.1" fill="url(#gk)"/>
+    <!-- Highlight: top face of shaft -->
+    <rect x="11.8" y="14.6" width="14.8" height="0.85" rx="0.4" fill="rgba(255,246,178,0.72)"/>
+    <!-- Highlight: bow arc (upper-left) -->
+    <path d="M3.7 13.6 A5.7 5.7 0 0 1 9.4 11.2" stroke="rgba(255,246,178,0.68)" stroke-width="1.15" fill="none" stroke-linecap="round"/>
+    <!-- Small shoulder glint where shaft meets bow -->
+    <circle cx="11.4" cy="16" r="0.8" fill="rgba(255,246,178,0.45)"/>
   </g>
 </svg>
