@@ -117,7 +117,7 @@ export default function ImpactSection() {
 
         .photo-card {
           position: relative; border-radius: 12px; overflow: hidden;
-          aspect-ratio: 4 / 3;
+          height: 210px;
           border: 1px solid rgba(201,168,76,0.2);
           box-shadow: 0 8px 30px rgba(0,0,0,0.35);
           cursor: pointer;

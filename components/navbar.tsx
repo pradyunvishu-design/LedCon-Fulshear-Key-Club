@@ -39,8 +39,9 @@ export default function Navbar() {
           position: fixed; top:0; left:0; right:0; z-index:100;
           display:flex; align-items:center; justify-content:space-between;
           padding:1.4rem 3rem;
-          transition: all 0.4s ease;
-          animation: navReveal 0.8s ease both;
+          transition: padding 0.4s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+          transform: translateZ(0);
+          backface-visibility: hidden;
         }
         .kc-nav.scrolled {
           background: rgba(5,13,26,0.88);
@@ -102,10 +103,6 @@ export default function Navbar() {
           .kc-nav.scrolled{ padding:0.75rem 1.5rem; }
           .kc-nav-links{ display:none; }
           .kc-hamburger{ display:flex; }
-        }
-        @keyframes navReveal {
-          from { opacity:0; transform:translateY(-16px); }
-          to   { opacity:1; transform:translateY(0); }
         }
       `}</style>
       <nav className={`kc-nav${scrolled ? " scrolled" : ""}`}>

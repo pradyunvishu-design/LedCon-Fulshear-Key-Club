@@ -218,23 +218,24 @@ export default function CinematicIntro() {
           0%, 100% { opacity: 0.45; transform: scale(1); }
           50%      { opacity: 0.9;  transform: scale(1.18); }
         }
-        /* NO blur() in keyframes — biggest perf killer removed */
         @keyframes kc-portalBurst {
-          0%   { opacity: 1;    transform: translateX(-50%) translateY(-50%) scale(1);    filter: brightness(1);  }
-          10%  { opacity: 1;    transform: translateX(-50%) translateY(-50%) scale(1.04); filter: brightness(4);  }
-          20%  { opacity: 1;    transform: translateX(-50%) translateY(-50%) scale(1.01); filter: brightness(10); }
-          38%  { opacity: 0.75; transform: translateX(-50%) translateY(-50%) scale(2.4);  filter: brightness(4);  }
-          65%  { opacity: 0.2;  transform: translateX(-50%) translateY(-50%) scale(6.5);  filter: brightness(1);  }
-          100% { opacity: 0;    transform: translateX(-50%) translateY(-50%) scale(14);   filter: brightness(0);  }
+          0%   { opacity: 1;    transform: translateX(-50%) translateY(-50%) scale(1);   }
+          15%  { opacity: 1;    transform: translateX(-50%) translateY(-50%) scale(1.06); }
+          40%  { opacity: 0.65; transform: translateX(-50%) translateY(-50%) scale(2.8);  }
+          70%  { opacity: 0.15; transform: translateX(-50%) translateY(-50%) scale(8);    }
+          100% { opacity: 0;    transform: translateX(-50%) translateY(-50%) scale(16);   }
         }
       `}</style>
 
-      {!isDone && (
-        <div
-          ref={overlayRef}
-          style={{ position: "fixed", inset: 0, zIndex: 9996, background: HERO_BG }}
-        />
-      )}
+      <div
+        ref={overlayRef}
+        style={{
+          position: "fixed", inset: 0, zIndex: 9996, background: HERO_BG,
+          opacity: isDone ? 0 : 1,
+          transition: isDone ? "opacity 0.3s ease" : "none",
+          pointerEvents: isDone ? "none" : "auto",
+        }}
+      />
 
       {/* Logo — always centered, bursts into portal */}
       <div
@@ -272,9 +273,8 @@ export default function CinematicIntro() {
               width: "100%", height: "100%", objectFit: "cover",
               borderRadius: "50%", clipPath: "circle(50% at 50% 50%)",
               display: "block",
-              animation: "kc-coinSpin 8s cubic-bezier(0.37,0,0.63,1) infinite",
-              /* 2 drop-shadows instead of 4 — huge paint cost reduction */
-              filter: "drop-shadow(0 0 35px rgba(201,168,76,0.9)) drop-shadow(0 0 90px rgba(26,58,143,0.75))",
+              animation: isPortal ? "none" : "kc-coinSpin 8s cubic-bezier(0.37,0,0.63,1) infinite",
+              filter: isPortal ? "none" : "drop-shadow(0 0 35px rgba(201,168,76,0.9)) drop-shadow(0 0 90px rgba(26,58,143,0.75))",
             }}
           />
         </div>
