@@ -58,18 +58,18 @@ export default function CinematicIntro() {
 
   // ── Session guard + phase sequencer ────────────────────────────────────────
   // Timeline:
-  //   0ms  → warp  : stars blast at full speed
-  //   500ms → zoom  : logo zooms in from a tiny point
-  //   1300ms → reveal: logo expands huge + overlay fades → site appears from logo
-  //   2000ms → done : unmount
+  //   0ms    → warp  : stars blast at full speed for 1.5s
+  //   1500ms → zoom  : logo zooms in (circular, site-matched size)
+  //   2600ms → reveal: overlay slowly fades → site appears underneath
+  //   4200ms → done  : unmount
   useEffect(() => {
-    if (sessionStorage.getItem("introPlayed_v4")) return;
-    sessionStorage.setItem("introPlayed_v4", "true");
+    if (sessionStorage.getItem("introPlayed_v5")) return;
+    sessionStorage.setItem("introPlayed_v5", "true");
     setShouldRender(true);
 
-    addTimeout(() => { phaseRef.current = "zoom";   setPhaseState("zoom");   }, 500);
-    addTimeout(() => { phaseRef.current = "reveal"; setPhaseState("reveal"); }, 1300);
-    addTimeout(() => { phaseRef.current = "done";   setPhaseState("done");   }, 2000);
+    addTimeout(() => { phaseRef.current = "zoom";   setPhaseState("zoom");   }, 1500);
+    addTimeout(() => { phaseRef.current = "reveal"; setPhaseState("reveal"); }, 2600);
+    addTimeout(() => { phaseRef.current = "done";   setPhaseState("done");   }, 4200);
 
     return () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
   }, [addTimeout]);
@@ -90,8 +90,8 @@ export default function CinematicIntro() {
     const animate = (now: number) => {
       if (phaseRef.current === "done") return;
       const elapsed = now - startTime;
-      // Jump straight to warp — ramp 10→40 over the first 500ms
-      const speed = elapsed < 500 ? 10 + (elapsed / 500) * 30 : 40;
+      // Ramp 10→40 over the first 1500ms, then hold
+      const speed = elapsed < 1500 ? 10 + (elapsed / 1500) * 30 : 40;
       ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, w, h);
       for (const star of stars) { star.update(speed); star.draw(ctx); }
@@ -108,7 +108,6 @@ export default function CinematicIntro() {
   if (!shouldRender || phaseState === "done") return null;
 
   const isWarp   = phaseState === "warp";
-  const isZoom   = phaseState === "zoom";
   const isReveal = phaseState === "reveal";
 
   return (
@@ -117,9 +116,9 @@ export default function CinematicIntro() {
         position: "fixed", inset: 0, zIndex: 9999,
         background: "#000", overflow: "hidden",
         display: "flex", alignItems: "center", justifyContent: "center",
-        // During reveal: entire overlay fades to zero → site appears underneath
+        // During reveal: entire overlay slowly fades → site appears underneath
         opacity: isReveal ? 0 : 1,
-        transition: isReveal ? "opacity 0.7s cubic-bezier(0.4,0,1,1)" : "none",
+        transition: isReveal ? "opacity 1.6s cubic-bezier(0.4,0,0.6,1)" : "none",
         pointerEvents: isReveal ? "none" : "auto",
       }}
     >
@@ -129,32 +128,26 @@ export default function CinematicIntro() {
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
       />
 
-      {/* Logo — zooms in then explodes outward as overlay fades */}
+      {/* Logo — circular, matches hero coin size (320px) */}
       <div
         style={{
           position: "relative", zIndex: 10,
-          width: "72vmin", height: "72vmin",
-          maxWidth: "560px", maxHeight: "560px",
-          // warp:   tiny blurred speck
-          // zoom:   snaps to full size sharp
-          // reveal: blasts outward to 4× while fading
+          width: "min(320px, 45vmin)", height: "min(320px, 45vmin)",
+          borderRadius: "50%",
+          // warp: tiny blurred speck  |  zoom: snaps to full size  |  reveal: stays put as overlay fades
           opacity:   isWarp ? 0 : 1,
-          transform: isWarp ? "scale(0.04)"
-                   : isReveal ? "scale(4.5)"
-                   : "scale(1)",
-          filter:    isWarp ? "blur(40px)"
-                   : isReveal ? "blur(8px)"
-                   : "blur(0px)",
+          transform: isWarp ? "scale(0.04)" : "scale(1)",
+          filter:    isWarp ? "blur(40px)" : "blur(0px)",
           transition: isReveal
-            ? "transform 0.7s cubic-bezier(0.4,0,1,1), filter 0.5s ease-in"
-            : "transform 0.75s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease-out, filter 0.6s ease-out",
+            ? "none"
+            : "transform 0.9s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease-out, filter 0.7s ease-out",
           willChange: "transform, opacity, filter",
         }}
       >
         {/* Gold radial glow behind badge */}
         <div style={{
-          position: "absolute", inset: "-25%", borderRadius: "50%", pointerEvents: "none",
-          background: "radial-gradient(circle, rgba(201,168,76,0.3) 0%, rgba(26,58,143,0.18) 45%, transparent 72%)",
+          position: "absolute", inset: "-30%", borderRadius: "50%", pointerEvents: "none",
+          background: "radial-gradient(circle, rgba(201,168,76,0.35) 0%, rgba(26,58,143,0.2) 45%, transparent 72%)",
         }} />
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -162,9 +155,11 @@ export default function CinematicIntro() {
           src="/screen_transparent.png"
           alt="Key Club International Badge"
           style={{
-            width: "100%", height: "100%", objectFit: "contain",
+            width: "100%", height: "100%", objectFit: "cover",
+            borderRadius: "50%",
+            clipPath: "circle(50% at 50% 50%)",
             position: "relative", zIndex: 1,
-            filter: "drop-shadow(0 0 48px rgba(201,168,76,0.6)) drop-shadow(0 0 100px rgba(26,58,143,0.45))",
+            filter: "drop-shadow(0 0 40px rgba(201,168,76,0.6)) drop-shadow(0 0 100px rgba(26,58,143,0.45))",
           }}
         />
       </div>
