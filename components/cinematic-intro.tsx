@@ -109,7 +109,7 @@ export default function CinematicIntro() {
 
       const cx = w / 2, cy = h / 2;
       const cur    = phaseRef.current;
-      const isBurst = cur === "disperse" || cur === "portal";
+      const isBurst = cur === "disperse";
 
       // ── 2 shockwave rings (reduced from 3) ──
       if (isBurst) {
