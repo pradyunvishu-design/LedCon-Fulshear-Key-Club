@@ -1,39 +1,39 @@
 "use client";
 
-// Gallery images — paste URLs from keyclubfulshear.vercel.app gallery here:
+// Drop your images into /public/story/ with these filenames:
 const storyImages = [
-  "", // Entry 1 — Club Founded
-  "", // Entry 2 — Community Roots
-  "", // Entry 3 — Food Bank
-  "", // Entry 4 — Blood Drive
-  "", // Entry 5 — Tutoring
+  "/story/food-drive.jpg",         // Entry 1 — PDF page 2 (SLAM DUNK post)
+  "/story/service-generations.jpg",// Entry 2 — PDF page 3 (SERVICE FOR GENERATIONS post)
+  "/story/100-year-celebration.jpg",// Entry 3 — PDF page 5 (100 Year Celebration post)
+  "/story/community-feeding.jpg",  // Entry 4 — PDF page 13 or 16 (kitchen group photo)
+  "/story/community-events.jpg",   // Entry 5 — PDF page 10 (lion dance photo)
 ];
 
 const stories = [
   {
-    year: "2016",
-    title: "A Club is Founded",
-    body: "When Fulshear High School opened its doors, so did Key Club — one of the first student organizations at CFHS. We joined Division 3S of the Texas-Oklahoma District, becoming part of a 17,000-member network dedicated to service.",
+    year: "Fall 2024",
+    title: "Slam Dunk! The Campus Food Drive",
+    body: "Our members turned lunchtime into service time. We collected hundreds of bags of fresh produce — including bags of Granny Smith apples — and distributed them to students and families across campus. When the last bag hit the bin, there was only one thing left to say: SLAM DUNK.",
   },
   {
-    year: "2022",
-    title: "Growing Community Roots",
-    body: "As membership grew, so did our reach. Members launched recurring service projects across Fulshear — from community food drives at the Fulshear Community Center to clean-up events at local parks. Service became our identity.",
-  },
-  {
-    year: "2023",
-    title: "Houston Food Bank Partnership",
-    body: "We partnered with the Houston Food Bank to package over 5,000 meals for families in the greater Fulshear area. This became one of our largest and most impactful events of the year — and we've done it every year since.",
-  },
-  {
-    year: "2024",
-    title: "Blood Drive Initiative",
-    body: "Our club hosted 3 community blood drives across Fort Bend County, connecting local donors with hospitals in need. Each drive brought members, families, and community members together for a single lifesaving mission.",
+    year: "Spring 2025",
+    title: "Service for Generations",
+    body: "Inspired by Key Club International's 'Service for Generations' initiative, our members spent an afternoon writing heartfelt cards and distributing care items for those who needed them most. Every card written, every shirt handed off — a reminder that kindness has no age limit.",
   },
   {
     year: "2025",
-    title: "Tutoring & Education Outreach",
-    body: "We launched a peer tutoring program that reached 120+ local elementary students every semester. Seeing younger kids light up with understanding — that's what Key Club is all about. The program continues to grow every year.",
+    title: "100 Years of Key Club",
+    body: "Key Club International turned 100 in 2025 — and Fulshear Key Club celebrated in style. We hosted a special event where members competed in teams to pitch their most creative service ideas. The best part? The winning team got to pie the officers in the face. A century of service, one glorious mess.",
+  },
+  {
+    year: "Ongoing",
+    title: "Feeding the Community",
+    body: "Gloves on, sleeves rolled up. Our members regularly take over the kitchen to prepare food trays and meals for local community events and families in need. From foil pans to full spreads, our food service projects remind us that the most direct form of care is a warm meal.",
+  },
+  {
+    year: "Year-Round",
+    title: "Building Community Through Celebration",
+    body: "From a Princess Night that brought hundreds of young girls to the stage, to a cultural showcase featuring traditional lion dancing with live fire — Fulshear Key Club shows up where it counts. We believe that celebration and service go hand in hand, and our community feels it every time.",
   },
 ];
 
@@ -166,7 +166,7 @@ export default function ImpactSection() {
           <div className="story-header fade-in">
             <p className="section-label" style={{ justifyContent: "center" }}>Club History</p>
             <h2 className="section-heading">Our Story</h2>
-            <p>From Day 1 at Fulshear High School to thousands of meals packed and hundreds of students tutored — this is how we got here.</p>
+            <p>Food drives, cultural celebrations, cooking for the community, 100-year milestones — here&apos;s what we&apos;ve been up to.</p>
           </div>
 
           {stories.map((s, i) => {
