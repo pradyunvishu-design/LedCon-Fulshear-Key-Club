@@ -2,7 +2,6 @@
 
 const contacts = [
   {
-    icon: "✉️",
     title: "Club Email",
     val: "your-email@lcisd.org",
     sub: "Managed by Webmaster",
@@ -11,7 +10,6 @@ const contacts = [
     border: "rgba(201,168,76,0.5)",
   },
   {
-    icon: "📸",
     title: "Instagram",
     val: "@fulshearkeyclub",
     sub: "DM us anytime",
@@ -20,7 +18,6 @@ const contacts = [
     border: "rgba(200,80,180,0.5)",
   },
   {
-    icon: "🏅",
     title: "Lt. Governor",
     val: "[ LTG Name ]",
     sub: "ltg@tokeyclub.com",
@@ -29,7 +26,6 @@ const contacts = [
     border: "rgba(100,149,237,0.5)",
   },
   {
-    icon: "🖥️",
     title: "District Tech",
     val: "Website Submissions",
     sub: "techpro@tokeyclub.com",
@@ -38,7 +34,6 @@ const contacts = [
     border: "rgba(78,203,113,0.5)",
   },
   {
-    icon: "📍",
     title: "Meetings",
     val: "LGI Room",
     sub: "Every other Wednesday @ 4:15 PM",
@@ -47,7 +42,6 @@ const contacts = [
     border: "rgba(255,140,0,0.5)",
   },
   {
-    icon: "📱",
     title: "Remind 101",
     val: "@cfhs-key",
     sub: "Text to 81010",
@@ -181,7 +175,7 @@ export default function ContactSection() {
           ))}
         </div>
         <div className="site-footer">
-          <div className="footer-logo">CFHS <span>✦</span> Key Club</div>
+          <div className="footer-logo">CFHS <span>·</span> Key Club</div>
           <ul className="footer-links">
             {["about", "events", "officers", "contact"].map((l) => (
               <li key={l}><a href={`#${l}`}>{l}</a></li>

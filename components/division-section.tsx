@@ -53,7 +53,7 @@ export default function DivisionSection() {
         </div>
         <div className="division-grid">
           <div className="division-card glass-card fade-in">
-            <div className="division-card-title">🏫 Division</div>
+            <div className="division-card-title">Division</div>
             {[
               ["School", "Fulshear High School"],
               ["Mascot", "Home of the Chargers"],
@@ -68,7 +68,7 @@ export default function DivisionSection() {
             ))}
           </div>
           <div className="division-card glass-card fade-in">
-            <div className="division-card-title">🌐 Sponsor</div>
+            <div className="division-card-title">Sponsor</div>
             {[
               ["District", "Texas-Oklahoma District"],
               ["Website", "tokeyclub.com"],

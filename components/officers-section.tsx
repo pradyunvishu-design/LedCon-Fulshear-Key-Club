@@ -9,14 +9,6 @@ const officers = [
   { title: "Webmaster", name: "Jordan Taylor", year: "Class of 2026", email: "webmaster@lcisd.org", quote: "Connecting us through technology." },
 ];
 
-const icons: Record<string, string> = {
-  "President": "👑",
-  "Vice President": "⭐",
-  "Secretary": "📋",
-  "Treasurer": "💰",
-  "Editor": "✏️",
-  "Webmaster": "💻",
-};
 
 const colors: Record<string, { glow: string; border: string; avatar: string }> = {
   "President":      { glow: "rgba(201,168,76,0.45)",  border: "rgba(201,168,76,0.7)",   avatar: "linear-gradient(135deg,#c9a84c,#f0c85a)" },

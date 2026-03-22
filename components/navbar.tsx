@@ -109,7 +109,7 @@ export default function Navbar() {
         }
       `}</style>
       <nav className={`kc-nav${scrolled ? " scrolled" : ""}`}>
-        <Link href="/" className="kc-nav-logo">CFHS <span>✦</span> KEY CLUB</Link>
+        <Link href="/" className="kc-nav-logo">CFHS <span>·</span> KEY CLUB</Link>
         <ul className="kc-nav-links">
           {navLinks.map((l) => (
             <li key={l.href}>

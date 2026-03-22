@@ -2,28 +2,28 @@
 
 const links = [
   {
-    icon: "🌐",
+    icon: "",
     title: "District Website",
     desc: "Texas-Oklahoma Key Club District",
     url: "https://tokeyclub.com",
     label: "tokeyclub.com",
   },
   {
-    icon: "🔑",
+    icon: "",
     title: "Key Club International",
     desc: "Official KCI Site",
     url: "https://www.keyclub.org",
     label: "keyclub.org",
   },
   {
-    icon: "🏫",
+    icon: "",
     title: "Fulshear High School",
     desc: "Home of the Chargers",
     url: "https://www.lcisd.org/schools/high-schools/fulshear-high-school",
     label: "lcisd.org",
   },
   {
-    icon: "📸",
+    icon: "",
     title: "Instagram",
     desc: "Follow us @fulshearkeyclub",
     url: "https://instagram.com/fulshearkeyclub",

@@ -8,7 +8,6 @@ const events = [
     tag: "Officers Required",
     tagColor: "var(--gold)",
     tagGlow: "rgba(201,168,76,0.25)",
-    icon: "🏛️",
   },
   {
     date: "Apr 12",
@@ -17,7 +16,6 @@ const events = [
     tag: "Volunteer",
     tagColor: "#4a9eff",
     tagGlow: "rgba(74,158,255,0.25)",
-    icon: "🥫",
   },
   {
     date: "Apr 22",
@@ -26,7 +24,6 @@ const events = [
     tag: "Service",
     tagColor: "#4ecb71",
     tagGlow: "rgba(78,203,113,0.25)",
-    icon: "🌿",
   },
 ];
 
