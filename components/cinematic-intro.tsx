@@ -60,13 +60,9 @@ export default function CinematicIntro() {
       Math.hypot(w - cx, h - cy)
     ) + 20;
 
-    // Logo floats from center (50%) up to hero position (27%), then fades
-    logo.style.transition = [
-      "top 1.1s cubic-bezier(0.16,1,0.3,1)",
-      "opacity 0.85s ease-in 0.35s",
-    ].join(", ");
-    logo.style.top     = "27%";
-    logo.style.opacity = "0";
+    // Logo floats from center (50%) up to hero position (27%) and stays
+    logo.style.transition = "top 1.1s cubic-bezier(0.16,1,0.3,1)";
+    logo.style.top = "27%";
 
     // Portal mask: radial transparent hole expanding from center
     const duration = 1400;
