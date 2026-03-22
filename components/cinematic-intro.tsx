@@ -104,12 +104,12 @@ export default function CinematicIntro() {
 
     let raf = 0;
     const animate = () => {
-      if (phaseRef.current === "done" || phaseRef.current === "portal") return;
+      if (phaseRef.current === "done") return;
       ctx.clearRect(0, 0, w, h);
 
       const cx = w / 2, cy = h / 2;
       const cur    = phaseRef.current;
-      const isBurst = cur === "disperse";
+      const isBurst = cur === "disperse" || cur === "portal";
 
       // ── 2 shockwave rings (reduced from 3) ──
       if (isBurst) {
