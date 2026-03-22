@@ -4,7 +4,8 @@ import { useEffect, useRef, useState, useCallback } from "react";
 
 const HERO_BG = "radial-gradient(ellipse 100% 90% at 50% 50%, #081530 0%, #020709 100%)";
 
-type Phase = "roll" | "disperse" | "portal" | "done";
+// Phases: logo rolls in → particles suck in → orbit → disperse → portal reveals site
+type Phase = "rollin" | "suck" | "orbit" | "disperse" | "portal" | "done";
 
 interface Particle {
   x: number; y: number;
@@ -12,23 +13,18 @@ interface Particle {
   alpha: number; size: number; gold: boolean; orbitR: number;
 }
 
-const MASK_DELAY    = 200;
-const MASK_DURATION = 1300;
+const MASK_DURATION = 1400;
 
 function portalEase(t: number): number {
-  if (t < 0.2) return (t / 0.2) * 0.4;
-  const t2 = (t - 0.2) / 0.8;
-  return 0.4 + 0.6 * (1 - Math.pow(1 - t2, 2.5));
+  return 1 - Math.pow(1 - t, 2.5);
 }
 
 export default function CinematicIntro() {
-  const [phase, setPhase] = useState<Phase>("roll");
-  const phaseRef          = useRef<Phase>("roll");
-  const overlayRef        = useRef<HTMLDivElement>(null);
-  const logoRef           = useRef<HTMLDivElement>(null);
-  const canvasRef         = useRef<HTMLCanvasElement>(null);
-  const timeoutsRef       = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const maskOpenRef       = useRef<number>(0);
+  const [phase, setPhase] = useState<Phase>("rollin");
+  const phaseRef    = useRef<Phase>("rollin");
+  const overlayRef  = useRef<HTMLDivElement>(null);
+  const canvasRef   = useRef<HTMLCanvasElement>(null);
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const addTimeout = useCallback((fn: () => void, ms: number) => {
     const id = setTimeout(fn, ms);
@@ -36,31 +32,36 @@ export default function CinematicIntro() {
   }, []);
 
   useEffect(() => {
-    addTimeout(() => { phaseRef.current = "disperse"; setPhase("disperse"); }, 1900);
-    addTimeout(() => { phaseRef.current = "portal";   setPhase("portal");   }, 2100);
-    addTimeout(() => { phaseRef.current = "done";     setPhase("done");     }, 3800);
+    // Timeline:
+    //   0       → 1500ms  rollin   (logo rolls in from right)
+    //   1500ms  → 2200ms  suck     (particles rush toward logo)
+    //   2200ms  → 3700ms  orbit    (particles orbit logo)
+    //   3700ms  → 4000ms  disperse (particles explode outward)
+    //   4000ms  → 5500ms  portal   (logo expands, circle reveals site)
+    //   5500ms+           done
+    addTimeout(() => { phaseRef.current = "suck";    setPhase("suck");    }, 1500);
+    addTimeout(() => { phaseRef.current = "orbit";   setPhase("orbit");   }, 2200);
+    addTimeout(() => { phaseRef.current = "disperse";setPhase("disperse");}, 3700);
+    addTimeout(() => { phaseRef.current = "portal";  setPhase("portal");  }, 4000);
+    addTimeout(() => { phaseRef.current = "done";    setPhase("done");    }, 5500);
     return () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
   }, [addTimeout]);
 
-  // Overlay mask opens from center — reveals site through the portal
+  // Portal mask: JS-driven radial-gradient expands from center, revealing site
   useEffect(() => {
     if (phase !== "portal") return;
     const overlay = overlayRef.current;
     if (!overlay) return;
-
     const w = window.innerWidth, h = window.innerHeight;
-    const maxR  = Math.hypot(w / 2, h / 2) + 30;
-    const openAt = performance.now() + MASK_DELAY;
-    maskOpenRef.current = openAt;
-
+    const maxR = Math.hypot(w / 2, h / 2) + 30;
+    const openAt = performance.now() + 80;
     let raf = 0;
     const tick = (now: number) => {
       const elapsed = now - openAt;
       if (elapsed < 0) { raf = requestAnimationFrame(tick); return; }
-      const t = Math.min(elapsed / MASK_DURATION, 1);
-      const r = portalEase(t) * maxR;
-      // Sharper 2-stop edge = fewer gradient calculations per frame
-      const m = `radial-gradient(circle at 50% 50%, transparent ${r}px, black ${r + 18}px)`;
+      const t   = Math.min(elapsed / MASK_DURATION, 1);
+      const r   = portalEase(t) * maxR;
+      const m   = `radial-gradient(circle at 50% 50%, transparent ${r}px, black ${r + 20}px)`;
       overlay.style.setProperty("-webkit-mask", m);
       overlay.style.setProperty("mask", m);
       if (t < 1) raf = requestAnimationFrame(tick);
@@ -69,7 +70,7 @@ export default function CinematicIntro() {
     return () => cancelAnimationFrame(raf);
   }, [phase]);
 
-  // Canvas: particles + shockwave rings + portal edge ring
+  // Canvas: particles with phase-based physics
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -78,92 +79,108 @@ export default function CinematicIntro() {
 
     let w = (canvas.width  = window.innerWidth);
     let h = (canvas.height = window.innerHeight);
-    let shockR = 0;
 
-    // Fewer particles, no trails — huge perf win
-    const N = 120;
+    // Particles start spread around the screen
+    const N = 130;
     const particles: Particle[] = Array.from({ length: N }, () => {
-      const side = Math.floor(Math.random() * 4);
-      let x: number, y: number;
-      if      (side === 0) { x = Math.random() * w; y = -(Math.random() * 60 + 10); }
-      else if (side === 1) { x = w + Math.random() * 60 + 10; y = Math.random() * h; }
-      else if (side === 2) { x = Math.random() * w; y = h + Math.random() * 60 + 10; }
-      else                 { x = -(Math.random() * 60 + 10); y = Math.random() * h; }
-      const cx = w / 2, cy = h / 2;
-      const d  = Math.hypot(cx - x, cy - y) || 1;
-      const spd = Math.random() * 3 + 2.5;
+      const angle  = Math.random() * Math.PI * 2;
+      const minDist = Math.min(w, h) * 0.15;
+      const maxDist = Math.min(w, h) * 0.48;
+      const dist   = Math.random() * (maxDist - minDist) + minDist;
       return {
-        x, y,
-        vx: ((cx - x) / d) * spd + (Math.random() - 0.5) * 0.4,
-        vy: ((cy - y) / d) * spd + (Math.random() - 0.5) * 0.4,
-        alpha: Math.random() * 0.4 + 0.6,
-        size: Math.random() * 2.0 + 0.8,
-        gold: Math.random() > 0.42,
-        orbitR: Math.random() * 70 + 40,
+        x: w / 2 + Math.cos(angle) * dist,
+        y: h / 2 + Math.sin(angle) * dist,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        alpha:  Math.random() * 0.5 + 0.5,
+        size:   Math.random() * 1.8 + 0.7,
+        gold:   Math.random() > 0.45,
+        orbitR: Math.random() * 70 + 35,
       };
     });
 
-    let raf = 0;
+    let shockR = 0;
+    let raf    = 0;
+
     const animate = () => {
-      // Stop canvas entirely once portal starts — CSS mask handles the reveal smoothly
-      if (phaseRef.current === "done" || phaseRef.current === "portal") return;
-      ctx.clearRect(0, 0, w, h);
-
-      const cx = w / 2, cy = h / 2;
       const cur = phaseRef.current;
+      if (cur === "portal" || cur === "done") return;
 
-      // ── 2 shockwave rings (disperse only) ──
+      ctx.clearRect(0, 0, w, h);
+      const cx = w / 2, cy = h / 2;
+
+      // Shockwave rings during disperse
       if (cur === "disperse") {
-        shockR += 12;
+        shockR += 14;
         const maxDim = Math.hypot(w, h);
         if (shockR < maxDim * 1.5) {
-          const fade = Math.max(0, 1 - shockR / (maxDim * 0.65));
+          const fade = Math.max(0, 1 - shockR / (maxDim * 0.6));
           ctx.beginPath(); ctx.arc(cx, cy, shockR, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(201,168,76,${fade * 0.65})`; ctx.lineWidth = 4; ctx.stroke();
-          if (shockR > 24) {
-            ctx.beginPath(); ctx.arc(cx, cy, shockR - 24, 0, Math.PI * 2);
-            ctx.strokeStyle = `rgba(100,149,237,${fade * 0.35})`; ctx.lineWidth = 2; ctx.stroke();
+          ctx.strokeStyle = `rgba(201,168,76,${fade * 0.7})`; ctx.lineWidth = 4; ctx.stroke();
+          if (shockR > 28) {
+            ctx.beginPath(); ctx.arc(cx, cy, shockR - 28, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(100,149,237,${fade * 0.4})`; ctx.lineWidth = 2; ctx.stroke();
           }
         }
       }
 
-      // ── Particles (roll + disperse only) ──
       for (const p of particles) {
-        const dx   = cx - p.x, dy = cy - p.y;
+        const dx   = cx - p.x;
+        const dy   = cy - p.y;
         const dist = Math.hypot(dx, dy) || 1;
 
-        if (cur === "roll") {
-          // Gravity + orbital tangential force
-          const grav = Math.min(1.6, 130 / dist);
-          p.vx += (dx / dist) * grav; p.vy += (dy / dist) * grav;
-          if (dist < p.orbitR * 2.5) {
-            const str = (1 - dist / (p.orbitR * 2.5)) * 2.2;
-            p.vx += (-dy / dist) * str; p.vy += (dx / dist) * str;
+        if (cur === "rollin") {
+          // Gentle idle drift while logo rolls in
+          p.vx += (Math.random() - 0.5) * 0.015;
+          p.vy += (Math.random() - 0.5) * 0.015;
+          p.vx *= 0.99; p.vy *= 0.99;
+
+        } else if (cur === "suck") {
+          // Strong gravity sucks particles toward the logo
+          const pull = Math.min(8, 600 / (dist + 20));
+          p.vx += (dx / dist) * pull;
+          p.vy += (dy / dist) * pull;
+          const spd = Math.hypot(p.vx, p.vy);
+          if (spd > 22) { p.vx = (p.vx / spd) * 22; p.vy = (p.vy / spd) * 22; }
+          p.vx *= 0.88; p.vy *= 0.88;
+
+        } else if (cur === "orbit") {
+          // Gravity toward center + tangential force to bend path into orbit
+          const grav = Math.min(2.2, 140 / dist);
+          p.vx += (dx / dist) * grav;
+          p.vy += (dy / dist) * grav;
+          if (dist < p.orbitR * 2.8) {
+            const str = (1 - dist / (p.orbitR * 2.8)) * 3.0;
+            p.vx += (-dy / dist) * str;
+            p.vy += ( dx / dist) * str;
           }
           const sp = Math.hypot(p.vx, p.vy);
-          if (sp > 9) { p.vx = (p.vx / sp) * 9; p.vy = (p.vy / sp) * 9; }
+          if (sp > 11) { p.vx = (p.vx / sp) * 11; p.vy = (p.vy / sp) * 11; }
           p.vx *= 0.95; p.vy *= 0.95;
-        } else {
-          // Spiral disperse
-          const force = 0.5 + Math.min(9, 130 / (dist + 1));
-          p.vx -= (dx / dist) * force; p.vy -= (dy / dist) * force;
-          p.vx += (-dy / dist) * force * 0.5; p.vy += (dx / dist) * force * 0.5;
-          p.vx *= 0.988; p.vy *= 0.988;
-          if (p.x < -80 || p.x > w + 80 || p.y < -80 || p.y > h + 80) {
-            p.alpha = Math.max(0, p.alpha - 0.025);
-          }
+
+        } else if (cur === "disperse") {
+          // Explode outward with spiral
+          const force = 1.0 + Math.min(10, 160 / (dist + 1));
+          p.vx -= (dx / dist) * force;
+          p.vy -= (dy / dist) * force;
+          p.vx += (-dy / dist) * force * 0.45;
+          p.vy += ( dx / dist) * force * 0.45;
+          p.vx *= 0.984; p.vy *= 0.984;
+          if (p.x < -100 || p.x > w + 100 || p.y < -100 || p.y > h + 100)
+            p.alpha = Math.max(0, p.alpha - 0.04);
         }
+
         p.x += p.vx; p.y += p.vy;
         if (p.alpha < 0.02) continue;
 
-        // Soft glow halo
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2);
+        // Glow halo
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size * 4.5, 0, Math.PI * 2);
         ctx.fillStyle = p.gold
-          ? `rgba(201,168,76,${p.alpha * 0.12})`
+          ? `rgba(201,168,76,${p.alpha * 0.13})`
           : `rgba(100,149,237,${p.alpha * 0.10})`;
         ctx.fill();
 
-        // Core
+        // Core dot
         ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = p.gold
           ? `rgba(255,215,100,${p.alpha})`
@@ -175,39 +192,43 @@ export default function CinematicIntro() {
     };
     raf = requestAnimationFrame(animate);
 
-    const onResize = () => {
-      w = canvas.width  = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    };
+    const onResize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
     window.addEventListener("resize", onResize);
     return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", onResize); };
   }, []);
 
-  const isDone   = phase === "done";
-  const isPortal = phase === "portal" || phase === "done";
+  const isDone      = phase === "done";
+  const isPortal    = phase === "portal" || phase === "done";
+  const isSpinning  = phase === "orbit"  || phase === "disperse";
 
   return (
     <>
       <style>{`
+        /* Logo rolls in from the right with a 3D coin-flip */
         @keyframes kc-rollIn {
-          0%   { opacity: 0; transform: translateX(65vw) rotateY(900deg) scale(0.18); }
-          100% { opacity: 1; transform: translateX(0) rotateY(0deg) scale(1); }
+          0%   { opacity: 0; transform: translateX(90vw) rotateY(-720deg) scale(0.1); }
+          6%   { opacity: 1; }
+          100% { opacity: 1; transform: translateX(0px) rotateY(0deg)   scale(1);   }
         }
+        /* Continuous coin spin during orbit */
         @keyframes kc-coinSpin {
           from { transform: rotateY(0deg); }
           to   { transform: rotateY(360deg); }
         }
+        /* Halo pulse around logo during orbit */
         @keyframes kc-halo {
-          0%, 100% { opacity: 0.45; transform: scale(1); }
-          50%      { opacity: 0.9;  transform: scale(1.18); }
+          0%, 100% { opacity: 0.4; transform: scale(1); }
+          50%      { opacity: 0.9; transform: scale(1.2); }
         }
+        /* Logo expands and fades into portal on disperse */
         @keyframes kc-portalBurst {
           0%   { opacity: 1;   transform: translateX(-50%) translateY(-50%) scale(1);   }
-          20%  { opacity: 0.9; transform: translateX(-50%) translateY(-50%) scale(1.12); }
-          100% { opacity: 0;   transform: translateX(-50%) translateY(-50%) scale(2.5);  }
+          20%  { opacity: 0.9; transform: translateX(-50%) translateY(-50%) scale(1.18); }
+          100% { opacity: 0;   transform: translateX(-50%) translateY(-50%) scale(3.2);  }
         }
       `}</style>
 
+      {/* Dark overlay — circle cut-out expands during portal phase */}
       <div
         ref={overlayRef}
         style={{
@@ -220,49 +241,63 @@ export default function CinematicIntro() {
         }}
       />
 
-      {/* Logo — always centered, bursts into portal */}
+      {/* ── LOGO WRAPPER ──
+          • During portal/done: plays kc-portalBurst (translates from center)
+          • Otherwise: sits centered via inline transform
+          • Has perspective so child rotateY looks 3D
+      */}
       <div
-        ref={logoRef}
         style={{
           position: "fixed",
           top: "50%", left: "50%",
-          transform: "translateX(-50%) translateY(-50%)",
-          width: "320px", height: "320px",
+          width: "300px", height: "300px",
           zIndex: 9998,
           perspective: "1200px",
           pointerEvents: "none",
-          willChange: "transform, opacity, filter",
-          ...(isPortal && {
-            animation: "kc-portalBurst 0.9s cubic-bezier(0.4, 0, 1, 1) forwards",
-          }),
+          willChange: "transform, opacity",
+          ...(isPortal
+            ? { animation: "kc-portalBurst 1.05s cubic-bezier(0.4, 0, 1, 1) forwards" }
+            : { transform: "translateX(-50%) translateY(-50%)" }
+          ),
         }}
       >
-        <div style={{
-          position: "absolute", inset: "-38%", borderRadius: "50%", pointerEvents: "none",
-          background: "radial-gradient(circle, rgba(201,168,76,0.72) 0%, rgba(26,58,143,0.52) 44%, transparent 70%)",
-          animation: isPortal ? "none" : "kc-halo 1.4s ease-in-out infinite",
-        }} />
+        {/* Halo glow ring — visible during orbit + disperse */}
+        {isSpinning && (
+          <div style={{
+            position: "absolute", inset: "-38%", borderRadius: "50%",
+            pointerEvents: "none",
+            background: "radial-gradient(circle, rgba(201,168,76,0.7) 0%, rgba(26,58,143,0.5) 44%, transparent 70%)",
+            animation: "kc-halo 1.4s ease-in-out infinite",
+          }} />
+        )}
 
-        <div style={{
-          width: "100%", height: "100%",
-          animation: "kc-rollIn 1.75s cubic-bezier(0.16,1,0.3,1) 0.05s both",
-          transformStyle: "preserve-3d",
-        }}>
+        {/* Inner div: plays kc-rollIn, then stays at natural position */}
+        <div
+          style={{
+            width: "100%", height: "100%",
+            ...(phase === "rollin"
+              ? { animation: "kc-rollIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards" }
+              : {}
+            ),
+          }}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/screen_transparent.png"
             alt="Key Club International Badge"
             style={{
               width: "100%", height: "100%", objectFit: "cover",
-              borderRadius: "50%",
-              display: "block",
-              animation: isPortal ? "none" : "kc-coinSpin 8s cubic-bezier(0.37,0,0.63,1) infinite",
-              filter: isPortal ? "none" : "drop-shadow(0 0 35px rgba(201,168,76,0.9)) drop-shadow(0 0 90px rgba(26,58,143,0.75))",
+              borderRadius: "50%", display: "block",
+              animation: isSpinning ? "kc-coinSpin 5s linear infinite" : "none",
+              filter: isPortal
+                ? "none"
+                : "drop-shadow(0 0 35px rgba(201,168,76,0.9)) drop-shadow(0 0 90px rgba(26,58,143,0.75))",
             }}
           />
         </div>
       </div>
 
+      {/* Canvas sits on top — hidden once done */}
       {!isDone && (
         <canvas
           ref={canvasRef}
