@@ -33,25 +33,31 @@ export default function CinematicIntro() {
     return () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
   }, [addTimeout]);
 
-  // Reveal: portal mask from center + logo floats up and STAYS
+  // Reveal: instantly snap logo to hero's exact position (portal mask is still closed,
+  // hiding the teleport), then open the portal over 1.4s
   useEffect(() => {
     if (phase !== "reveal") return;
     const overlay = overlayRef.current;
     const logo    = logoRef.current;
     if (!overlay || !logo) return;
 
+    // Measure the actual hero coin's center in the viewport and snap to it instantly.
+    // The portal mask is still at r=0 (fully closed) at this moment, so the jump is hidden.
+    const heroCoin = document.querySelector(".hero-logo-coin") as HTMLElement | null;
+    if (heroCoin) {
+      const rect = heroCoin.getBoundingClientRect();
+      const centerY = rect.top + rect.height / 2;
+      logo.style.transition = "none";
+      logo.style.top = `${(centerY / window.innerHeight) * 100}%`;
+    }
+
     const w = window.innerWidth, h = window.innerHeight;
     const maxR = Math.max(
       Math.hypot(w / 2, h / 2),
-      Math.hypot(w / 2, h / 2), // same as above — logo is at center
       Math.hypot(w - w / 2, h / 2),
       Math.hypot(w / 2, h - h / 2),
       Math.hypot(w - w / 2, h - h / 2)
     ) + 20;
-
-    // Logo floats from center → hero position (27%), NO fade — stays spinning
-    logo.style.transition = "top 1.1s cubic-bezier(0.16,1,0.3,1)";
-    logo.style.top = "27%";
 
     // Portal mask grows from viewport center
     const duration = 1400, start = performance.now();
@@ -68,22 +74,13 @@ export default function CinematicIntro() {
     return () => cancelAnimationFrame(raf);
   }, [phase]);
 
-  // When done: logo stays spinning, hide it only when user scrolls hero out of view
+  // When done: hide intro logo instantly — hero logo is already at the exact same
+  // position with the same rotation, so the handoff is invisible.
   useEffect(() => {
     if (phase !== "done") return;
     const logo = logoRef.current;
     if (!logo) return;
-    logo.style.pointerEvents = "none";
-
-    const onScroll = () => {
-      // Hide once user has scrolled past the hero section
-      if (window.scrollY > window.innerHeight * 0.6) {
-        logo.style.display = "none";
-        window.removeEventListener("scroll", onScroll);
-      }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    logo.style.display = "none";
   }, [phase]);
 
   // Canvas: gravity → orbit → spiral disperse + shockwave rings
@@ -252,7 +249,7 @@ export default function CinematicIntro() {
               borderRadius: "50%", clipPath: "circle(50% at 50% 50%)",
               display: "block",
               // Spins continuously after entrance — keeps going after handoff
-              animation: "kc-coinSpin 8s cubic-bezier(0.37,0,0.63,1) 1.9s infinite",
+              animation: "kc-coinSpin 8s cubic-bezier(0.37,0,0.63,1) 0s infinite",
               filter: [
                 "drop-shadow(0 0 55px rgba(201,168,76,0.95))",
                 "drop-shadow(0 0 120px rgba(26,58,143,0.75))",
