@@ -104,13 +104,14 @@ export default function CinematicIntro() {
 
     let raf = 0;
     const animate = () => {
-      if (phaseRef.current === "done") return;
+      // Stop canvas entirely once portal starts — CSS mask handles the reveal smoothly
+      if (phaseRef.current === "done" || phaseRef.current === "portal") return;
       ctx.clearRect(0, 0, w, h);
 
       const cx = w / 2, cy = h / 2;
       const cur = phaseRef.current;
 
-      // ── 2 shockwave rings (disperse only — already gone by portal phase) ──
+      // ── 2 shockwave rings (disperse only) ──
       if (cur === "disperse") {
         shockR += 12;
         const maxDim = Math.hypot(w, h);
@@ -125,26 +126,7 @@ export default function CinematicIntro() {
         }
       }
 
-      // ── Portal edge rings ──
-      if (cur === "portal" && maskOpenRef.current > 0) {
-        const elapsed = performance.now() - maskOpenRef.current;
-        if (elapsed > 0) {
-          const maxR = Math.hypot(w / 2, h / 2) + 30;
-          const t  = Math.min(elapsed / MASK_DURATION, 1);
-          const r  = portalEase(t) * maxR;
-          const ef = Math.max(0, 1 - t * 1.1);
-
-          ctx.beginPath(); ctx.arc(cx, cy, r + 8, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(201,168,76,${ef * 0.7})`; ctx.lineWidth = 10; ctx.stroke();
-
-          ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(255,248,220,${ef * 0.95})`; ctx.lineWidth = 2; ctx.stroke();
-        }
-        raf = requestAnimationFrame(animate);
-        return;
-      }
-
-      // ── Particles (roll + disperse only — skip during portal) ──
+      // ── Particles (roll + disperse only) ──
       for (const p of particles) {
         const dx   = cx - p.x, dy = cy - p.y;
         const dist = Math.hypot(dx, dy) || 1;

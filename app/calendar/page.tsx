@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -8,7 +8,7 @@ const eventsMap: Record<number, { title: string; time: string; loc: string; type
   4:  { title: "Divisional Council Meeting", time: "5:00 PM – 6:30 PM",  loc: "Fulshear High School",          type: "Meeting",   lat: 29.684, lng: -95.912, desc: "Monthly council meeting with division officers and chapter representatives." },
   8:  { title: "Community Food Pantry",       time: "9:00 AM – 12:00 PM", loc: "5757 Flewellen Oaks Ln #303",  type: "Volunteer", lat: 29.742, lng: -95.895, desc: "Help sort and distribute groceries to families in need at the local food pantry." },
   12: { title: "Park Clean-up",               time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",             type: "Service",   lat: 29.718, lng: -95.923, desc: "Community park beautification — bring gloves and wear closed-toe shoes." },
-  15: { title: "Key Club General Meeting",    time: "4:15 PM – 5:00 PM",  loc: "Fulshear High School",          type: "Meeting",   lat: 29.684, lng: -95.912, desc: "All-member general meeting. Attendance required for service hour credit." },
+  7:  { title: "Key Club General Meeting",    time: "4:00 PM – 5:00 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",   lat: 29.684, lng: -95.912, desc: "All-member general meeting — held the 1st Tuesday of every month. Attendance required for service hour credit." },
   18: { title: "H-E-B Food Drive",            time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",        type: "Service",   lat: 29.736, lng: -95.834, desc: "Stand outside H-E-B and collect non-perishable food donations for local families." },
   23: { title: "Children's Book Reading",     time: "4:00 PM – 5:30 PM",  loc: "Fulshear Branch Library",       type: "Volunteer", lat: 29.689, lng: -95.899, desc: "Read to kids ages 4–8 at the library. Great for members who love working with children." },
   25: { title: "Marathon Water Station",      time: "6:00 AM – 11:00 AM", loc: "Cinco Ranch Blvd",              type: "Service",   lat: 29.740, lng: -95.820, desc: "Staff a water station along the route and cheer on runners at the community marathon." },
@@ -39,6 +39,16 @@ type Event = typeof eventsMap[number];
 
 export default function CalendarPage() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+
+  useEffect(() => {
+    const els = document.querySelectorAll(".fade-in");
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); } }),
+      { threshold: 0.05 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   const eventList = Object.entries(eventsMap)
     .map(([day, ev]) => ({ day: Number(day), ...ev }))

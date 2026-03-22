@@ -3,9 +3,9 @@
 const contacts = [
   {
     title: "Club Email",
-    val: "your-email@lcisd.org",
+    val: "fulshearkeyclub@lcisd.org",
     sub: "Managed by Webmaster",
-    href: "mailto:your-email@lcisd.org",
+    href: "mailto:fulshearkeyclub@lcisd.org",
     glow: "rgba(201,168,76,0.3)",
     border: "rgba(201,168,76,0.5)",
   },
@@ -44,7 +44,7 @@ const contacts = [
   {
     title: "Meetings",
     val: "LGI Room",
-    sub: "Every other Wednesday @ 4:15 PM",
+    sub: "1st Tuesday of every month · 4:00 PM",
     href: "#",
     glow: "rgba(201,168,76,0.3)",
     border: "rgba(201,168,76,0.5)",
