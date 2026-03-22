@@ -13,12 +13,12 @@ export default function ContactPage() {
     return () => observer.disconnect();
   }, []);
   return (
-    <main className="flex-grow pt-24" style={{ minHeight: "100vh", position: "relative" }}>
+    <main className="flex-grow" style={{ paddingTop: "7rem", minHeight: "100vh", position: "relative" }}>
       {/* EXPANDED INFO SECTION */}
       <div className="section-wrapper fade-in" style={{ marginBottom: "-4rem", position: "relative", zIndex: 10 }}>
-        <h3 style={{ fontSize: "1.8rem", color: "white", marginBottom: "2.5rem", textAlign: "center", animation: "heroReveal 1s ease both" }}>Frequently Asked Questions</h3>
+        <h3 style={{ fontSize: "1.8rem", color: "white", marginBottom: "2.5rem", textAlign: "center" }}>Frequently Asked Questions</h3>
         
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", maxWidth: "800px", margin: "0 auto", animation: "heroReveal 1s ease both 0.2s" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", maxWidth: "800px", margin: "0 auto" }}>
           
           <div style={{ background: "rgba(10,15,30,0.8)", padding: "2rem", borderRadius: "12px", border: "1px solid rgba(201,168,76,0.15)", backdropFilter: "blur(10px)" }}>
             <h4 style={{ color: "white", fontSize: "1.05rem", marginBottom: "0.5rem" }}>When and where are general meetings?</h4>

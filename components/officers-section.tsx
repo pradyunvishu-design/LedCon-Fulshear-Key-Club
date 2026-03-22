@@ -1,22 +1,21 @@
 "use client";
 
 const officers = [
-  { title: "President",     name: "Bisan Abdalla",        year: "Class of 2027", email: "president@lcisd.org",     quote: "I love engaging with different communities and making a positive impact by helping out!" },
-  { title: "Vice President",name: "Takashi Orellana",     year: "Class of 2026", email: "vicepresident@lcisd.org", quote: "I love volunteering and getting to connect more with my community & friends." },
-  { title: "Secretary",     name: "Ziruo Yin",            year: "Class of 2027", email: "secretary@lcisd.org",     quote: "I love that we are able to provide volunteer opportunities and participate in them." },
-  { title: "Treasurer",     name: "Max Brito",            year: "Class of 2027", email: "treasurer@lcisd.org",     quote: "I love connecting with members and providing a way to better our communities." },
-  { title: "Editor",        name: "Ahlon Steward",        year: "Class of 2027", email: "editor@lcisd.org",        quote: "I love how everyone in Key Club is one big community." },
-  { title: "Webmaster",     name: "Sesandi Devanarayana", year: "Class of 2027", email: "webmaster@lcisd.org",     quote: "I love the impact we are able to leave behind on communities by helping out!" },
+  { title: "President",     name: "Bisan Abdalla",        year: "Class of 2027", email: "president@lcisd.org",     quote: "I love engaging with different communities and making a positive impact by helping out!", image: "/officers/bisan.jpg" },
+  { title: "Vice President",name: "Takashi Orellana",     year: "Class of 2026", email: "vicepresident@lcisd.org", quote: "I love volunteering and getting to connect more with my community & friends.", image: "/officers/takashi.jpg" },
+  { title: "Secretary",     name: "Ziruo Yin",            year: "Class of 2027", email: "secretary@lcisd.org",     quote: "I love that we are able to provide volunteer opportunities and participate in them.", image: "/officers/ziruo.jpg" },
+  { title: "Treasurer",     name: "Max Brito",            year: "Class of 2027", email: "treasurer@lcisd.org",     quote: "I love connecting with members and providing a way to better our communities.", image: "/officers/max.jpg" },
+  { title: "Editor",        name: "Ahlon Steward",        year: "Class of 2027", email: "editor@lcisd.org",        quote: "I love how everyone in Key Club is one big community.", image: "/officers/ahlon.jpg" },
+  { title: "Webmaster",     name: "Sesandi Devanarayana", year: "Class of 2027", email: "webmaster@lcisd.org",     quote: "I love the impact we are able to leave behind on communities by helping out!", image: "/officers/sesandi.jpg" },
 ];
 
-
-const colors: Record<string, { glow: string; border: string; avatar: string }> = {
-  "President":      { glow: "rgba(201,168,76,0.45)",  border: "rgba(201,168,76,0.7)",   avatar: "linear-gradient(135deg,#c9a84c,#f0c85a)" },
-  "Vice President": { glow: "rgba(100,149,237,0.4)",  border: "rgba(100,149,237,0.65)", avatar: "linear-gradient(135deg,#1a3a8f,#4a80e8)" },
-  "Secretary":      { glow: "rgba(201,168,76,0.35)",  border: "rgba(201,168,76,0.55)",  avatar: "linear-gradient(135deg,#8c6e28,#c9a84c)" },
-  "Treasurer":      { glow: "rgba(100,149,237,0.35)", border: "rgba(100,149,237,0.55)", avatar: "linear-gradient(135deg,#0f2044,#1a3a8f)" },
-  "Editor":         { glow: "rgba(201,168,76,0.35)",  border: "rgba(201,168,76,0.5)",   avatar: "linear-gradient(135deg,#c9a84c,#e8c870)" },
-  "Webmaster":      { glow: "rgba(100,149,237,0.4)",  border: "rgba(100,149,237,0.6)",  avatar: "linear-gradient(135deg,#1a3a8f,#3a6de8)" },
+const colors: Record<string, { glow: string; border: string; fallback: string }> = {
+  "President":      { glow: "rgba(201,168,76,0.45)",  border: "rgba(201,168,76,0.7)",   fallback: "linear-gradient(135deg,#c9a84c,#f0c85a)" },
+  "Vice President": { glow: "rgba(100,149,237,0.4)",  border: "rgba(100,149,237,0.65)", fallback: "linear-gradient(135deg,#1a3a8f,#4a80e8)" },
+  "Secretary":      { glow: "rgba(201,168,76,0.35)",  border: "rgba(201,168,76,0.55)",  fallback: "linear-gradient(135deg,#8c6e28,#c9a84c)" },
+  "Treasurer":      { glow: "rgba(100,149,237,0.35)", border: "rgba(100,149,237,0.55)", fallback: "linear-gradient(135deg,#0f2044,#1a3a8f)" },
+  "Editor":         { glow: "rgba(201,168,76,0.35)",  border: "rgba(201,168,76,0.5)",   fallback: "linear-gradient(135deg,#c9a84c,#e8c870)" },
+  "Webmaster":      { glow: "rgba(100,149,237,0.4)",  border: "rgba(100,149,237,0.6)",  fallback: "linear-gradient(135deg,#1a3a8f,#3a6de8)" },
 };
 
 export default function OfficersSection() {
@@ -63,25 +62,27 @@ export default function OfficersSection() {
           border-color: var(--oc-border-color, rgba(201,168,76,0.5)) !important;
         }
 
-        /* Avatar circle */
+        /* Avatar photo */
         .officer-avatar {
-          width: 72px; height: 72px;
+          width: 110px; height: 110px;
           border-radius: 50%;
-          background: var(--oc-avatar, linear-gradient(135deg,#c9a84c,#f0c85a));
-          display:flex; align-items:center; justify-content:center;
+          background: var(--oc-fallback, linear-gradient(135deg,#c9a84c,#f0c85a));
+          display: flex; align-items: center; justify-content: center;
           margin: 0 auto 1.25rem;
-          position:relative; z-index:1;
-          box-shadow: 0 0 0 2px rgba(255,255,255,0.06), 0 0 20px var(--oc-glow, rgba(201,168,76,0.3));
+          position: relative; z-index: 1;
+          box-shadow: 0 0 0 3px rgba(255,255,255,0.08), 0 0 24px var(--oc-glow, rgba(201,168,76,0.3));
           transition: box-shadow 0.3s, transform 0.3s;
+          overflow: hidden;
         }
         .officer-card:hover .officer-avatar {
-          box-shadow: 0 0 0 2px rgba(255,255,255,0.1), 0 0 35px var(--oc-glow, rgba(201,168,76,0.5));
-          transform: scale(1.08);
+          box-shadow: 0 0 0 3px rgba(255,255,255,0.14), 0 0 40px var(--oc-glow, rgba(201,168,76,0.5));
+          transform: scale(1.06);
         }
-        .officer-icon {
-          font-size: 2rem;
+        .officer-avatar img {
+          width: 100%; height: 100%;
+          object-fit: cover; object-position: center top;
+          border-radius: 50%;
           display: block;
-          filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
         }
 
         .officer-title {
@@ -151,11 +152,13 @@ export default function OfficersSection() {
                   "--oc-glow": c.glow,
                   "--oc-border": `linear-gradient(90deg, transparent, ${c.border}, transparent)`,
                   "--oc-border-color": c.border,
-                  "--oc-avatar": c.avatar,
+                  "--oc-fallback": c.fallback,
                   "--oc-glow-color": c.glow,
                 } as React.CSSProperties}
               >
                 <div className="officer-avatar">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={o.image} alt={o.name} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
                 </div>
                 <div className="officer-title">{o.title}</div>
                 <div className="officer-name">{o.name}</div>

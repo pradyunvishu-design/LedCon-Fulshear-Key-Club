@@ -2,7 +2,7 @@
 
 export default function MatcherPage() {
   return (
-    <main className="flex-grow pt-24 pb-16" style={{ minHeight: "100vh", position: "relative", overflow: "hidden" }}>
+    <main className="flex-grow pb-16" style={{ paddingTop: "7rem", minHeight: "100vh", position: "relative", overflow: "hidden" }}>
       <style>{`
         .matcher-hero {
           text-align: center;
