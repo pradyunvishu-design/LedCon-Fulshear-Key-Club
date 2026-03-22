@@ -11,6 +11,39 @@ export default function DivisionSection() {
           gap: 2rem;
         }
         .division-card { padding: 2.5rem; }
+        .division-school-logo {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+          padding-bottom: 1.25rem;
+          border-bottom: 1px solid rgba(201,168,76,0.15);
+        }
+        .division-school-logo img {
+          width: 64px;
+          height: 64px;
+          object-fit: contain;
+          filter: drop-shadow(0 0 10px rgba(88,44,131,0.6));
+        }
+        .division-school-logo-text {
+          display: flex;
+          flex-direction: column;
+          gap: 0.2rem;
+        }
+        .division-school-logo-name {
+          font-size: 0.9rem;
+          font-weight: 800;
+          color: var(--white);
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+        }
+        .division-school-logo-sub {
+          font-size: 0.7rem;
+          color: #a57fd6;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          font-weight: 600;
+        }
         .division-card-title {
           font-size: 0.72rem;
           letter-spacing: 0.2em;
@@ -54,12 +87,23 @@ export default function DivisionSection() {
         <div className="division-grid">
           <div className="division-card glass-card fade-in">
             <div className="division-card-title">Division</div>
+            <div className="division-school-logo">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://files.smartsites.parentsquare.com/5633/header_logo_img_if7fgb.png"
+                alt="Fulshear High School Chargers"
+              />
+              <div className="division-school-logo-text">
+                <span className="division-school-logo-name">Fulshear High School</span>
+                <span className="division-school-logo-sub">Home of the Chargers · Est. 2016</span>
+              </div>
+            </div>
             {[
-              ["School", "Fulshear High School"],
-              ["Mascot", "Home of the Chargers"],
+              ["District", "Texas-Oklahoma District"],
               ["Division", "[ Division # ]"],
               ["LTG Contact", "ltg@tokeyclub.com"],
               ["District Governor", "Hannah Nguyen"],
+              ["School District", "LCISD"],
             ].map(([k, v]) => (
               <div key={k} className="division-row">
                 <span className="div-key">{k}</span>

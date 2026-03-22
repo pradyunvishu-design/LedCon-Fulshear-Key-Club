@@ -1,12 +1,12 @@
 "use client";
 
 const officers = [
-  { title: "President", name: "Sarah Jenkins", year: "Class of 2026", email: "president@lcisd.org", quote: "Dedicated to expanding our reach." },
-  { title: "Vice President", name: "Marcus Chen", year: "Class of 2026", email: "vicepresident@lcisd.org", quote: "Service is the rent we pay for living." },
-  { title: "Secretary", name: "Emily Rodriguez", year: "Class of 2026", email: "secretary@lcisd.org", quote: "Organization is the key to success." },
-  { title: "Treasurer", name: "David Kim", year: "Class of 2026", email: "treasurer@lcisd.org", quote: "Ensuring our resources fuel our mission." },
-  { title: "Editor", name: "Aaliyah Smith", year: "Class of 2026", email: "editor@lcisd.org", quote: "Capturing our memories and milestones." },
-  { title: "Webmaster", name: "Jordan Taylor", year: "Class of 2026", email: "webmaster@lcisd.org", quote: "Connecting us through technology." },
+  { title: "President",     name: "[ Name ]", year: "Class of 2026", email: "president@lcisd.org",     quote: "Dedicated to expanding our reach." },
+  { title: "Vice President",name: "[ Name ]", year: "Class of 2026", email: "vicepresident@lcisd.org", quote: "Service is the rent we pay for living." },
+  { title: "Secretary",     name: "[ Name ]", year: "Class of 2026", email: "secretary@lcisd.org",     quote: "Organization is the key to success." },
+  { title: "Treasurer",     name: "[ Name ]", year: "Class of 2026", email: "treasurer@lcisd.org",     quote: "Ensuring our resources fuel our mission." },
+  { title: "Editor",        name: "[ Name ]", year: "Class of 2026", email: "editor@lcisd.org",        quote: "Capturing our memories and milestones." },
+  { title: "Webmaster",     name: "[ Name ]", year: "Class of 2026", email: "webmaster@lcisd.org",     quote: "Connecting us through technology." },
 ];
 
 
