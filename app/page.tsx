@@ -8,6 +8,9 @@ import DivisionSection from "@/components/division-section";
 import LinksSection from "@/components/links-section";
 import ContactSection from "@/components/contact-section";
 import ImpactSection from "@/components/impact-section";
+import dynamic from "next/dynamic";
+
+const CinematicIntro = dynamic(() => import("@/components/cinematic-intro"), { ssr: false });
 
 export default function Home() {
   // Intersection Observer for fade-in animations
@@ -30,6 +33,7 @@ export default function Home() {
 
   return (
     <>
+      <CinematicIntro />
       <HeroSection />
       <AboutSection />
       <DivisionSection />
