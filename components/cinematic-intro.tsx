@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 
 const HERO_BG = "radial-gradient(ellipse 100% 90% at 50% 50%, #081530 0%, #020709 100%)";
 
-type Phase = "roll" | "disperse" | "reveal" | "done";
+type Phase = "roll" | "disperse" | "portal" | "done";
 
 interface Particle {
   x: number; y: number;
@@ -25,31 +25,18 @@ export default function CinematicIntro() {
     timeoutsRef.current.push(id);
   }, []);
 
-  // Plays every page load
   useEffect(() => {
     addTimeout(() => { phaseRef.current = "disperse"; setPhase("disperse"); }, 1900);
-    addTimeout(() => { phaseRef.current = "reveal";   setPhase("reveal");   }, 2100);
-    addTimeout(() => { phaseRef.current = "done";     setPhase("done");     }, 3500);
+    addTimeout(() => { phaseRef.current = "portal";   setPhase("portal");   }, 2100);
+    addTimeout(() => { phaseRef.current = "done";     setPhase("done");     }, 3600);
     return () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
   }, [addTimeout]);
 
-  // Reveal: instantly snap logo to hero's exact position (portal mask is still closed,
-  // hiding the teleport), then open the portal over 1.4s
+  // Portal phase: overlay mask opens from the logo center while logo expands + fades
   useEffect(() => {
-    if (phase !== "reveal") return;
+    if (phase !== "portal") return;
     const overlay = overlayRef.current;
-    const logo    = logoRef.current;
-    if (!overlay || !logo) return;
-
-    // Measure the actual hero coin's center in the viewport and snap to it instantly.
-    // The portal mask is still at r=0 (fully closed) at this moment, so the jump is hidden.
-    const heroCoin = document.querySelector(".hero-logo-coin") as HTMLElement | null;
-    if (heroCoin) {
-      const rect = heroCoin.getBoundingClientRect();
-      const centerY = rect.top + rect.height / 2;
-      logo.style.transition = "none";
-      logo.style.top = `${(centerY / window.innerHeight) * 100}%`;
-    }
+    if (!overlay) return;
 
     const w = window.innerWidth, h = window.innerHeight;
     const maxR = Math.max(
@@ -59,28 +46,25 @@ export default function CinematicIntro() {
       Math.hypot(w - w / 2, h - h / 2)
     ) + 20;
 
-    // Portal mask grows from viewport center
-    const duration = 1400, start = performance.now();
+    // Short delay so the logo flash happens before the mask opens
+    const maskDelay = 180;
+    const duration  = 1300;
+    const startTime = performance.now() + maskDelay;
     let raf = 0;
+
     const tick = (now: number) => {
-      const t = Math.min((now - start) / duration, 1);
-      const r = (1 - Math.pow(1 - t, 2.5)) * maxR;
-      const m = `radial-gradient(circle at 50% 50%, transparent ${r}px, black ${r + 7}px)`;
+      const elapsed = now - startTime;
+      if (elapsed < 0) { raf = requestAnimationFrame(tick); return; }
+      const t = Math.min(elapsed / duration, 1);
+      // Ease-out-cubic: fast open, then slows as it covers the viewport
+      const r = (1 - Math.pow(1 - t, 3)) * maxR;
+      const m = `radial-gradient(circle at 50% 50%, transparent ${r}px, black ${r + 10}px)`;
       overlay.style.setProperty("-webkit-mask", m);
       overlay.style.setProperty("mask", m);
       if (t < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [phase]);
-
-  // When done: hide intro logo instantly — hero logo is already at the exact same
-  // position with the same rotation, so the handoff is invisible.
-  useEffect(() => {
-    if (phase !== "done") return;
-    const logo = logoRef.current;
-    if (!logo) return;
-    logo.style.display = "none";
   }, [phase]);
 
   // Canvas: gravity → orbit → spiral disperse + shockwave rings
@@ -96,7 +80,7 @@ export default function CinematicIntro() {
     const getCY = () => h / 2;
     let shockR = 0;
 
-    const N = 260;
+    const N = 280;
     const particles: Particle[] = Array.from({ length: N }, () => {
       const side = Math.floor(Math.random() * 4);
       let x: number, y: number;
@@ -123,7 +107,7 @@ export default function CinematicIntro() {
       if (phaseRef.current === "done") return;
       ctx.clearRect(0, 0, w, h);
       const cx = getCX(), cy = getCY();
-      const isBurst = phaseRef.current === "disperse" || phaseRef.current === "reveal";
+      const isBurst = phaseRef.current === "disperse" || phaseRef.current === "portal";
 
       // Shockwave rings
       if (isBurst) {
@@ -186,7 +170,8 @@ export default function CinematicIntro() {
     return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", onResize); };
   }, []);
 
-  const isDone = phase === "done";
+  const isDone   = phase === "done";
+  const isPortal = phase === "portal" || phase === "done";
 
   return (
     <>
@@ -203,9 +188,32 @@ export default function CinematicIntro() {
           0%, 100% { opacity: 0.5;  transform: scale(1);    }
           50%      { opacity: 1;    transform: scale(1.22); }
         }
+        /* Logo BECOMES the portal: flash bright, then expand into a glowing ring */
+        @keyframes kc-portalBurst {
+          0%   {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-50%) scale(1);
+            filter: brightness(1) blur(0px);
+          }
+          10%  {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-50%) scale(1.06);
+            filter: brightness(6) blur(1px);
+          }
+          35%  {
+            opacity: 0.8;
+            transform: translateX(-50%) translateY(-50%) scale(2.5);
+            filter: brightness(3) blur(3px);
+          }
+          100% {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-50%) scale(10);
+            filter: brightness(1) blur(14px);
+          }
+        }
       `}</style>
 
-      {/* Overlay — removed when done (already fully transparent by then) */}
+      {/* Overlay — removed when done */}
       {!isDone && (
         <div
           ref={overlayRef}
@@ -213,28 +221,31 @@ export default function CinematicIntro() {
         />
       )}
 
-      {/* Logo — NEVER removed from DOM; floats from center→27% and keeps spinning.
-          No fade, no disappear. Hides only when user scrolls hero section away. */}
+      {/* Logo — stays at center, transforms into the portal on burst */}
       <div
         ref={logoRef}
         style={{
           position: "fixed",
           top: "50%", left: "50%",
+          // CSS animation overrides this transform during portal phase
           transform: "translateX(-50%) translateY(-50%)",
-          width: "min(320px, 45vmin)", height: "min(320px, 45vmin)",
+          width: "320px", height: "320px",
           zIndex: 9998,
           perspective: "1200px",
-          pointerEvents: isDone ? "none" : "auto",
+          pointerEvents: "none",
+          ...(isPortal && {
+            animation: "kc-portalBurst 1.5s cubic-bezier(0.25,0,0.8,1) forwards",
+          }),
         }}
       >
-        {/* Pulsing radial halo */}
+        {/* Pulsing radial halo — also expands with the burst */}
         <div style={{
           position: "absolute", inset: "-35%", borderRadius: "50%", pointerEvents: "none",
           background: "radial-gradient(circle, rgba(201,168,76,0.65) 0%, rgba(26,58,143,0.45) 45%, transparent 72%)",
           animation: "kc-glow 1.4s ease-in-out infinite",
         }} />
 
-        {/* Entrance: rolls + flips in from right */}
+        {/* Entrance roll + continuous spin */}
         <div style={{
           width: "100%", height: "100%",
           animation: "kc-rollIn 1.75s cubic-bezier(0.16,1,0.3,1) 0.05s both",
@@ -248,7 +259,6 @@ export default function CinematicIntro() {
               width: "100%", height: "100%", objectFit: "cover",
               borderRadius: "50%", clipPath: "circle(50% at 50% 50%)",
               display: "block",
-              // Spins continuously after entrance — keeps going after handoff
               animation: "kc-coinSpin 8s cubic-bezier(0.37,0,0.63,1) 0s infinite",
               filter: [
                 "drop-shadow(0 0 55px rgba(201,168,76,0.95))",
@@ -260,7 +270,7 @@ export default function CinematicIntro() {
         </div>
       </div>
 
-      {/* Canvas — removed when done (particles already gone by then) */}
+      {/* Canvas — removed when done */}
       {!isDone && (
         <canvas
           ref={canvasRef}
