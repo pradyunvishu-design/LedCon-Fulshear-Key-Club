@@ -19,11 +19,19 @@ const contacts = [
   },
   {
     title: "Lt. Governor",
-    val: "[ LTG Name ]",
-    sub: "ltg@tokeyclub.com",
-    href: "mailto:ltg@tokeyclub.com",
+    val: "M. Chintalapally",
+    sub: "ltg3s@tokeyclub.com",
+    href: "mailto:ltg3s@tokeyclub.com",
     glow: "rgba(100,149,237,0.3)",
     border: "rgba(100,149,237,0.5)",
+  },
+  {
+    title: "School Address",
+    val: "9302 Charger Way",
+    sub: "Fulshear, TX 77441",
+    href: "https://maps.google.com/?q=9302+Charger+Way+Fulshear+TX+77441",
+    glow: "rgba(255,140,0,0.3)",
+    border: "rgba(255,140,0,0.5)",
   },
   {
     title: "District Tech",
@@ -38,8 +46,8 @@ const contacts = [
     val: "LGI Room",
     sub: "Every other Wednesday @ 4:15 PM",
     href: "#",
-    glow: "rgba(255,140,0,0.3)",
-    border: "rgba(255,140,0,0.5)",
+    glow: "rgba(201,168,76,0.3)",
+    border: "rgba(201,168,76,0.5)",
   },
   {
     title: "Remind 101",

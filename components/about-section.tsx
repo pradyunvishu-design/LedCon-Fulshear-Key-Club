@@ -1,7 +1,7 @@
 "use client";
 
 const stats = [
-  { value: "15,611", label: "T-O District Members" },
+  { value: "17,000+", label: "T-O District Members" },
   { value: "1925", label: "Year Founded" },
   { value: "33", label: "Global Districts" },
   { value: "∞", label: "Community Impact" },

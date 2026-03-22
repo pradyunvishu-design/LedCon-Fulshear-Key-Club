@@ -99,11 +99,12 @@ export default function DivisionSection() {
               </div>
             </div>
             {[
-              ["District", "Texas-Oklahoma District"],
-              ["Division", "[ Division # ]"],
-              ["LTG Contact", "ltg@tokeyclub.com"],
+              ["Division",          "Division 3S — T-O District"],
+              ["Lt. Governor",      "Meenakshiaayathi Chintalapally"],
+              ["LTG Email",         "ltg3s@tokeyclub.com"],
               ["District Governor", "Hannah Nguyen"],
-              ["School District", "LCISD"],
+              ["Address",           "9302 Charger Way, Fulshear TX"],
+              ["Phone",             "(832) 223-5000"],
             ].map(([k, v]) => (
               <div key={k} className="division-row">
                 <span className="div-key">{k}</span>

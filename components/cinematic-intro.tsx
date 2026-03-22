@@ -104,7 +104,7 @@ export default function CinematicIntro() {
 
     let raf = 0;
     const animate = () => {
-      if (phaseRef.current === "done") return;
+      if (phaseRef.current === "done" || phaseRef.current === "portal") return;
       ctx.clearRect(0, 0, w, h);
 
       const cx = w / 2, cy = h / 2;
