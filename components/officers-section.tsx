@@ -80,9 +80,12 @@ export default function OfficersSection() {
         }
         .officer-avatar img {
           width: 100%; height: 100%;
-          object-fit: cover; object-position: center top;
+          object-fit: cover;
           border-radius: 50%;
           display: block;
+          /* zoom into face area — slides have name/text above & below the headshot */
+          transform: scale(2.8);
+          transform-origin: 50% 42%;
         }
 
         .officer-title {
