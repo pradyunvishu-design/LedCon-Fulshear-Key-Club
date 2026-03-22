@@ -1,12 +1,12 @@
 "use client";
 
 const officers = [
-  { title: "President",     name: "Bisan Abdalla",        year: "Class of 2027", email: "president@lcisd.org",     quote: "I love engaging with different communities and making a positive impact by helping out!", image: "/officers/bisan.jpg" },
-  { title: "Vice President",name: "Takashi Orellana",     year: "Class of 2026", email: "vicepresident@lcisd.org", quote: "I love volunteering and getting to connect more with my community & friends.", image: "/officers/takashi.jpg" },
-  { title: "Secretary",     name: "Ziruo Yin",            year: "Class of 2027", email: "secretary@lcisd.org",     quote: "I love that we are able to provide volunteer opportunities and participate in them.", image: "/officers/ziruo.jpg" },
-  { title: "Treasurer",     name: "Max Brito",            year: "Class of 2027", email: "treasurer@lcisd.org",     quote: "I love connecting with members and providing a way to better our communities.", image: "/officers/max.jpg" },
-  { title: "Editor",        name: "Ahlon Steward",        year: "Class of 2027", email: "editor@lcisd.org",        quote: "I love how everyone in Key Club is one big community.", image: "/officers/ahlon.jpg" },
-  { title: "Webmaster",     name: "Sesandi Devanarayana", year: "Class of 2027", email: "webmaster@lcisd.org",     quote: "I love the impact we are able to leave behind on communities by helping out!", image: "/officers/sesandi.jpg" },
+  { title: "President",     name: "Bisan Abdalla",        year: "Class of 2027", email: "president@lcisd.org",     quote: "I love engaging with different communities and making a positive impact by helping out!", image: "/officers/bisan.png" },
+  { title: "Vice President",name: "Takashi Orellana",     year: "Class of 2026", email: "vicepresident@lcisd.org", quote: "I love volunteering and getting to connect more with my community & friends.", image: "/officers/takashi.png" },
+  { title: "Secretary",     name: "Ziruo Yin",            year: "Class of 2027", email: "secretary@lcisd.org",     quote: "I love that we are able to provide volunteer opportunities and participate in them.", image: "/officers/ziruo.png" },
+  { title: "Treasurer",     name: "Max Brito",            year: "Class of 2027", email: "treasurer@lcisd.org",     quote: "I love connecting with members and providing a way to better our communities.", image: "/officers/max.png" },
+  { title: "Editor",        name: "Ahlon Steward",        year: "Class of 2027", email: "editor@lcisd.org",        quote: "I love how everyone in Key Club is one big community.", image: "/officers/ahlon.png" },
+  { title: "Webmaster",     name: "Sesandi Devanarayana", year: "Class of 2027", email: "webmaster@lcisd.org",     quote: "I love the impact we are able to leave behind on communities by helping out!", image: "/officers/sesandi.png" },
 ];
 
 const colors: Record<string, { glow: string; border: string; fallback: string }> = {
