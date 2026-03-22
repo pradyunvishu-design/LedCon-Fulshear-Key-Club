@@ -23,7 +23,7 @@ export default function Navbar() {
 
   const navLinks = [
     { label: "Home", href: "/#hero" },
-    { label: "AI Matcher", href: "/matcher" },
+    { label: "Volunteer Matcher", href: "/matcher" },
     { label: "Calendar", href: "/calendar" },
     { label: "About", href: "/about" },
     { label: "Officers", href: "/officers" },
@@ -55,11 +55,12 @@ export default function Navbar() {
           text-decoration:none;
         }
         .kc-nav-logo span { color:var(--gold); }
-        .kc-nav-links { display:flex; gap:2.5rem; list-style:none; margin:0; padding:0; }
+        .kc-nav-links { display:flex; gap:2rem; list-style:none; margin:0; padding:0; }
         .kc-nav-links a {
-          font-size:0.72rem; font-weight:700; letter-spacing:0.14em;
+          font-size:0.7rem; font-weight:700; letter-spacing:0.12em;
           text-transform:uppercase; color:var(--silver);
           transition:color 0.2s; position:relative; text-decoration:none;
+          white-space:nowrap;
         }
         .kc-nav-links a.active {
           color:var(--gold);
@@ -98,7 +99,11 @@ export default function Navbar() {
         }
         .mobile-menu a.active { color:var(--gold); }
         .mobile-menu a:hover { color:var(--gold); }
-        @media(max-width:768px){
+        @media(max-width:1100px){
+          .kc-nav-links{ gap:1.2rem; }
+          .kc-nav-links a{ font-size:0.63rem; letter-spacing:0.08em; }
+        }
+        @media(max-width:900px){
           .kc-nav{ padding:1rem 1.5rem; }
           .kc-nav.scrolled{ padding:0.75rem 1.5rem; }
           .kc-nav-links{ display:none; }

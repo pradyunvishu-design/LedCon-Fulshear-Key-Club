@@ -106,7 +106,7 @@ export default function MatcherPage() {
       <div className="section-wrapper" style={{ position: "relative", zIndex: 2 }}>
         <div className="matcher-hero">
           <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)", color: "var(--gold)", fontWeight: 700, fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.15em", padding: "6px 14px", borderRadius: "99px", marginBottom: "1.5rem" }}>
-            AI-Powered Feature
+            Volunteer Matcher
           </div>
           <h1 className="matcher-title">Find Your Perfect <br/><span className="highlight">Service Match.</span></h1>
           <p style={{ color: "var(--silver)", maxWidth: "520px", margin: "0 auto", lineHeight: "1.7", fontSize: "1.05rem", opacity: 0.8 }}>
