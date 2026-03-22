@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 
 const chapters = [
   {
@@ -70,6 +71,8 @@ const chapters = [
 ];
 
 export default function ImpactSection() {
+  const [lightbox, setLightbox] = useState<{ src: string; caption: string } | null>(null);
+
   return (
     <section id="impact" style={{ padding: "8rem 0 4rem", position: "relative" }}>
       <style>{`
@@ -78,8 +81,17 @@ export default function ImpactSection() {
         .story-header { text-align: center; margin-bottom: 5rem; }
         .story-header p { color: var(--silver); max-width: 520px; margin: 0 auto; line-height: 1.7; font-size: 1rem; }
 
-        .chapter { margin-bottom: 6rem; }
-        .chapter-header { margin-bottom: 2rem; }
+        .chapter-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 4rem;
+          align-items: center;
+          margin-bottom: 0;
+        }
+        .chapter-row.reverse { direction: rtl; }
+        .chapter-row.reverse > * { direction: ltr; }
+
+        .chapter-text { }
         .story-year {
           display: inline-block;
           font-size: 0.7rem; font-weight: 800;
@@ -93,18 +105,18 @@ export default function ImpactSection() {
           color: var(--white); line-height: 1.15;
           margin-bottom: 0.75rem; letter-spacing: -0.02em;
         }
-        .story-body { color: var(--silver); line-height: 1.75; font-size: 0.95rem; max-width: 680px; }
+        .story-body { color: var(--silver); line-height: 1.75; font-size: 0.95rem; }
 
         .photo-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 1rem; margin-top: 1.75rem;
+          gap: 0.75rem;
         }
-        .photo-grid.cols-1 { grid-template-columns: 1fr; max-width: 560px; }
-        .photo-grid.cols-2 { grid-template-columns: repeat(2, 1fr); max-width: 760px; }
+        .photo-grid.cols-1 { grid-template-columns: 1fr; }
+        .photo-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
 
         .photo-card {
-          position: relative; border-radius: 14px; overflow: hidden;
+          position: relative; border-radius: 12px; overflow: hidden;
           aspect-ratio: 4 / 3;
           border: 1px solid rgba(201,168,76,0.2);
           box-shadow: 0 8px 30px rgba(0,0,0,0.35);
@@ -114,29 +126,61 @@ export default function ImpactSection() {
           width: 100%; height: 100%; object-fit: cover; display: block;
           transition: transform 0.4s ease;
         }
-        .photo-card:hover img { transform: scale(1.05); }
+        .photo-card:hover img { transform: scale(1.06); }
         .photo-caption {
           position: absolute; bottom: 0; left: 0; right: 0;
           padding: 0.6rem 0.85rem;
-          background: linear-gradient(to top, rgba(2,7,9,0.85), transparent);
-          font-size: 0.72rem; color: rgba(255,255,255,0.8);
+          background: linear-gradient(to top, rgba(2,7,9,0.88), transparent);
+          font-size: 0.72rem; color: rgba(255,255,255,0.85);
           letter-spacing: 0.03em; line-height: 1.4;
           transform: translateY(100%); transition: transform 0.3s ease;
         }
         .photo-card:hover .photo-caption { transform: translateY(0); }
 
         .story-divider {
-          width: 1px; height: 3.5rem;
+          width: 1px; height: 4rem;
           background: linear-gradient(to bottom, rgba(201,168,76,0.35), transparent);
-          margin: 0 auto 6rem;
+          margin: 4rem auto;
         }
 
+        /* ── LIGHTBOX ── */
+        .lightbox-overlay {
+          position: fixed; inset: 0; z-index: 99999;
+          background: rgba(0,0,0,0.92);
+          display: flex; align-items: center; justify-content: center;
+          padding: 1.5rem;
+          animation: lbFadeIn 0.2s ease;
+        }
+        @keyframes lbFadeIn { from { opacity: 0 } to { opacity: 1 } }
+        .lightbox-img {
+          max-width: 90vw; max-height: 85vh;
+          border-radius: 12px;
+          box-shadow: 0 0 80px rgba(201,168,76,0.2), 0 30px 80px rgba(0,0,0,0.6);
+          object-fit: contain;
+          animation: lbZoomIn 0.25s cubic-bezier(0.22,1,0.36,1);
+        }
+        @keyframes lbZoomIn { from { transform: scale(0.88); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+        .lightbox-caption {
+          position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+          color: rgba(255,255,255,0.75); font-size: 0.85rem;
+          letter-spacing: 0.04em; text-align: center;
+          max-width: 600px; padding: 0 1rem;
+        }
+        .lightbox-close {
+          position: absolute; top: 1.25rem; right: 1.5rem;
+          background: none; border: none; cursor: pointer;
+          color: rgba(255,255,255,0.6); font-size: 2rem; line-height: 1;
+          transition: color 0.2s;
+        }
+        .lightbox-close:hover { color: var(--gold); }
+
         @media (max-width: 768px) {
-          .photo-grid, .photo-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
-          .photo-grid.cols-1 { grid-template-columns: 1fr; }
+          .chapter-row, .chapter-row.reverse { grid-template-columns: 1fr; direction: ltr; gap: 2rem; }
+          .photo-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 480px) {
-          .photo-grid { grid-template-columns: 1fr; }
+          .photo-grid { grid-template-columns: repeat(2, 1fr); }
+          .photo-grid.cols-1 { grid-template-columns: 1fr; }
         }
 
         /* ── IMPACT DASHBOARD ── */
@@ -187,18 +231,19 @@ export default function ImpactSection() {
           </div>
 
           {chapters.map((ch, i) => {
+            const isReverse = i % 2 === 1;
             const colClass = ch.photos.length === 1 ? "cols-1" : ch.photos.length === 2 ? "cols-2" : "";
             return (
               <div key={ch.title}>
-                <div className="chapter fade-in" style={{ transitionDelay: `${i * 0.05}s` }}>
-                  <div className="chapter-header">
+                <div className={`chapter-row fade-in${isReverse ? " reverse" : ""}`} style={{ transitionDelay: `${i * 0.05}s` }}>
+                  <div className="chapter-text">
                     <span className="story-year">{ch.tag}</span>
                     <h3 className="story-title">{ch.title}</h3>
                     <p className="story-body">{ch.body}</p>
                   </div>
                   <div className={`photo-grid ${colClass}`}>
                     {ch.photos.map((p) => (
-                      <div key={p.src} className="photo-card">
+                      <div key={p.src} className="photo-card" onClick={() => setLightbox(p)}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={p.src} alt={p.caption} />
                         <div className="photo-caption">{p.caption}</div>
@@ -211,6 +256,16 @@ export default function ImpactSection() {
             );
           })}
         </div>
+
+        {/* ── LIGHTBOX ── */}
+        {lightbox && (
+          <div className="lightbox-overlay" onClick={() => setLightbox(null)}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="lightbox-img" src={lightbox.src} alt={lightbox.caption} onClick={(e) => e.stopPropagation()} />
+            <button className="lightbox-close" onClick={() => setLightbox(null)}>✕</button>
+            {lightbox.caption && <p className="lightbox-caption">{lightbox.caption}</p>}
+          </div>
+        )}
 
         {/* ── IMPACT DASHBOARD ── */}
         <div style={{ borderTop: "1px solid rgba(201,168,76,0.15)", paddingTop: "6rem" }}>
