@@ -13,7 +13,7 @@ interface Particle {
 }
 
 const MASK_DELAY    = 200;
-const MASK_DURATION = 1500;
+const MASK_DURATION = 1300;
 
 function portalEase(t: number): number {
   if (t < 0.2) return (t / 0.2) * 0.4;
@@ -59,7 +59,8 @@ export default function CinematicIntro() {
       if (elapsed < 0) { raf = requestAnimationFrame(tick); return; }
       const t = Math.min(elapsed / MASK_DURATION, 1);
       const r = portalEase(t) * maxR;
-      const m = `radial-gradient(circle at 50% 50%, transparent ${r}px, rgba(0,0,0,0.5) ${r + 12}px, black ${r + 36}px)`;
+      // Sharper 2-stop edge = fewer gradient calculations per frame
+      const m = `radial-gradient(circle at 50% 50%, transparent ${r}px, black ${r + 18}px)`;
       overlay.style.setProperty("-webkit-mask", m);
       overlay.style.setProperty("mask", m);
       if (t < 1) raf = requestAnimationFrame(tick);
@@ -201,11 +202,9 @@ export default function CinematicIntro() {
           50%      { opacity: 0.9;  transform: scale(1.18); }
         }
         @keyframes kc-portalBurst {
-          0%   { opacity: 1;    transform: translateX(-50%) translateY(-50%) scale(1);   }
-          15%  { opacity: 1;    transform: translateX(-50%) translateY(-50%) scale(1.06); }
-          40%  { opacity: 0.65; transform: translateX(-50%) translateY(-50%) scale(2.8);  }
-          70%  { opacity: 0.15; transform: translateX(-50%) translateY(-50%) scale(8);    }
-          100% { opacity: 0;    transform: translateX(-50%) translateY(-50%) scale(16);   }
+          0%   { opacity: 1;   transform: translateX(-50%) translateY(-50%) scale(1);   }
+          20%  { opacity: 0.9; transform: translateX(-50%) translateY(-50%) scale(1.12); }
+          100% { opacity: 0;   transform: translateX(-50%) translateY(-50%) scale(2.5);  }
         }
       `}</style>
 
@@ -216,6 +215,8 @@ export default function CinematicIntro() {
           opacity: isDone ? 0 : 1,
           transition: isDone ? "opacity 0.3s ease" : "none",
           pointerEvents: isDone ? "none" : "auto",
+          transform: "translateZ(0)",
+          willChange: "mask, opacity",
         }}
       />
 
@@ -232,7 +233,7 @@ export default function CinematicIntro() {
           pointerEvents: "none",
           willChange: "transform, opacity, filter",
           ...(isPortal && {
-            animation: "kc-portalBurst 1.75s cubic-bezier(0.22, 0, 0.6, 1) forwards",
+            animation: "kc-portalBurst 0.9s cubic-bezier(0.4, 0, 1, 1) forwards",
           }),
         }}
       >
@@ -253,7 +254,7 @@ export default function CinematicIntro() {
             alt="Key Club International Badge"
             style={{
               width: "100%", height: "100%", objectFit: "cover",
-              borderRadius: "50%", clipPath: "circle(50% at 50% 50%)",
+              borderRadius: "50%",
               display: "block",
               animation: isPortal ? "none" : "kc-coinSpin 8s cubic-bezier(0.37,0,0.63,1) infinite",
               filter: isPortal ? "none" : "drop-shadow(0 0 35px rgba(201,168,76,0.9)) drop-shadow(0 0 90px rgba(26,58,143,0.75))",
