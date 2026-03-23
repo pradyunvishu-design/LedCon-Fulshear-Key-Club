@@ -26,9 +26,7 @@ export default function CinematicIntro() {
     timers.current.push(setTimeout(fn, ms));
   }, []);
 
-  // ── Strip checkerboard background from Chargers PNG via edge flood-fill ──
-  // Flood-fill from all 4 edges: only background pixels connected to the border
-  // are removed — interior logo pixels (even gray ones) are never touched.
+  // ── Load Chargers PNG (background already removed) + apply circular crop ──
   useEffect(() => {
     const img = new Image();
     img.onload = () => {
@@ -37,54 +35,11 @@ export default function CinematicIntro() {
       c.width = SIZE; c.height = SIZE;
       const ctx2 = c.getContext("2d");
       if (!ctx2) return;
-      ctx2.drawImage(img, 0, 0, SIZE, SIZE);
-      const id = ctx2.getImageData(0, 0, SIZE, SIZE);
-      const d  = id.data;
-
-      // A pixel is "background" if it's gray (low sat) OR nearly transparent
-      const isBg = (pi: number): boolean => {
-        if (d[pi + 3] < 40) return true;
-        const r = d[pi], g = d[pi + 1], b = d[pi + 2];
-        const maxC = Math.max(r, g, b), minC = Math.min(r, g, b);
-        const sat = maxC === 0 ? 0 : (maxC - minC) / maxC;
-        return sat < 0.28 && (r + g + b) / 3 > 50;
-      };
-
-      const visited = new Uint8Array(SIZE * SIZE);
-      const queue: number[] = [];
-      const enqueue = (x: number, y: number) => {
-        if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) return;
-        const idx = y * SIZE + x;
-        if (visited[idx]) return;
-        if (isBg(idx * 4)) { visited[idx] = 1; queue.push(idx); }
-      };
-
-      // Seed from all 4 edges
-      for (let i = 0; i < SIZE; i++) {
-        enqueue(i, 0); enqueue(i, SIZE - 1);
-        enqueue(0, i); enqueue(SIZE - 1, i);
-      }
-
-      // BFS — mark all edge-connected background pixels transparent
-      while (queue.length > 0) {
-        const idx = queue.pop()!;
-        d[idx * 4 + 3] = 0;
-        const x = idx % SIZE, y = (idx / SIZE) | 0;
-        enqueue(x - 1, y); enqueue(x + 1, y);
-        enqueue(x, y - 1); enqueue(x, y + 1);
-      }
-
-      ctx2.putImageData(id, 0, 0);
-
-      // Hard circular crop — anything outside the inscribed circle becomes transparent.
-      // This guarantees zero checkerboard bleed regardless of edge anti-aliasing.
-      ctx2.globalCompositeOperation = "destination-in";
+      // Circular clip so only the inscribed circle is drawn — clean edges
       ctx2.beginPath();
       ctx2.arc(SIZE / 2, SIZE / 2, SIZE / 2, 0, Math.PI * 2);
-      ctx2.fillStyle = "#fff";
-      ctx2.fill();
-      ctx2.globalCompositeOperation = "source-over";
-
+      ctx2.clip();
+      ctx2.drawImage(img, 0, 0, SIZE, SIZE);
       setChargersSrc(c.toDataURL("image/png"));
     };
     img.src = "/chargers-logo.png";
