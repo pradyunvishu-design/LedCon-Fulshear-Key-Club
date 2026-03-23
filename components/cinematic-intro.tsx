@@ -26,11 +26,13 @@ export default function CinematicIntro() {
     timers.current.push(setTimeout(fn, ms));
   }, []);
 
-  // ── Strip checkerboard background from Chargers PNG via canvas pixel processing ──
+  // ── Strip checkerboard background from Chargers PNG via edge flood-fill ──
+  // Flood-fill from all 4 edges: only background pixels connected to the border
+  // are removed — interior logo pixels (even gray ones) are never touched.
   useEffect(() => {
     const img = new Image();
     img.onload = () => {
-      const SIZE = 320;
+      const SIZE = 512;
       const c = document.createElement("canvas");
       c.width = SIZE; c.height = SIZE;
       const ctx2 = c.getContext("2d");
@@ -38,17 +40,40 @@ export default function CinematicIntro() {
       ctx2.drawImage(img, 0, 0, SIZE, SIZE);
       const id = ctx2.getImageData(0, 0, SIZE, SIZE);
       const d  = id.data;
-      for (let i = 0; i < d.length; i += 4) {
-        const r = d[i], g = d[i + 1], b = d[i + 2];
-        const maxC = Math.max(r, g, b);
-        const minC = Math.min(r, g, b);
+
+      // A pixel is "background" if it's gray (low sat) OR nearly transparent
+      const isBg = (pi: number): boolean => {
+        if (d[pi + 3] < 40) return true;
+        const r = d[pi], g = d[pi + 1], b = d[pi + 2];
+        const maxC = Math.max(r, g, b), minC = Math.min(r, g, b);
         const sat = maxC === 0 ? 0 : (maxC - minC) / maxC;
-        const bri = (r + g + b) / 3;
-        if (sat < 0.20 && bri > 75) {
-          const grayFactor = (1 - sat / 0.20) * Math.min(1, (bri - 75) / 90);
-          d[i + 3] = Math.round(d[i + 3] * (1 - grayFactor));
-        }
+        return sat < 0.28 && (r + g + b) / 3 > 50;
+      };
+
+      const visited = new Uint8Array(SIZE * SIZE);
+      const queue: number[] = [];
+      const enqueue = (x: number, y: number) => {
+        if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) return;
+        const idx = y * SIZE + x;
+        if (visited[idx]) return;
+        if (isBg(idx * 4)) { visited[idx] = 1; queue.push(idx); }
+      };
+
+      // Seed from all 4 edges
+      for (let i = 0; i < SIZE; i++) {
+        enqueue(i, 0); enqueue(i, SIZE - 1);
+        enqueue(0, i); enqueue(SIZE - 1, i);
       }
+
+      // BFS — mark all edge-connected background pixels transparent
+      while (queue.length > 0) {
+        const idx = queue.pop()!;
+        d[idx * 4 + 3] = 0;
+        const x = idx % SIZE, y = (idx / SIZE) | 0;
+        enqueue(x - 1, y); enqueue(x + 1, y);
+        enqueue(x, y - 1); enqueue(x, y + 1);
+      }
+
       ctx2.putImageData(id, 0, 0);
       setChargersSrc(c.toDataURL("image/png"));
     };
@@ -308,8 +333,7 @@ export default function CinematicIntro() {
         <div style={{ width:"100%", height:"100%", animation:charAnim, position:"relative" }}>
           <div style={{
             position:"absolute", inset:0, borderRadius:"50%", overflow:"hidden",
-            background:"radial-gradient(circle at 40% 35%, #180828 0%, #0d0518 55%, #060210 100%)",
-            boxShadow:"0 0 0 2px rgba(180,100,255,0.6), 0 0 25px rgba(160,80,220,0.8), 0 0 60px rgba(120,50,200,0.5)",
+            boxShadow:"0 0 0 2px rgba(180,100,255,0.45), 0 0 18px rgba(160,80,220,0.5)",
             animation: isSpinning ? "kc-coinSpin 5s linear infinite" : "none",
           }}>
             {chargersSrc && (
@@ -320,16 +344,10 @@ export default function CinematicIntro() {
                 style={{
                   width:"100%", height:"100%",
                   objectFit:"contain", display:"block",
-                  padding:"6px",
-                  filter:"drop-shadow(0 0 12px rgba(200,120,255,0.9)) brightness(1.2) saturate(1.4)",
+                  filter:"drop-shadow(0 0 7px rgba(180,100,255,0.55))",
                 }}
               />
             )}
-            <div style={{
-              position:"absolute", inset:0, borderRadius:"50%",
-              background:"radial-gradient(circle at 28% 22%, rgba(220,160,255,0.18) 0%, transparent 55%)",
-              pointerEvents:"none",
-            }} />
           </div>
         </div>
       </div>
@@ -347,8 +365,7 @@ export default function CinematicIntro() {
         <div style={{ width:"100%", height:"100%", animation:kcAnim, position:"relative" }}>
           <div style={{
             position:"absolute", inset:0, borderRadius:"50%", overflow:"hidden",
-            background:"radial-gradient(circle at 40% 35%, #0e1e42 0%, #081530 55%, #020709 100%)",
-            boxShadow:"0 0 0 2px rgba(201,168,76,0.65), 0 0 25px rgba(201,168,76,0.8), 0 0 60px rgba(26,58,143,0.55)",
+            boxShadow:"0 0 0 2px rgba(201,168,76,0.5), 0 0 18px rgba(201,168,76,0.45)",
             animation: isSpinning ? "kc-coinSpin 5s linear infinite" : "none",
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -358,14 +375,9 @@ export default function CinematicIntro() {
               style={{
                 width:"100%", height:"100%",
                 objectFit:"cover", display:"block",
-                filter:"drop-shadow(0 0 12px rgba(255,215,100,0.9)) brightness(1.1) saturate(1.2)",
+                filter:"drop-shadow(0 0 7px rgba(201,168,76,0.5))",
               }}
             />
-            <div style={{
-              position:"absolute", inset:0, borderRadius:"50%",
-              background:"radial-gradient(circle at 28% 22%, rgba(255,240,160,0.12) 0%, transparent 55%)",
-              pointerEvents:"none",
-            }} />
           </div>
         </div>
       </div>
