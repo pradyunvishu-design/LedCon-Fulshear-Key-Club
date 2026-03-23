@@ -259,51 +259,100 @@ export default function CinematicIntro() {
 
       {/* ── CHARGERS LOGO — flies in from LEFT, purple glow ── */}
       <div style={{ ...baseWrapper, zIndex: 9997 }}>
-        {isSpinning && (
-          <div style={{
-            position: "absolute", inset: "-40%", borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(160,80,220,0.6) 0%, rgba(100,40,180,0.35) 50%, transparent 70%)",
-            animation: "kc-halo 1.4s ease-in-out infinite",
-            pointerEvents: "none",
-          }} />
-        )}
+        {/* Outer pulsing halo */}
+        <div style={{
+          position: "absolute", inset: "-45%", borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(160,80,220,0.55) 0%, rgba(100,40,180,0.28) 55%, transparent 72%)",
+          animation: "kc-halo 1.6s ease-in-out infinite",
+          pointerEvents: "none",
+        }} />
+        {/* Glowing border ring */}
+        <div style={{
+          position: "absolute", inset: "-4px", borderRadius: "50%",
+          border: "2px solid rgba(180,100,240,0.7)",
+          boxShadow: "0 0 20px rgba(160,80,220,0.8), 0 0 50px rgba(120,50,200,0.5), inset 0 0 20px rgba(160,80,220,0.15)",
+          pointerEvents: "none",
+        }} />
         <div style={{ width: "100%", height: "100%", animation: charAnim }}>
+          {/* Dark circular background — hides checkerboard from transparent PNG */}
+          <div style={{
+            position: "absolute", inset: 0, borderRadius: "50%",
+            background: "radial-gradient(circle at 40% 35%, #1a0a2e 0%, #0d0518 50%, #060210 100%)",
+            overflow: "hidden",
+          }} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/chargers-logo.png"
             alt="Fulshear Chargers"
             style={{
+              position: "absolute", inset: 0,
               width: "100%", height: "100%",
               objectFit: "contain", display: "block",
+              padding: "8px",
               animation: isSpinning ? "kc-coinSpin 5s linear infinite" : "none",
-              filter: "drop-shadow(0 0 32px rgba(160,80,220,0.95)) drop-shadow(0 0 80px rgba(100,40,180,0.8))",
+              filter: [
+                "drop-shadow(0 0 18px rgba(200,120,255,1))",
+                "drop-shadow(0 0 40px rgba(160,80,220,0.9))",
+                "drop-shadow(0 0 80px rgba(100,40,180,0.7))",
+                "brightness(1.15) saturate(1.3)",
+              ].join(" "),
             }}
           />
+          {/* Subtle inner rim light */}
+          <div style={{
+            position: "absolute", inset: 0, borderRadius: "50%",
+            background: "radial-gradient(circle at 30% 25%, rgba(220,160,255,0.12) 0%, transparent 60%)",
+            pointerEvents: "none",
+          }} />
         </div>
       </div>
 
       {/* ── KEY CLUB BADGE — flies in from RIGHT, gold glow ── */}
       <div style={{ ...baseWrapper, zIndex: 9998 }}>
-        {isSpinning && (
-          <div style={{
-            position: "absolute", inset: "-40%", borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(201,168,76,0.6) 0%, rgba(26,58,143,0.35) 50%, transparent 70%)",
-            animation: "kc-halo 1.4s ease-in-out infinite 0.7s",
-            pointerEvents: "none",
-          }} />
-        )}
+        {/* Outer pulsing halo */}
+        <div style={{
+          position: "absolute", inset: "-45%", borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(201,168,76,0.55) 0%, rgba(26,58,143,0.28) 55%, transparent 72%)",
+          animation: "kc-halo 1.6s ease-in-out infinite 0.8s",
+          pointerEvents: "none",
+        }} />
+        {/* Glowing border ring */}
+        <div style={{
+          position: "absolute", inset: "-4px", borderRadius: "50%",
+          border: "2px solid rgba(201,168,76,0.7)",
+          boxShadow: "0 0 20px rgba(201,168,76,0.8), 0 0 50px rgba(26,58,143,0.5), inset 0 0 20px rgba(201,168,76,0.1)",
+          pointerEvents: "none",
+        }} />
         <div style={{ width: "100%", height: "100%", animation: kcAnim }}>
+          {/* Dark circular background — hides checkerboard from transparent PNG */}
+          <div style={{
+            position: "absolute", inset: 0, borderRadius: "50%",
+            background: "radial-gradient(circle at 40% 35%, #0e1e42 0%, #081530 50%, #020709 100%)",
+            overflow: "hidden",
+          }} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/screen_transparent.png"
             alt="Key Club Badge"
             style={{
+              position: "absolute", inset: 0,
               width: "100%", height: "100%",
               objectFit: "cover", borderRadius: "50%", display: "block",
               animation: isSpinning ? "kc-coinSpin 5s linear infinite" : "none",
-              filter: "drop-shadow(0 0 32px rgba(201,168,76,0.95)) drop-shadow(0 0 80px rgba(26,58,143,0.8))",
+              filter: [
+                "drop-shadow(0 0 18px rgba(255,215,100,1))",
+                "drop-shadow(0 0 40px rgba(201,168,76,0.9))",
+                "drop-shadow(0 0 80px rgba(26,58,143,0.8))",
+                "brightness(1.1) saturate(1.2)",
+              ].join(" "),
             }}
           />
+          {/* Subtle inner rim light */}
+          <div style={{
+            position: "absolute", inset: 0, borderRadius: "50%",
+            background: "radial-gradient(circle at 30% 25%, rgba(255,240,160,0.1) 0%, transparent 60%)",
+            pointerEvents: "none",
+          }} />
         </div>
       </div>
 
