@@ -668,8 +668,32 @@ export default function HeroSection() {
       {/* HERO */}
       <section id="hero" className="hero-section" ref={heroRef}>
         <canvas className="hero-canvas" ref={canvasRef} />
+        <div className="hero-center-glow" style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)" }} />
 
         <div className="hero-content">
+          {/* ── Spinning coin logo ── */}
+          <div className="hero-logo-entrance">
+            <div className="hero-logo-outer">
+              <div className="logo-conic-ring" />
+              <div className="logo-ring logo-ring-1" />
+              <div className="logo-ring logo-ring-2" />
+              <div className="logo-ring logo-ring-3" />
+              <div className="logo-ring logo-ring-4" />
+              <div className="hero-logo-coin">
+                <div className="coin-face coin-front">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/screen_transparent.png" alt="Key Club Badge" />
+                  <div className="logo-shimmer" />
+                </div>
+                <div className="coin-face coin-back">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/screen_transparent.png" alt="" />
+                </div>
+                <div className="coin-edge" />
+              </div>
+            </div>
+          </div>
+
           <p className="hero-district-label">
             Texas · Oklahoma District &nbsp;·&nbsp; Key Club International &nbsp;·&nbsp; Since 1925
           </p>

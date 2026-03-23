@@ -17,17 +17,17 @@ const links = [
   },
   {
     icon: "",
-    title: "Fulshear High School",
-    desc: "Home of the Chargers",
-    url: "https://www.lcisd.org/schools/high-schools/fulshear-high-school",
-    label: "lcisd.org",
-  },
-  {
-    icon: "",
-    title: "Instagram",
+    title: "Club Instagram",
     desc: "Follow us @fulshearkeyclub",
     url: "https://instagram.com/fulshearkeyclub",
     label: "@fulshearkeyclub",
+  },
+  {
+    icon: "",
+    title: "T-O District Instagram",
+    desc: "Texas-Oklahoma District Key Club",
+    url: "https://instagram.com/tokeyclub",
+    label: "@tokeyclub",
   },
 ];
 

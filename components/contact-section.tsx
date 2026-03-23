@@ -44,7 +44,7 @@ const contacts = [
   {
     title: "Meetings",
     val: "LGI Room",
-    sub: "1st Tuesday of every month · 4:00 PM",
+    sub: "Every other Wednesday · 4:15 PM after school",
     href: "#",
     glow: "rgba(201,168,76,0.3)",
     border: "rgba(201,168,76,0.5)",
