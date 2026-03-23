@@ -15,9 +15,8 @@ interface Particle {
 }
 
 export default function CinematicIntro() {
-  const [phase, setPhase]           = useState<Phase>("rollin");
-  const [chargersSrc, setChargersSrc] = useState<string>("");
-  const [maskPx, setMaskPx]         = useState<number>(0);
+  const [phase, setPhase]  = useState<Phase>("rollin");
+  const [maskPx, setMaskPx] = useState<number>(0);
   const phaseRef  = useRef<Phase>("rollin");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const timers    = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -26,24 +25,6 @@ export default function CinematicIntro() {
     timers.current.push(setTimeout(fn, ms));
   }, []);
 
-  // ── Load Chargers PNG (background already removed) + apply circular crop ──
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      const SIZE = 512;
-      const c = document.createElement("canvas");
-      c.width = SIZE; c.height = SIZE;
-      const ctx2 = c.getContext("2d");
-      if (!ctx2) return;
-      // Circular clip so only the inscribed circle is drawn — clean edges
-      ctx2.beginPath();
-      ctx2.arc(SIZE / 2, SIZE / 2, SIZE / 2, 0, Math.PI * 2);
-      ctx2.clip();
-      ctx2.drawImage(img, 0, 0, SIZE, SIZE);
-      setChargersSrc(c.toDataURL("image/png"));
-    };
-    img.src = "/chargers-logo.png";
-  }, []);
 
   // ── Phase timeline ──
   useEffect(() => {
@@ -302,18 +283,16 @@ export default function CinematicIntro() {
             boxShadow:"0 0 0 2px rgba(180,100,255,0.45), 0 0 18px rgba(160,80,220,0.5)",
             animation: isSpinning ? "kc-coinSpin 5s linear infinite" : "none",
           }}>
-            {chargersSrc && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={chargersSrc}
-                alt="Fulshear Chargers"
-                style={{
-                  width:"100%", height:"100%",
-                  objectFit:"contain", display:"block",
-                  filter:"drop-shadow(0 0 7px rgba(180,100,255,0.55))",
-                }}
-              />
-            )}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/chargers-logo.png"
+              alt="Fulshear Chargers"
+              style={{
+                width:"100%", height:"100%",
+                objectFit:"contain", display:"block",
+                filter:"drop-shadow(0 0 7px rgba(180,100,255,0.55))",
+              }}
+            />
           </div>
         </div>
       </div>
