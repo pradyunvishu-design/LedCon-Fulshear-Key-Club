@@ -268,7 +268,11 @@ export default function HeroSection() {
         /* ───── GLOBAL HERO KEYFRAMES ───── */
         @keyframes coinFlip {
           0%   { transform: rotateY(0deg); }
-          100% { transform: rotateY(360deg); }
+          18%  { transform: rotateY(0deg); }      /* pause: show KC front */
+          38%  { transform: rotateY(180deg); }    /* flip to Chargers */
+          58%  { transform: rotateY(180deg); }    /* pause: show Chargers back */
+          78%  { transform: rotateY(360deg); }    /* flip back to KC */
+          100% { transform: rotateY(360deg); }    /* pause before loop */
         }
         @keyframes ringPulse {
           0%,100% { transform: scale(1);   opacity: 0.55; }
@@ -465,7 +469,7 @@ export default function HeroSection() {
           width:320px; height:320px;
           position:relative; z-index:1;
           transform-style: preserve-3d;
-          animation: coinFlip 8s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+          animation: coinFlip 11s cubic-bezier(0.37, 0, 0.63, 1) infinite;
           /* Optimized drop-shadow for performance */
           filter: drop-shadow(0 0 40px rgba(201,168,76,0.6)) drop-shadow(0 0 100px rgba(26,58,143,0.4));
         }
