@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const chapters = [
   {
-    tag: "Fall 2024",
+    tag: "Food Drive",
     title: "Slam Dunk! The Campus Food Drive",
     body: "Our members turned lunchtime into service time — collecting hundreds of bags of fresh produce and distributing them to students and families across campus. When the last bag hit the bin, there was only one thing left to say: SLAM DUNK.",
     photos: [
@@ -12,7 +12,7 @@ const chapters = [
     ],
   },
   {
-    tag: "Spring 2025",
+    tag: "Service",
     title: "Service for Generations",
     body: "Inspired by Key Club International's centennial theme, our members spent an afternoon writing heartfelt cards and distributing care packages. Every card written, every shirt handed off — proof that kindness has no age limit.",
     photos: [
@@ -20,7 +20,7 @@ const chapters = [
     ],
   },
   {
-    tag: "2024–2025",
+    tag: "Meetings",
     title: "Club Meetings & Kickoff",
     body: "Every great movement starts with people in a room who care. Our meetings are where ideas become projects, strangers become friends, and members find their why.",
     photos: [
@@ -29,9 +29,9 @@ const chapters = [
     ],
   },
   {
-    tag: "2025",
+    tag: "Centennial",
     title: "100 Years of Key Club",
-    body: "Key Club International turned 100 in 2025 — and Fulshear showed up. We hosted a special celebration where members competed in teams to pitch creative service ideas. The winners got to pie the officers in the face. A century of service, one glorious mess.",
+    body: "Key Club International reached its centennial — and Fulshear showed up. We hosted a special celebration where members competed in teams to pitch creative service ideas. The winners got to pie the officers in the face. A century of service, one glorious mess.",
     photos: [
       { src: "/story/6.jpg",  caption: "Celebrating 100 years of Key Club at our chapter event" },
       { src: "/story/7.jpg",  caption: "Teams presenting their service ideas to the group" },

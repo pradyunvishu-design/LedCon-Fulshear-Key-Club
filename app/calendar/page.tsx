@@ -1,49 +1,49 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const DAYS_OF_WEEK = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const DAYS   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
-// Events keyed by "YYYY-M-D" (month is 0-based to match JS Date)
 const allEvents: Record<string, { title: string; time: string; loc: string; type: string; desc: string }[]> = {
-  "2026-2-4":  [{ title: "Divisional Council Meeting",  time: "5:00 PM – 6:30 PM",  loc: "Fulshear High School",              type: "Meeting",   desc: "Monthly council meeting with division officers and chapter representatives." }],
-  "2026-2-7":  [{ title: "Key Club General Meeting",    time: "4:00 PM – 5:00 PM",  loc: "Fulshear High School · LGI Room",  type: "Meeting",   desc: "All-member general meeting — held the 1st Tuesday of every month. Attendance required for service hour credit." }],
-  "2026-2-8":  [{ title: "Community Food Pantry",       time: "9:00 AM – 12:00 PM", loc: "5757 Flewellen Oaks Ln #303",      type: "Volunteer", desc: "Help sort and distribute groceries to families in need at the local food pantry." }],
-  "2026-2-12": [{ title: "Park Clean-up",               time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",                type: "Service",   desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
-  "2026-2-18": [{ title: "H-E-B Food Drive",            time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",           type: "Service",   desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
-  "2026-2-23": [{ title: "Children's Book Reading",     time: "4:00 PM – 5:30 PM",  loc: "Fulshear Branch Library",          type: "Volunteer", desc: "Read to kids ages 4–8 at the library. Great for members who love working with children." }],
-  "2026-2-25": [{ title: "Marathon Water Station",      time: "6:00 AM – 11:00 AM", loc: "Cinco Ranch Blvd",                 type: "Service",   desc: "Staff a water station along the route and cheer on runners at the community marathon." }],
-  "2026-2-28": [{ title: "End of Month Social",         time: "6:00 PM – 8:00 PM",  loc: "Fulshear Town Square",             type: "Social",    desc: "Celebrate a great month with fellow members. Food, fun, and club bonding." }],
+  "2026-2-4":  [{ title: "Divisional Council Meeting",  time: "5:00 PM – 6:30 PM",  loc: "Fulshear High School",             type: "Meeting",    desc: "Monthly council meeting with division officers and chapter representatives." }],
+  "2026-2-11": [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
+  "2026-2-8":  [{ title: "Community Food Pantry",       time: "9:00 AM – 12:00 PM", loc: "5757 Flewellen Oaks Ln #303",     type: "Volunteer",  desc: "Help sort and distribute groceries to families in need at the local food pantry." }],
+  "2026-2-12": [{ title: "Park Clean-up",               time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",               type: "Service",    desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
+  "2026-2-18": [{ title: "H-E-B Food Drive",            time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",          type: "Service",    desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
+  "2026-2-23": [{ title: "Children's Book Reading",     time: "4:00 PM – 5:30 PM",  loc: "Fulshear Branch Library",         type: "Volunteer",  desc: "Read to kids ages 4–8 at the library. Great for members who love working with children." }],
+  "2026-2-25": [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
+  "2026-2-28": [{ title: "End of Month Social",         time: "6:00 PM – 8:00 PM",  loc: "Fulshear Town Square",            type: "Social",     desc: "Celebrate a great month with fellow members. Food, fun, and club bonding." }],
 
-  "2026-3-4":  [{ title: "Divisional Council Meeting",  time: "5:00 PM – 6:30 PM",  loc: "Fulshear High School",              type: "Meeting",   desc: "Monthly council meeting with division officers and chapter representatives." }],
-  "2026-3-7":  [{ title: "Key Club General Meeting",    time: "4:00 PM – 5:00 PM",  loc: "Fulshear High School · LGI Room",  type: "Meeting",   desc: "All-member general meeting — held the 1st Tuesday of every month. Attendance required for service hour credit." }],
-  "2026-3-12": [{ title: "Park Clean-up",               time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",                type: "Service",   desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
-  "2026-3-15": [{ title: "Bake Sale Fundraiser",        time: "7:30 AM – 3:00 PM",  loc: "Fulshear High School Lobby",       type: "Fundraiser",desc: "Annual bake sale to raise funds for district conference travel and club supplies." }],
-  "2026-3-19": [{ title: "H-E-B Food Drive",            time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",           type: "Service",   desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
-  "2026-3-22": [{ title: "Spring Clean the Creek",      time: "8:00 AM – 12:00 PM", loc: "Barker Reservoir Park",            type: "Service",   desc: "Join partners from Cross Creek Ranch HOA to remove trash and invasive plants along the waterway." }],
-  "2026-3-28": [{ title: "Pediatric Hospital Visit",    time: "1:00 PM – 4:00 PM",  loc: "Texas Children's Hospital Katy",  type: "Volunteer", desc: "Bring crafts and spend time with pediatric patients. Background check required in advance." }],
+  "2026-3-4":  [{ title: "Divisional Council Meeting",  time: "5:00 PM – 6:30 PM",  loc: "Fulshear High School",             type: "Meeting",    desc: "Monthly council meeting with division officers and chapter representatives." }],
+  "2026-3-11": [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
+  "2026-3-12": [{ title: "Park Clean-up",               time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",               type: "Service",    desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
+  "2026-3-15": [{ title: "Bake Sale Fundraiser",        time: "7:30 AM – 3:00 PM",  loc: "Fulshear High School Lobby",      type: "Fundraiser", desc: "Annual bake sale to raise funds for district conference travel and club supplies." }],
+  "2026-3-19": [{ title: "H-E-B Food Drive",            time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",          type: "Service",    desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
+  "2026-3-22": [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
+  "2026-3-28": [{ title: "Pediatric Hospital Visit",    time: "1:00 PM – 4:00 PM",  loc: "Texas Children's Hospital Katy", type: "Volunteer",  desc: "Bring crafts and spend time with pediatric patients. Background check required in advance." }],
 
-  "2026-4-1":  [{ title: "Divisional Council Meeting",  time: "5:00 PM – 6:30 PM",  loc: "Fulshear High School",              type: "Meeting",   desc: "Monthly council meeting with division officers and chapter representatives." }],
-  "2026-4-7":  [{ title: "Key Club General Meeting",    time: "4:00 PM – 5:00 PM",  loc: "Fulshear High School · LGI Room",  type: "Meeting",   desc: "All-member general meeting — held the 1st Tuesday of every month. Attendance required for service hour credit." }],
-  "2026-4-11": [{ title: "Earth Day Park Cleanup",      time: "8:00 AM – 12:00 PM", loc: "Exploration Park, Fulshear",       type: "Service",   desc: "Celebrate Earth Day by removing litter and planting native wildflowers at Exploration Park." }],
-  "2026-4-18": [{ title: "Blood Drive Volunteer",       time: "9:00 AM – 3:00 PM",  loc: "Fulshear High School Cafeteria",   type: "Volunteer", desc: "Volunteer at the school's annual blood drive — help with check-in, refreshments, and donor support." }],
-  "2026-4-25": [{ title: "Senior Center Visit",         time: "2:00 PM – 5:00 PM",  loc: "Cinco Ranch Senior Living",        type: "Volunteer", desc: "Spend the afternoon with residents — play games, share stories, and bring homemade cards." }],
+  "2026-4-1":  [{ title: "Divisional Council Meeting",  time: "5:00 PM – 6:30 PM",  loc: "Fulshear High School",             type: "Meeting",    desc: "Monthly council meeting with division officers and chapter representatives." }],
+  "2026-4-8":  [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
+  "2026-4-11": [{ title: "Earth Day Park Cleanup",      time: "8:00 AM – 12:00 PM", loc: "Exploration Park, Fulshear",      type: "Service",    desc: "Celebrate Earth Day by removing litter and planting native wildflowers at Exploration Park." }],
+  "2026-4-18": [{ title: "Blood Drive Volunteer",       time: "9:00 AM – 3:00 PM",  loc: "Fulshear High School Cafeteria",  type: "Volunteer",  desc: "Volunteer at the school's annual blood drive — help with check-in, refreshments, and donor support." }],
+  "2026-4-22": [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
+  "2026-4-25": [{ title: "Senior Center Visit",         time: "2:00 PM – 5:00 PM",  loc: "Cinco Ranch Senior Living",       type: "Volunteer",  desc: "Spend the afternoon with residents — play games, share stories, and bring homemade cards." }],
 };
 
-const typeColors: Record<string, string> = {
-  Meeting:    "rgba(100,149,237,1)",
-  Volunteer:  "rgba(201,168,76,1)",
-  Service:    "rgba(80,200,120,1)",
-  Social:     "rgba(200,100,200,1)",
-  Fundraiser: "rgba(255,140,60,1)",
+const TYPE_COLOR: Record<string, string> = {
+  Meeting:    "#6495ed",
+  Volunteer:  "#c9a84c",
+  Service:    "#50c878",
+  Social:     "#c864c8",
+  Fundraiser: "#ff8c3c",
 };
-const typeBg: Record<string, string> = {
-  Meeting:    "rgba(100,149,237,0.15)",
-  Volunteer:  "rgba(201,168,76,0.12)",
-  Service:    "rgba(80,200,120,0.12)",
-  Social:     "rgba(200,100,200,0.12)",
-  Fundraiser: "rgba(255,140,60,0.12)",
+const TYPE_BG: Record<string, string> = {
+  Meeting:    "rgba(100,149,237,0.14)",
+  Volunteer:  "rgba(201,168,76,0.13)",
+  Service:    "rgba(80,200,120,0.13)",
+  Social:     "rgba(200,100,200,0.13)",
+  Fundraiser: "rgba(255,140,60,0.13)",
 };
 
 type EventItem = { title: string; time: string; loc: string; type: string; desc: string; day: number };
@@ -51,336 +51,393 @@ type EventItem = { title: string; time: string; loc: string; type: string; desc:
 export default function CalendarPage() {
   const today = new Date();
   const [viewYear,  setViewYear]  = useState(today.getFullYear());
-  const [viewMonth, setViewMonth] = useState(today.getMonth()); // 0-based
-  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+  const [viewMonth, setViewMonth] = useState(today.getMonth());
+  const [selected,  setSelected]  = useState<EventItem | null>(null);
+  const [view,      setView]      = useState<"month" | "list">("month");
 
   useEffect(() => {
     const els = document.querySelectorAll(".fade-in");
     const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } }),
-      { threshold: 0.05 }
+      (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } }),
+      { threshold: 0.04 }
     );
-    els.forEach((el) => obs.observe(el));
+    els.forEach(el => obs.observe(el));
     return () => obs.disconnect();
   }, []);
 
-  // Navigate months
-  const prevMonth = () => {
-    if (viewMonth === 0) { setViewMonth(11); setViewYear(viewYear - 1); }
-    else setViewMonth(viewMonth - 1);
-  };
-  const nextMonth = () => {
-    if (viewMonth === 11) { setViewMonth(0); setViewYear(viewYear + 1); }
-    else setViewMonth(viewMonth + 1);
-  };
+  const prevMonth = () => { if (viewMonth === 0) { setViewMonth(11); setViewYear((y: number) => y - 1); } else setViewMonth((m: number) => m - 1); };
+  const nextMonth = () => { if (viewMonth === 11) { setViewMonth(0);  setViewYear((y: number) => y + 1); } else setViewMonth((m: number) => m + 1); };
+  const jumpToday = () => { setViewYear(today.getFullYear()); setViewMonth(today.getMonth()); };
 
-  // Build calendar grid
-  const firstWeekday = new Date(viewYear, viewMonth, 1).getDay();
-  const daysInMonth  = new Date(viewYear, viewMonth + 1, 0).getDate();
-  const daysInPrev   = new Date(viewYear, viewMonth, 0).getDate();
-
+  const firstWD    = new Date(viewYear, viewMonth, 1).getDay();
+  const daysInMo   = new Date(viewYear, viewMonth + 1, 0).getDate();
+  const daysInPrev = new Date(viewYear, viewMonth, 0).getDate();
   const gridDays: { date: number; current: boolean }[] = [];
-  for (let i = firstWeekday - 1; i >= 0; i--)
-    gridDays.push({ date: daysInPrev - i, current: false });
-  for (let d = 1; d <= daysInMonth; d++)
-    gridDays.push({ date: d, current: true });
-  const trailing = (7 - (gridDays.length % 7)) % 7;
-  for (let d = 1; d <= trailing; d++)
-    gridDays.push({ date: d, current: false });
+  for (let i = firstWD - 1; i >= 0; i--) gridDays.push({ date: daysInPrev - i, current: false });
+  for (let d = 1; d <= daysInMo; d++)   gridDays.push({ date: d, current: true });
+  const trail = (7 - (gridDays.length % 7)) % 7;
+  for (let d = 1; d <= trail; d++) gridDays.push({ date: d, current: false });
 
-  // Events for viewed month
   const monthEvents: EventItem[] = Object.entries(allEvents)
-    .filter(([key]) => {
-      const [y, m] = key.split("-").map(Number);
-      return y === viewYear && m === viewMonth;
-    })
-    .flatMap(([key, evs]) => {
-      const day = Number(key.split("-")[2]);
-      return evs.map(ev => ({ ...ev, day }));
-    })
+    .filter(([k]) => { const [y,m] = k.split("-").map(Number); return y === viewYear && m === viewMonth; })
+    .flatMap(([k, evs]) => { const day = Number(k.split("-")[2]); return evs.map(ev => ({ ...ev, day })); })
     .sort((a, b) => a.day - b.day);
 
-  const eventsByDay: Record<number, EventItem[]> = {};
-  monthEvents.forEach(ev => {
-    if (!eventsByDay[ev.day]) eventsByDay[ev.day] = [];
-    eventsByDay[ev.day].push(ev);
-  });
+  const byDay: Record<number, EventItem[]> = {};
+  monthEvents.forEach(ev => { (byDay[ev.day] ??= []).push(ev); });
 
-  const isToday = (d: number) =>
-    d === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear();
+  const isToday = (d: number) => d === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear();
 
   return (
-    <main style={{ minHeight: "100vh", position: "relative", display: "flex", flexDirection: "column", paddingTop: "8rem", paddingBottom: "4rem" }}>
+    <main style={{ minHeight: "100vh", paddingTop: "7rem", paddingBottom: "5rem", position: "relative" }}>
       <style>{`
-        .calendar-page-bg {
-          position:absolute; inset:0; pointer-events:none; z-index:0;
+        .cal-bg {
+          position:fixed; inset:0; pointer-events:none; z-index:0;
           background:
-            radial-gradient(circle at 10% 20%, rgba(26,58,143,0.1) 0%, transparent 60%),
-            radial-gradient(circle at 90% 80%, rgba(201,168,76,0.06) 0%, transparent 50%);
+            radial-gradient(ellipse 60% 50% at 15% 25%, rgba(26,58,143,0.09) 0%, transparent 65%),
+            radial-gradient(ellipse 50% 40% at 85% 75%, rgba(100,40,200,0.07) 0%, transparent 60%),
+            radial-gradient(ellipse 40% 35% at 75% 15%, rgba(201,168,76,0.04) 0%, transparent 55%);
         }
-        .cal-page-content {
-          position:relative; z-index:2;
-          max-width:1400px; width:100%; margin:0 auto; padding:0 1.5rem;
-          flex-grow:1; display:flex; flex-direction:column;
-        }
-        .cal-page-header { text-align:center; margin-bottom:3rem; }
-        .cal-page-header p { color:var(--silver); font-size:0.95rem; max-width:480px; margin:0.75rem auto 0; line-height:1.7; }
-        .cal-dashboard { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start; }
+        .cal-wrap { position:relative; z-index:2; max-width:1380px; margin:0 auto; padding:0 1.5rem; }
 
-        /* ── CALENDAR ── */
+        /* ── HEADER ── */
+        .cal-head { text-align:center; margin-bottom:3.5rem; }
+        .cal-head p { color:var(--silver); font-size:0.95rem; max-width:500px; margin:0.75rem auto 0; line-height:1.7; }
+
+        /* ── VIEW TOGGLE ── */
+        .cal-toggle {
+          display:inline-flex; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+          border-radius:10px; overflow:hidden; margin:0 auto 2.5rem; display:flex; width:fit-content;
+        }
+        .cal-toggle-btn {
+          padding:0.5rem 1.4rem; font-size:0.75rem; font-weight:700; letter-spacing:0.1em;
+          text-transform:uppercase; border:none; cursor:pointer; transition:all 0.22s; background:transparent; color:var(--silver);
+        }
+        .cal-toggle-btn.active { background:rgba(201,168,76,0.15); color:var(--gold); }
+
+        /* ── MAIN GRID ── */
+        .cal-grid-layout { display:grid; grid-template-columns:1.15fr 1fr; gap:2rem; align-items:start; }
+
+        /* ── CALENDAR SHELL ── */
         .cal-shell {
-          background:rgba(10,15,30,0.7); border-radius:20px;
-          border:1px solid rgba(100,149,237,0.15);
-          backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
-          padding:2.5rem; box-shadow:0 20px 50px rgba(0,0,0,0.5);
+          background:linear-gradient(145deg,rgba(12,18,40,0.92) 0%,rgba(8,12,28,0.96) 100%);
+          border:1px solid rgba(100,149,237,0.14); border-radius:22px;
+          backdrop-filter:blur(28px); -webkit-backdrop-filter:blur(28px);
+          padding:2.2rem; box-shadow:0 24px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.03);
           position:sticky; top:6rem;
         }
-        .cal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; }
-        .cal-title-area { text-align:center; flex-grow:1; }
-        .cal-subtitle { font-size:0.72rem; color:var(--gold); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.2rem; font-weight:700; }
-        .cal-title { font-size:1.75rem; font-weight:800; color:white; }
-        .cal-events-count { font-size:0.78rem; color:var(--silver); margin-top:0.2rem; }
+        .cal-nav-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.75rem; }
         .cal-nav-btn {
-          background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
-          color:var(--gold); font-size:1.3rem; cursor:pointer; padding:0.4rem 0.7rem;
-          border-radius:8px; transition:all 0.2s; line-height:1;
+          width:36px; height:36px; display:flex; align-items:center; justify-content:center;
+          background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.09);
+          color:var(--gold); font-size:1.2rem; border-radius:9px; cursor:pointer; transition:all 0.2s;
         }
-        .cal-nav-btn:hover { background:rgba(201,168,76,0.12); border-color:rgba(201,168,76,0.4); transform:scale(1.08); }
-        .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
-        .cal-day-header { text-align:center; font-size:0.7rem; color:var(--silver); padding-bottom:0.6rem; font-weight:600; letter-spacing:0.05em; }
-        .cal-day {
-          background:rgba(255,255,255,0.02); border-radius:8px;
-          padding:0.45rem 0.2rem; text-align:center;
-          display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
-          border:1px solid rgba(255,255,255,0.04); transition:all 0.18s; min-height:58px;
+        .cal-nav-btn:hover { background:rgba(201,168,76,0.14); border-color:rgba(201,168,76,0.4); transform:scale(1.07); }
+        .cal-today-btn {
+          font-size:0.65rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+          color:var(--silver); background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.09);
+          border-radius:7px; padding:0.3rem 0.75rem; cursor:pointer; transition:all 0.2s;
         }
-        .cal-day.has-event {
-          cursor:pointer; background:rgba(26,58,143,0.12);
-          border-color:rgba(100,149,237,0.25);
-        }
-        .cal-day.has-event:hover, .cal-day.has-event.selected {
-          background:rgba(201,168,76,0.12); border-color:rgba(201,168,76,0.5);
-          transform:translateY(-2px); box-shadow:0 6px 16px rgba(201,168,76,0.1);
-        }
-        .cal-day.is-today .cal-day-num {
-          background:var(--gold); color:#000; border-radius:50%;
-          width:26px; height:26px; display:flex; align-items:center; justify-content:center;
-          font-size:0.85rem; margin:0 auto 0.25rem;
-        }
-        .cal-day.muted { opacity:0.2; pointer-events:none; border-color:transparent; background:transparent; }
-        .cal-day-num { font-size:0.9rem; font-weight:700; color:white; margin-bottom:0.2rem; }
-        .cal-day-dots { display:flex; gap:2px; justify-content:center; flex-wrap:wrap; padding:0 2px; }
-        .cal-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+        .cal-today-btn:hover { color:var(--gold); border-color:rgba(201,168,76,0.4); }
+        .cal-month-label { text-align:center; }
+        .cal-month-name  { font-size:1.55rem; font-weight:900; color:white; letter-spacing:-0.02em; line-height:1; }
+        .cal-month-count { font-size:0.7rem; color:var(--silver); margin-top:0.25rem; letter-spacing:0.06em; }
 
-        /* ── EVENT LIST ── */
-        .event-list-panel {
-          background:rgba(10,15,30,0.7); border-radius:20px;
-          border:1px solid rgba(100,149,237,0.15);
-          backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
-          padding:2rem; box-shadow:0 20px 50px rgba(0,0,0,0.5);
-          display:flex; flex-direction:column; gap:0.65rem;
+        .cal-dow-row { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:6px; }
+        .cal-dow { text-align:center; font-size:0.65rem; font-weight:700; color:rgba(154,171,204,0.55); letter-spacing:0.06em; padding-bottom:0.5rem; text-transform:uppercase; }
+
+        .cal-days { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+        .cal-cell {
+          aspect-ratio:1; border-radius:9px; display:flex; flex-direction:column;
+          align-items:center; justify-content:flex-start; padding:0.35rem 0.15rem 0.2rem;
+          border:1px solid transparent; transition:all 0.18s; position:relative;
+          background:rgba(255,255,255,0.018);
         }
-        .event-list-heading { font-size:0.72rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:0.25rem; }
-        .event-list-empty { text-align:center; color:var(--silver); opacity:0.5; padding:3rem 1rem; font-size:0.9rem; }
-        .event-list-item {
-          display:flex; align-items:center; gap:0.9rem;
-          padding:0.9rem 1.1rem; border-radius:12px;
-          background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06);
-          cursor:pointer; transition:all 0.2s;
+        .cal-cell.muted { opacity:0.15; pointer-events:none; background:transparent; }
+        .cal-cell.has-event {
+          cursor:pointer; background:rgba(26,58,143,0.12);
+          border-color:rgba(100,149,237,0.18);
         }
-        .event-list-item:hover, .event-list-item.active {
-          background:rgba(201,168,76,0.08); border-color:rgba(201,168,76,0.35);
-          transform:translateX(4px);
+        .cal-cell.has-event:hover { background:rgba(201,168,76,0.1); border-color:rgba(201,168,76,0.4); transform:scale(1.04); box-shadow:0 4px 14px rgba(0,0,0,0.35); }
+        .cal-cell.active { background:rgba(201,168,76,0.13) !important; border-color:rgba(201,168,76,0.55) !important; }
+        .cal-cell-num { font-size:0.82rem; font-weight:700; color:rgba(255,255,255,0.85); line-height:1; margin-bottom:3px; }
+        .cal-cell.today .cal-cell-num {
+          background:var(--gold); color:#000; border-radius:50%;
+          width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:0.75rem;
         }
-        .event-list-date { min-width:2.8rem; text-align:center; display:flex; flex-direction:column; align-items:center; }
-        .event-list-day-num { font-size:1.45rem; font-weight:900; color:white; line-height:1; }
-        .event-list-day-label { font-size:0.58rem; color:var(--gold); font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
-        .event-list-divider { width:1px; height:36px; background:rgba(255,255,255,0.08); flex-shrink:0; }
-        .event-list-info { flex-grow:1; min-width:0; }
-        .event-list-title { font-size:0.88rem; font-weight:700; color:white; margin-bottom:0.15rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .event-list-meta { font-size:0.72rem; color:var(--silver); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .event-list-badge { font-size:0.6rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:0.18rem 0.5rem; border-radius:999px; flex-shrink:0; border:1px solid; }
-        .event-list-arrow { color:var(--silver); font-size:0.9rem; flex-shrink:0; opacity:0.45; }
+        .cal-dots { display:flex; gap:2px; justify-content:center; }
+        .cal-dot  { width:4px; height:4px; border-radius:50%; flex-shrink:0; }
+
+        /* ── LEGEND ── */
+        .cal-legend { display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1.5rem; justify-content:center; }
+        .cal-legend-item { display:flex; align-items:center; gap:0.35rem; font-size:0.62rem; color:var(--silver); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; }
+        .cal-legend-dot  { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+        /* ── EVENT PANEL ── */
+        .event-panel {
+          display:flex; flex-direction:column; gap:0;
+          background:linear-gradient(145deg,rgba(12,18,40,0.92) 0%,rgba(8,12,28,0.96) 100%);
+          border:1px solid rgba(100,149,237,0.14); border-radius:22px;
+          backdrop-filter:blur(28px); -webkit-backdrop-filter:blur(28px);
+          overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.03);
+        }
+        .event-panel-head {
+          padding:1.6rem 1.8rem 1.2rem;
+          border-bottom:1px solid rgba(255,255,255,0.05);
+          display:flex; align-items:center; justify-content:space-between;
+        }
+        .event-panel-title { font-size:0.68rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); }
+        .event-panel-count { font-size:0.68rem; color:var(--silver); }
+        .event-panel-body  { padding:1rem; display:flex; flex-direction:column; gap:0.55rem; max-height:520px; overflow-y:auto; }
+        .event-panel-empty { text-align:center; color:var(--silver); opacity:0.45; padding:3.5rem 1.5rem; }
+        .event-panel-empty span { font-size:2rem; display:block; margin-bottom:0.75rem; }
+
+        .event-card {
+          display:grid; grid-template-columns:48px 1px 1fr auto;
+          gap:0 0.9rem; align-items:center;
+          padding:0.95rem 1rem; border-radius:12px;
+          background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.055);
+          cursor:pointer; transition:all 0.22s;
+        }
+        .event-card:hover, .event-card.active {
+          background:rgba(201,168,76,0.07); border-color:rgba(201,168,76,0.3);
+          transform:translateX(3px);
+          box-shadow:0 4px 18px rgba(0,0,0,0.3);
+        }
+        .event-card-date { text-align:center; }
+        .event-card-day  { font-size:1.5rem; font-weight:900; color:white; line-height:1; display:block; }
+        .event-card-mon  { font-size:0.58rem; font-weight:700; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; }
+        .event-card-bar  { width:1px; height:38px; background:rgba(255,255,255,0.07); }
+        .event-card-info { min-width:0; }
+        .event-card-name { font-size:0.86rem; font-weight:700; color:white; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:0.2rem; }
+        .event-card-time { font-size:0.7rem; color:var(--silver); }
+        .event-badge { font-size:0.58rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:0.2rem 0.55rem; border-radius:999px; border:1px solid; white-space:nowrap; }
+
+        /* ── LIST VIEW ── */
+        .list-view { display:flex; flex-direction:column; gap:0.6rem; }
+        .list-month-group { margin-bottom:1.5rem; }
+        .list-month-head  { font-size:0.7rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); padding:0.5rem 0 0.75rem; border-bottom:1px solid rgba(201,168,76,0.14); margin-bottom:0.75rem; }
 
         /* ── MODAL ── */
-        .event-modal-overlay {
-          position:fixed; inset:0; z-index:9990; background:rgba(0,0,0,0.82);
-          display:flex; align-items:center; justify-content:center; padding:1.5rem;
-          animation:lbFadeIn 0.2s ease;
+        .modal-overlay {
+          position:fixed; inset:0; z-index:9990; background:rgba(0,0,0,0.85);
+          backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; padding:1.5rem;
+          animation:fadein 0.18s ease;
         }
-        @keyframes lbFadeIn { from{opacity:0} to{opacity:1} }
-        .event-modal {
-          background:rgba(10,15,35,0.97); border:1px solid rgba(201,168,76,0.25);
-          border-radius:20px; width:100%; max-width:680px;
-          box-shadow:0 40px 100px rgba(0,0,0,0.7), 0 0 60px rgba(201,168,76,0.07);
-          overflow:hidden; animation:modalZoom 0.25s cubic-bezier(0.22,1,0.36,1);
-          max-height:90vh; display:flex; flex-direction:column;
+        @keyframes fadein { from{opacity:0} to{opacity:1} }
+        .modal-box {
+          background:linear-gradient(145deg,rgba(10,15,35,0.99),rgba(6,9,22,0.99));
+          border:1px solid rgba(201,168,76,0.22); border-radius:22px;
+          width:100%; max-width:660px; max-height:88vh;
+          box-shadow:0 40px 120px rgba(0,0,0,0.75), 0 0 60px rgba(201,168,76,0.06);
+          overflow:hidden; display:flex; flex-direction:column;
+          animation:zoom 0.24s cubic-bezier(0.22,1,0.36,1);
         }
-        @keyframes modalZoom { from{transform:scale(0.92);opacity:0} to{transform:scale(1);opacity:1} }
-        .event-modal-header {
-          padding:1.75rem 2rem 1.25rem; border-bottom:1px solid rgba(255,255,255,0.06);
+        @keyframes zoom { from{transform:scale(0.9) translateY(12px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
+        .modal-head {
+          padding:1.75rem 2rem 1.4rem;
+          border-bottom:1px solid rgba(255,255,255,0.06);
           display:flex; align-items:flex-start; justify-content:space-between; gap:1rem;
         }
-        .event-modal-badge { display:inline-block; padding:0.25rem 0.8rem; border-radius:999px; font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.75rem; border:1px solid; }
-        .event-modal-title { font-size:1.5rem; font-weight:900; color:white; line-height:1.2; }
-        .modal-close-btn {
-          background:rgba(255,255,255,0.06); border:none; color:rgba(255,255,255,0.6);
-          font-size:1.2rem; width:34px; height:34px; border-radius:50%; cursor:pointer;
-          display:flex; align-items:center; justify-content:center; transition:all 0.2s; flex-shrink:0;
+        .modal-title { font-size:1.45rem; font-weight:900; color:white; line-height:1.2; margin-top:0.6rem; }
+        .modal-close {
+          width:32px; height:32px; border-radius:50%; border:none; flex-shrink:0;
+          background:rgba(255,255,255,0.07); color:rgba(255,255,255,0.55); font-size:1rem;
+          display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;
         }
-        .modal-close-btn:hover { background:rgba(201,168,76,0.15); color:var(--gold); }
-        .event-modal-body { padding:1.5rem 2rem; overflow-y:auto; flex-grow:1; }
-        .event-modal-detail { display:flex; align-items:flex-start; gap:0.75rem; margin-bottom:0.85rem; }
-        .event-modal-detail-icon { color:var(--gold); font-size:1rem; flex-shrink:0; margin-top:0.1rem; }
-        .event-modal-detail-label { font-size:0.68rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:0.12rem; }
-        .event-modal-detail-val { font-size:0.88rem; color:var(--silver); }
-        .event-modal-desc { font-size:0.88rem; color:var(--silver); line-height:1.65; margin:1.25rem 0; padding:1.25rem; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid rgba(255,255,255,0.06); }
-        .event-modal-map { margin-top:0.5rem; border-radius:12px; overflow:hidden; height:260px; border:1px solid rgba(255,255,255,0.08); background:#0a0f1e; }
-        .event-modal-map iframe { width:100%; height:100%; border:0; display:block; }
+        .modal-close:hover { background:rgba(201,168,76,0.18); color:var(--gold); }
+        .modal-body { padding:1.5rem 2rem 2rem; overflow-y:auto; flex-grow:1; }
+        .modal-row  { display:flex; align-items:flex-start; gap:0.75rem; margin-bottom:0.9rem; }
+        .modal-icon { font-size:1rem; color:var(--gold); flex-shrink:0; margin-top:0.15rem; }
+        .modal-lbl  { font-size:0.65rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); margin-bottom:0.1rem; }
+        .modal-val  { font-size:0.88rem; color:var(--silver); }
+        .modal-desc { font-size:0.88rem; color:var(--silver); line-height:1.7; margin:1.25rem 0; padding:1.2rem; background:rgba(255,255,255,0.028); border-radius:12px; border:1px solid rgba(255,255,255,0.06); }
+        .modal-map  { border-radius:14px; overflow:hidden; height:240px; border:1px solid rgba(255,255,255,0.08); margin-top:0.5rem; }
+        .modal-map iframe { width:100%; height:100%; border:0; display:block; }
 
-        @media(max-width:900px){
-          .cal-dashboard { grid-template-columns:1fr; }
+        @media(max-width:960px){
+          .cal-grid-layout { grid-template-columns:1fr; }
           .cal-shell { position:static; }
+          .event-panel-body { max-height:400px; }
         }
-        @media(max-width:500px){
-          .cal-grid { gap:3px; }
-          .cal-day { min-height:46px; }
+        @media(max-width:560px){
+          .cal-days { gap:2px; }
+          .cal-cell { padding:0.25rem 0.1rem 0.15rem; border-radius:6px; }
+          .cal-cell-num { font-size:0.72rem; }
+          .event-card { grid-template-columns:40px 1px 1fr auto; gap:0 0.7rem; }
+          .modal-head { padding:1.25rem 1.25rem 1rem; }
+          .modal-body { padding:1rem 1.25rem 1.5rem; }
+          .modal-title { font-size:1.2rem; }
         }
       `}</style>
 
-      <div className="calendar-page-bg" />
-      <div className="cal-page-content">
-        <div className="cal-page-header fade-in">
+      <div className="cal-bg" />
+      <div className="cal-wrap">
+
+        {/* Header */}
+        <div className="cal-head fade-in">
           <p className="section-label" style={{ justifyContent:"center" }}>Schedule</p>
           <h1 className="section-heading">Event Calendar</h1>
-          <p>Tap a date or select an event below to see full details and directions.</p>
+          <p>Browse upcoming meetings, volunteer events, and service opportunities.</p>
         </div>
 
-        <div className="cal-dashboard">
+        {/* View toggle */}
+        <div style={{ display:"flex", justifyContent:"center" }}>
+          <div className="cal-toggle">
+            <button className={`cal-toggle-btn${view==="month" ? " active" : ""}`} onClick={() => setView("month")}>Month</button>
+            <button className={`cal-toggle-btn${view==="list"  ? " active" : ""}`} onClick={() => setView("list")}>All Events</button>
+          </div>
+        </div>
 
-          {/* LEFT: CALENDAR */}
-          <div className="cal-shell fade-in">
-            <div className="cal-header">
-              <button className="cal-nav-btn" onClick={prevMonth} aria-label="Previous month">‹</button>
-              <div className="cal-title-area">
-                <div className="cal-subtitle">Key Club Events</div>
-                <div className="cal-title">{MONTHS[viewMonth]} {viewYear}</div>
-                <div className="cal-events-count">
-                  {monthEvents.length > 0 ? `${monthEvents.length} event${monthEvents.length !== 1 ? "s" : ""} this month` : "No events scheduled"}
+        {view === "month" ? (
+          <div className="cal-grid-layout fade-in">
+
+            {/* Calendar */}
+            <div className="cal-shell">
+              <div className="cal-nav-row">
+                <button className="cal-nav-btn" onClick={prevMonth} aria-label="Previous">‹</button>
+                <div className="cal-month-label">
+                  <div className="cal-month-name">{MONTHS[viewMonth]} {viewYear}</div>
+                  <div className="cal-month-count">
+                    {monthEvents.length > 0 ? `${monthEvents.length} event${monthEvents.length !== 1 ? "s" : ""}` : "No events"}
+                  </div>
                 </div>
+                <button className="cal-nav-btn" onClick={nextMonth} aria-label="Next">›</button>
               </div>
-              <button className="cal-nav-btn" onClick={nextMonth} aria-label="Next month">›</button>
+              <div style={{ display:"flex", justifyContent:"center", marginBottom:"1.2rem" }}>
+                <button className="cal-today-btn" onClick={jumpToday}>Today</button>
+              </div>
+
+              <div className="cal-dow-row">
+                {DAYS.map(d => <div key={d} className="cal-dow">{d}</div>)}
+              </div>
+              <div className="cal-days">
+                {gridDays.map((day, i) => {
+                  const evs = day.current ? (byDay[day.date] ?? []) : [];
+                  return (
+                    <div
+                      key={i}
+                      className={`cal-cell${!day.current ? " muted":""}${evs.length > 0 ? " has-event":""}${selected?.day === day.date && evs.some(e=>e===selected) ? " active":""}${isToday(day.date) && day.current ? " today":""}`}
+                      onClick={() => evs.length > 0 && setSelected(evs[0])}
+                    >
+                      <span className="cal-cell-num">{day.date}</span>
+                      {evs.length > 0 && (
+                        <div className="cal-dots">
+                          {evs.slice(0,3).map((ev,j) => <span key={j} className="cal-dot" style={{ background: TYPE_COLOR[ev.type] ?? "var(--gold)" }} />)}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="cal-legend">
+                {Object.entries(TYPE_COLOR).map(([type, color]) => (
+                  <span key={type} className="cal-legend-item">
+                    <span className="cal-legend-dot" style={{ background: color }} />
+                    {type}
+                  </span>
+                ))}
+              </div>
             </div>
 
-            <div className="cal-grid">
-              {DAYS_OF_WEEK.map(d => <div key={d} className="cal-day-header">{d}</div>)}
-              {gridDays.map((day, i) => {
-                const dayEvents = day.current ? (eventsByDay[day.date] ?? []) : [];
-                const isSelected = selectedEvent?.day === day.date && day.current && dayEvents.some(e => e === selectedEvent);
-                return (
-                  <div
-                    key={i}
-                    className={`cal-day${!day.current ? " muted" : ""}${dayEvents.length > 0 ? " has-event" : ""}${isSelected ? " selected" : ""}${isToday(day.date) && day.current ? " is-today" : ""}`}
-                    onClick={() => { if (day.current && dayEvents.length > 0) setSelectedEvent(dayEvents[0]); }}
-                  >
-                    <span className="cal-day-num">{day.date}</span>
-                    {dayEvents.length > 0 && (
-                      <div className="cal-day-dots">
-                        {dayEvents.slice(0, 3).map((ev, j) => (
-                          <span key={j} className="cal-dot" style={{ background: typeColors[ev.type] ?? "var(--gold)" }} />
-                        ))}
+            {/* Event list */}
+            <div className="event-panel fade-in" style={{ transitionDelay:"0.08s" }}>
+              <div className="event-panel-head">
+                <span className="event-panel-title">{MONTHS[viewMonth]} Events</span>
+                <span className="event-panel-count">{monthEvents.length} scheduled</span>
+              </div>
+              <div className="event-panel-body">
+                {monthEvents.length === 0 ? (
+                  <div className="event-panel-empty">
+                    <span>📅</span>
+                    No events for {MONTHS[viewMonth]}.<br/>Use the arrows to browse.
+                  </div>
+                ) : (
+                  monthEvents.map((ev, i) => (
+                    <div
+                      key={i}
+                      className={`event-card${selected === ev ? " active":""}`}
+                      onClick={() => setSelected(ev)}
+                    >
+                      <div className="event-card-date">
+                        <span className="event-card-day">{ev.day}</span>
+                        <span className="event-card-mon">{MONTHS[viewMonth].slice(0,3)}</span>
                       </div>
-                    )}
-                  </div>
-                );
-              })}
+                      <div className="event-card-bar" />
+                      <div className="event-card-info">
+                        <div className="event-card-name">{ev.title}</div>
+                        <div className="event-card-time">⏱ {ev.time}</div>
+                      </div>
+                      <span className="event-badge" style={{ color: TYPE_COLOR[ev.type], background: TYPE_BG[ev.type], borderColor: TYPE_COLOR[ev.type] }}>{ev.type}</span>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
-
-          {/* RIGHT: EVENT LIST */}
-          <div className="event-list-panel fade-in" style={{ transitionDelay: "0.1s" }}>
-            <div className="event-list-heading">{MONTHS[viewMonth]} {viewYear} — Upcoming Events</div>
-            {monthEvents.length === 0 ? (
-              <div className="event-list-empty">
-                <div style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>📅</div>
-                No events scheduled for {MONTHS[viewMonth]}.<br/>Use the arrows to browse other months.
-              </div>
-            ) : (
-              monthEvents.map((ev, i) => {
-                const color = typeColors[ev.type] ?? "var(--silver)";
-                const bg    = typeBg[ev.type]    ?? "rgba(255,255,255,0.08)";
-                return (
-                  <div
-                    key={i}
-                    className={`event-list-item${selectedEvent === ev ? " active" : ""}`}
-                    onClick={() => setSelectedEvent(ev)}
-                  >
-                    <div className="event-list-date">
-                      <span className="event-list-day-num">{ev.day}</span>
-                      <span className="event-list-day-label">{MONTHS[viewMonth].slice(0,3)}</span>
+        ) : (
+          /* ALL EVENTS LIST VIEW */
+          <div className="list-view fade-in" style={{ maxWidth:780, margin:"0 auto" }}>
+            {Object.entries(
+              Object.entries(allEvents)
+                .flatMap(([k, evs]) => { const [y,m,d] = k.split("-").map(Number); return evs.map(ev => ({ ...ev, day:d, month:m, year:y })); })
+                .sort((a,b) => new Date(a.year, a.month, a.day).getTime() - new Date(b.year, b.month, b.day).getTime())
+                .reduce((acc, ev) => {
+                  const key = `${MONTHS[ev.month]} ${ev.year}`;
+                  (acc[key] ??= []).push(ev);
+                  return acc;
+                }, {} as Record<string, (EventItem & { month:number; year:number })[]>)
+            ).map(([label, evs]) => (
+              <div key={label} className="list-month-group">
+                <div className="list-month-head">{label}</div>
+                {evs.map((ev, i) => (
+                  <div key={i} className={`event-card${selected === ev ? " active":""}`} style={{ marginBottom:"0.55rem" }} onClick={() => setSelected(ev)}>
+                    <div className="event-card-date">
+                      <span className="event-card-day">{ev.day}</span>
+                      <span className="event-card-mon">{MONTHS[ev.month].slice(0,3)}</span>
                     </div>
-                    <div className="event-list-divider" />
-                    <div className="event-list-info">
-                      <div className="event-list-title">{ev.title}</div>
-                      <div className="event-list-meta">⏱ {ev.time}</div>
+                    <div className="event-card-bar" />
+                    <div className="event-card-info">
+                      <div className="event-card-name">{ev.title}</div>
+                      <div className="event-card-time">⏱ {ev.time} · 📍 {ev.loc}</div>
                     </div>
-                    <span className="event-list-badge" style={{ color, background: bg, borderColor: color }}>{ev.type}</span>
-                    <span className="event-list-arrow">›</span>
+                    <span className="event-badge" style={{ color: TYPE_COLOR[ev.type], background: TYPE_BG[ev.type], borderColor: TYPE_COLOR[ev.type] }}>{ev.type}</span>
                   </div>
-                );
-              })
-            )}
+                ))}
+              </div>
+            ))}
           </div>
-
-        </div>
+        )}
       </div>
 
-      {/* MODAL */}
-      {selectedEvent && (
-        <div className="event-modal-overlay" onClick={() => setSelectedEvent(null)}>
-          <div className="event-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="event-modal-header">
+      {/* Modal */}
+      {selected && (
+        <div className="modal-overlay" onClick={() => setSelected(null)}>
+          <div className="modal-box" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+            <div className="modal-head">
               <div>
-                <span
-                  className="event-modal-badge"
-                  style={{
-                    color: typeColors[selectedEvent.type] ?? "var(--silver)",
-                    background: typeBg[selectedEvent.type] ?? "rgba(255,255,255,0.08)",
-                    borderColor: typeColors[selectedEvent.type] ?? "var(--silver)",
-                  }}
-                >{selectedEvent.type}</span>
-                <h2 className="event-modal-title">{selectedEvent.title}</h2>
+                <span className="event-badge" style={{ color: TYPE_COLOR[selected.type], background: TYPE_BG[selected.type], borderColor: TYPE_COLOR[selected.type] }}>{selected.type}</span>
+                <h2 className="modal-title">{selected.title}</h2>
               </div>
-              <button className="modal-close-btn" onClick={() => setSelectedEvent(null)}>✕</button>
+              <button className="modal-close" onClick={() => setSelected(null)}>✕</button>
             </div>
-            <div className="event-modal-body">
-              <div className="event-modal-detail">
-                <span className="event-modal-detail-icon">📅</span>
-                <div>
-                  <div className="event-modal-detail-label">Date</div>
-                  <div className="event-modal-detail-val">{MONTHS[viewMonth]} {selectedEvent.day}, {viewYear}</div>
-                </div>
+            <div className="modal-body">
+              <div className="modal-row">
+                <span className="modal-icon">📅</span>
+                <div><div className="modal-lbl">Date</div><div className="modal-val">{MONTHS[viewMonth]} {selected.day}, {viewYear}</div></div>
               </div>
-              <div className="event-modal-detail">
-                <span className="event-modal-detail-icon">⏱</span>
-                <div>
-                  <div className="event-modal-detail-label">Time</div>
-                  <div className="event-modal-detail-val">{selectedEvent.time}</div>
-                </div>
+              <div className="modal-row">
+                <span className="modal-icon">⏱</span>
+                <div><div className="modal-lbl">Time</div><div className="modal-val">{selected.time}</div></div>
               </div>
-              <div className="event-modal-detail">
-                <span className="event-modal-detail-icon">📍</span>
-                <div>
-                  <div className="event-modal-detail-label">Location</div>
-                  <div className="event-modal-detail-val">{selectedEvent.loc}</div>
-                </div>
+              <div className="modal-row">
+                <span className="modal-icon">📍</span>
+                <div><div className="modal-lbl">Location</div><div className="modal-val">{selected.loc}</div></div>
               </div>
-              <div className="event-modal-desc">{selectedEvent.desc}</div>
-              <div className="event-modal-map">
-                <iframe
-                  loading="lazy"
-                  src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedEvent.loc)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
-                />
+              <div className="modal-desc">{selected.desc}</div>
+              <div className="modal-map">
+                <iframe loading="lazy" src={`https://maps.google.com/maps?q=${encodeURIComponent(selected.loc)}&t=&z=14&ie=UTF8&iwloc=&output=embed`} />
               </div>
             </div>
           </div>
