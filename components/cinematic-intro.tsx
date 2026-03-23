@@ -204,13 +204,13 @@ export default function CinematicIntro() {
     undefined;
 
   const baseWrapper = {
-    position: "fixed",
+    position: "fixed" as const,
     top: "50%", left: "50%",
     transform: "translateX(-50%) translateY(-50%)",
     width: "280px", height: "280px",
     perspective: "1200px",
-    pointerEvents: "none",
-    display: isDone ? "none" : undefined,
+    pointerEvents: "none" as const,
+    display: isDone ? "none" as const : undefined,
   };
 
   return (
