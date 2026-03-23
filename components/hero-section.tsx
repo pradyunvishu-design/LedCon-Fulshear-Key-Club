@@ -391,14 +391,7 @@ export default function HeroSection() {
 
         /* Centre glow beneath logo */
         .hero-center-glow {
-          position:absolute;
-          width:800px; height:800px; border-radius:50%;
-          background: radial-gradient(circle,
-            rgba(26,58,143,0.32) 0%,
-            rgba(201,168,76,0.1) 40%,
-            transparent 70%);
-          pointer-events:none; z-index:1;
-          animation: ringPulse2 5s ease-in-out infinite;
+          display: none;
         }
 
         /* ───── LOGO WRAPPER ───── */
@@ -679,6 +672,23 @@ export default function HeroSection() {
               <div className="logo-ring logo-ring-2" />
               <div className="logo-ring logo-ring-3" />
               <div className="logo-ring logo-ring-4" />
+              {/* Fulshear logo behind the coin — faint, purple-tinted */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/chargers-logo.png"
+                alt=""
+                aria-hidden="true"
+                style={{
+                  position:"absolute",
+                  width:"370px", height:"370px",
+                  objectFit:"contain",
+                  opacity:0.18,
+                  filter:"blur(1px) drop-shadow(0 0 18px rgba(160,80,220,0.6)) saturate(0.7)",
+                  zIndex:0,
+                  pointerEvents:"none",
+                  animation:"floatY 7s ease-in-out infinite 2.4s",
+                }}
+              />
               <div className="hero-logo-coin">
                 <div className="coin-face coin-front">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
