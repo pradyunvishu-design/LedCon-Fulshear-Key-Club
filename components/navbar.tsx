@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -20,6 +20,62 @@ export default function Navbar() {
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
+
+  const navCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Purple sparkle particles floating across the nav bar
+  useEffect(() => {
+    const canvas = navCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width  = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const N = 28;
+    const pts = Array.from({ length: N }, () => ({
+      x:     Math.random() * canvas.width,
+      y:     Math.random() * canvas.height,
+      vx:    (Math.random() - 0.5) * 0.4,
+      vy:    (Math.random() - 0.5) * 0.25,
+      r:     Math.random() * 1.2 + 0.3,
+      alpha: Math.random() * 0.55 + 0.2,
+      pulse: Math.random() * Math.PI * 2,
+    }));
+
+    let raf = 0;
+    const draw = () => {
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+      for (const p of pts) {
+        p.x += p.vx; p.y += p.vy;
+        p.pulse += 0.018;
+        const a = p.alpha * (0.7 + Math.sin(p.pulse) * 0.3);
+        if (p.x < -4)  p.x = W + 4;
+        if (p.x > W+4) p.x = -4;
+        if (p.y < -4)  p.y = H + 4;
+        if (p.y > H+4) p.y = -4;
+        // Soft glow
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(150,60,240,${a * 0.12})`;
+        ctx.fill();
+        // Core dot
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(175,90,255,${a})`;
+        ctx.fill();
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    raf = requestAnimationFrame(draw);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+  }, []);
 
   const navLinks = [
     { label: "Home", href: "/#hero" },
@@ -43,6 +99,11 @@ export default function Navbar() {
           transition: padding 0.4s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
           transform: translateZ(0);
           backface-visibility: hidden;
+          overflow: hidden;
+        }
+        .nav-particle-canvas {
+          position:absolute; inset:0; width:100%; height:100%;
+          pointer-events:none; z-index:0;
         }
         .kc-nav.scrolled {
           background: rgba(5,13,26,0.88);
@@ -112,15 +173,16 @@ export default function Navbar() {
         }
       `}</style>
       <nav className={`kc-nav${scrolled ? " scrolled" : ""}`}>
-        <Link href="/" className="kc-nav-logo">CFHS <span>·</span> KEY CLUB</Link>
-        <ul className="kc-nav-links">
+        <canvas ref={navCanvasRef} className="nav-particle-canvas" />
+        <Link href="/" className="kc-nav-logo" style={{position:"relative",zIndex:1}}>CFHS <span>·</span> KEY CLUB</Link>
+        <ul className="kc-nav-links" style={{position:"relative",zIndex:1}}>
           {navLinks.map((l) => (
             <li key={l.href}>
               <Link href={l.href} className={pathname === l.href ? "active" : ""}>{l.label}</Link>
             </li>
           ))}
         </ul>
-        <button className="kc-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+        <button className="kc-hamburger" style={{position:"relative",zIndex:1}} onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
           <span /><span /><span />
         </button>
       </nav>
