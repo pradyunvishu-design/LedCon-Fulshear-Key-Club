@@ -72,6 +72,8 @@ export default function LinksSection() {
         }
         @media (max-width: 650px) {
           .links-grid { grid-template-columns: 1fr; }
+          .link-card  { padding: 1.25rem; }
+          .link-title { font-size: 0.9rem; }
         }
       `}</style>
       <div className="section-wrapper">

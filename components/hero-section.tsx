@@ -384,6 +384,24 @@ export default function HeroSection() {
           .mobile-menu a:hover{ color:var(--gold); }
         }
 
+        @media(max-width:600px){
+          .hero-logo-outer        { width:220px; height:220px; }
+          .logo-conic-ring        { width:212px; height:212px; }
+          .logo-ring-1            { width:208px; height:208px; }
+          .logo-ring-2            { width:240px; height:240px; }
+          .logo-ring-3            { width:265px; height:265px; }
+          .logo-ring-4            { width:290px; height:290px; }
+          .hero-logo-coin         { width:180px; height:180px; }
+          .coin-edge              { width:180px; height:180px; }
+          .hero-chargers-bg       { width:200px !important; height:200px !important; }
+          .hero-title             { font-size: clamp(2.8rem, 14vw, 5rem); }
+          .hero-subtitle          { font-size: 0.8rem; }
+          .hero-district-label    { font-size: 0.58rem; letter-spacing: 0.1em; }
+          .hero-cta-group         { gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+          .hero-cta-primary,
+          .hero-cta-secondary     { font-size: 0.78rem; padding: 0.7rem 1.4rem; }
+        }
+
         /* ───── HERO ───── */
         .hero-section {
           position:relative; width:100vw; height:100vh;
@@ -682,6 +700,7 @@ export default function HeroSection() {
                 src="/chargers-logo.png"
                 alt=""
                 aria-hidden="true"
+                className="hero-chargers-bg"
                 style={{
                   position:"absolute",
                   width:"370px", height:"370px",

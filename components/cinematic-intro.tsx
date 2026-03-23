@@ -286,6 +286,9 @@ export default function CinematicIntro() {
           0%,100% { opacity:0.5; transform:scale(1); }
           50%     { opacity:1;   transform:scale(1.08); }
         }
+        @media(max-width:600px){
+          .kc-logo-wrap { width:160px !important; height:160px !important; }
+        }
       `}</style>
 
       {/* Dark overlay with growing hole during reveal */}
@@ -313,7 +316,7 @@ export default function CinematicIntro() {
       )}
 
       {/* ── CHARGERS — from LEFT ── */}
-      <div style={{ ...baseWrapper, zIndex: 9998 }}>
+      <div className="kc-logo-wrap" style={{ ...baseWrapper, zIndex: 9998 }}>
         <div style={{
           position:"absolute", inset:"-44%", borderRadius:"50%",
           background:"radial-gradient(circle, rgba(145,65,215,0.38) 0%, rgba(100,40,180,0.1) 55%, transparent 72%)",
@@ -335,7 +338,7 @@ export default function CinematicIntro() {
       </div>
 
       {/* ── KEY CLUB — from RIGHT ── */}
-      <div style={{ ...baseWrapper, zIndex: 9999 }}>
+      <div className="kc-logo-wrap" style={{ ...baseWrapper, zIndex: 9999 }}>
         <div style={{
           position:"absolute", inset:"-44%", borderRadius:"50%",
           background:"radial-gradient(circle, rgba(201,168,76,0.38) 0%, rgba(180,140,50,0.1) 55%, transparent 72%)",

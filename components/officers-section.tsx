@@ -133,6 +133,12 @@ export default function OfficersSection() {
         @media (max-width: 550px) {
           .officers-grid { grid-template-columns: 1fr; }
         }
+        @media (max-width: 480px) {
+          .officer-card  { padding: 1.5rem 1rem 1.25rem; }
+          .officer-name  { font-size: 0.95rem; }
+          .officer-title { font-size: 0.6rem; }
+          .officer-year  { font-size: 0.7rem; }
+        }
       `}</style>
 
       <div className="officers-bg" />

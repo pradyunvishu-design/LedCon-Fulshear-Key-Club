@@ -158,6 +158,9 @@ export default function ContactSection() {
         @media (max-width: 500px) {
           .contact-grid { grid-template-columns: 1fr; }
           .footer-copy { text-align:center; width:100%; }
+          .contact-title { font-size: 0.58rem; }
+          .contact-val   { font-size: 0.78rem; }
+          .contact-card  { padding: 1.25rem; }
         }
       `}</style>
       <div className="contact-bg" />

@@ -141,6 +141,13 @@ a { color: inherit; text-decoration: none; }
 }
 .slide-in-right.visible { opacity: 1; transform: translateX(0); filter: blur(0); }
 
+/* ─── MOBILE ─── */
+@media(max-width:600px){
+  .section-wrapper { padding: 0 1rem; }
+  .glass-card      { border-radius: 12px; }
+  .section-heading { font-size: clamp(1.6rem, 7vw, 2.5rem); }
+}
+
 /* Section divider */
 .section-divider {
   width: 100%; height: 1px;
