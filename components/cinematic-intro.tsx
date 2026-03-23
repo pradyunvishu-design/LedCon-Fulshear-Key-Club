@@ -7,18 +7,24 @@ const HERO_BG = "radial-gradient(ellipse 100% 90% at 50% 50%, #081530 0%, #02070
 type Phase = "rollin" | "merge" | "disperse" | "reveal" | "done";
 
 interface Particle {
-  x: number; y: number; px: number; py: number; // current + previous (for streak)
+  x: number; y: number; px: number; py: number;
   vx: number; vy: number;
   alpha: number;
   baseSize: number;
-  color: 0 | 1 | 2; // 0=gold  1=blue  2=purple
-  tier: 0 | 1 | 2;  // 0=tiny sparkle  1=medium  2=large blob
+  color: 0 | 1 | 2;
+  tier: 0 | 1 | 2;
   orbitR: number;
   orbitSpeed: number;
   orbitAngle: number;
 }
 
 export default function CinematicIntro() {
+  // Play once per browser session — skip if already seen this visit
+  const [show] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return sessionStorage.getItem("kc-intro-played") !== "1";
+  });
+
   const [phase, setPhase]   = useState<Phase>("rollin");
   const [maskPx, setMaskPx] = useState<number>(0);
   const phaseRef  = useRef<Phase>("rollin");
@@ -29,22 +35,24 @@ export default function CinematicIntro() {
     timers.current.push(setTimeout(() => {
       phaseRef.current = p;
       setPhase(p);
-      if (p === "done") document.body.classList.add("intro-done");
+      if (p === "done") {
+        document.body.classList.add("intro-done");
+        sessionStorage.setItem("kc-intro-played", "1");
+      }
     }, ms));
   }, []);
 
   useEffect(() => {
-    // rollin   0 → 1600ms   logos glide in from opposite sides
-    // merge    1600 → 3200ms logos spin at center, particles orbit
-    // disperse 3200 → 3800ms everything explodes outward
-    // reveal   3800 → 5100ms overlay hole expands
-    // done     5100ms
+    if (!show) {
+      document.body.classList.add("intro-done");
+      return;
+    }
     go("merge",    1600);
     go("disperse", 3200);
     go("reveal",   3800);
     go("done",     5100);
     return () => { timers.current.forEach(clearTimeout); timers.current = []; };
-  }, [go]);
+  }, [go, show]);
 
   // ── Reveal: circular hole grows in the overlay ──
   useEffect(() => {
@@ -64,6 +72,7 @@ export default function CinematicIntro() {
 
   // ── Canvas ──
   useEffect(() => {
+    if (!show) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -71,13 +80,12 @@ export default function CinematicIntro() {
     let w = (canvas.width  = window.innerWidth);
     let h = (canvas.height = window.innerHeight);
 
-    // ── Spawn particles spread across screen ──
-    const N = 320;
+    const N = 450;
     const particles: Particle[] = Array.from({ length: N }, (_, i) => {
       const cx  = w / 2, cy = h / 2;
       const ang = (i / N) * Math.PI * 2 + Math.random() * 0.4;
       const r   = Math.random();
-      const tier = i < N * 0.5 ? 0 : i < N * 0.85 ? 1 : 2; // 50% tiny, 35% medium, 15% large
+      const tier = i < N * 0.5 ? 0 : i < N * 0.85 ? 1 : 2;
       const radius = tier === 0
         ? 80  + Math.random() * Math.max(w, h) * 0.5
         : tier === 1
@@ -88,10 +96,10 @@ export default function CinematicIntro() {
       return {
         x: px, y: py, px, py,
         vx: 0, vy: 0,
-        alpha:       tier === 2 ? 0.45 + Math.random() * 0.35 : 0.55 + Math.random() * 0.45,
-        baseSize:    tier === 0 ? 0.4 + Math.random() * 0.7
-                   : tier === 1 ? 1.0 + Math.random() * 1.2
-                                : 2.0 + Math.random() * 1.8,
+        alpha:    tier === 2 ? 0.45 + Math.random() * 0.35 : 0.55 + Math.random() * 0.45,
+        baseSize: tier === 0 ? 0.4 + Math.random() * 0.7
+                : tier === 1 ? 1.0 + Math.random() * 1.2
+                             : 2.0 + Math.random() * 1.8,
         color: r < 0.34 ? 0 : r < 0.67 ? 1 : 2,
         tier: tier as 0 | 1 | 2,
         orbitR:     25 + Math.random() * 80,
@@ -100,10 +108,14 @@ export default function CinematicIntro() {
       };
     });
 
-    // Flash: bright burst when logos first merge
     let flashAlpha   = 0;
     let flashRadius  = 0;
     let mergeFlashed = false;
+
+    // Shockwave ring that expands on disperse
+    let shockwaveR      = 0;
+    let shockwaveAlpha  = 0;
+    let disperseShocked = false;
 
     let raf = 0;
 
@@ -114,14 +126,19 @@ export default function CinematicIntro() {
       ctx.clearRect(0, 0, w, h);
       const cx = w / 2, cy = h / 2;
 
-      // ── Trigger merge flash ──
       if (cur === "merge" && !mergeFlashed) {
         mergeFlashed = true;
         flashAlpha  = 1;
         flashRadius = 0;
       }
 
-      // ── Draw merge flash ──
+      if (cur === "disperse" && !disperseShocked) {
+        disperseShocked = true;
+        shockwaveAlpha  = 0.95;
+        shockwaveR      = 20;
+      }
+
+      // Merge flash
       if (flashAlpha > 0) {
         flashRadius += 22;
         flashAlpha  *= 0.84;
@@ -134,9 +151,24 @@ export default function CinematicIntro() {
         ctx.fillStyle = grad; ctx.fill();
       }
 
-      // ── Particles ──
+      // Disperse shockwave
+      if (shockwaveAlpha > 0.01) {
+        shockwaveR    += 20;
+        shockwaveAlpha *= 0.88;
+        ctx.beginPath();
+        ctx.arc(cx, cy, shockwaveR, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(200,100,255,${shockwaveAlpha * 0.55})`;
+        ctx.lineWidth   = 4 + shockwaveAlpha * 5;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(cx, cy, shockwaveR * 1.45, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(201,168,76,${shockwaveAlpha * 0.3})`;
+        ctx.lineWidth   = 2;
+        ctx.stroke();
+      }
+
       for (const p of particles) {
-        p.px = p.x; p.py = p.y; // save prev position for streak
+        p.px = p.x; p.py = p.y;
 
         const dx   = cx - p.x, dy = cy - p.y;
         const dist = Math.hypot(dx, dy) || 1;
@@ -148,11 +180,9 @@ export default function CinematicIntro() {
           p.vx *= 0.975; p.vy *= 0.975;
 
         } else if (cur === "merge") {
-          // Pull in then orbit
           const pull = Math.min(4.5, 280 / (dist + 1));
           p.vx += (dx / dist) * pull;
           p.vy += (dy / dist) * pull;
-          // Tangential orbit force
           const orbitZone = p.orbitR * 4;
           if (dist < orbitZone) {
             const str = Math.pow(1 - dist / orbitZone, 1.5) * 6;
@@ -167,7 +197,6 @@ export default function CinematicIntro() {
           const push = 3.5 + Math.min(22, 350 / (dist + 1));
           p.vx -= (dx / dist) * push;
           p.vy -= (dy / dist) * push;
-          // Counter-clockwise swirl
           p.vx += (-dy / dist) * push * 0.4;
           p.vy +=  (dx / dist) * push * 0.4;
           p.vx *= 0.972; p.vy *= 0.972;
@@ -185,7 +214,6 @@ export default function CinematicIntro() {
         const [cr, cg, cb] = palette[p.color];
 
         if (p.tier === 2) {
-          // Large blob — soft radial gradient
           const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.baseSize * 6);
           g.addColorStop(0,   `rgba(${cr},${cg},${cb},${p.alpha * 0.55})`);
           g.addColorStop(0.5, `rgba(${cr},${cg},${cb},${p.alpha * 0.2})`);
@@ -194,7 +222,6 @@ export default function CinematicIntro() {
           ctx.fillStyle = g; ctx.fill();
         }
 
-        // Velocity streak for fast particles
         if (speed > 3 && p.tier !== 2) {
           ctx.beginPath();
           ctx.moveTo(p.px, p.py);
@@ -205,7 +232,6 @@ export default function CinematicIntro() {
           ctx.stroke();
         }
 
-        // Core dot with glow ring
         ctx.beginPath(); ctx.arc(p.x, p.y, p.baseSize * 3.5, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${cr},${cg},${cb},${p.alpha * 0.12})`; ctx.fill();
         ctx.beginPath(); ctx.arc(p.x, p.y, p.baseSize, 0, Math.PI * 2);
@@ -222,12 +248,14 @@ export default function CinematicIntro() {
     };
     window.addEventListener("resize", onResize);
     return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", onResize); };
-  }, []);
+  }, [show]);
+
+  if (!show) return null;
 
   const isDone     = phase === "done";
-  const isMerge    = phase === "merge";
   const isDisperse = phase === "disperse";
   const isReveal   = phase === "reveal";
+  const isMerge    = phase === "merge";
   const isSpinning = isMerge || isDisperse || isReveal;
 
   const logoAnim = (side: "left" | "right") => {
@@ -282,10 +310,6 @@ export default function CinematicIntro() {
           0%,100% { opacity:0.28; transform:scale(1); }
           50%     { opacity:0.75; transform:scale(1.18); }
         }
-        @keyframes kc-ringPulse {
-          0%,100% { opacity:0.5; transform:scale(1); }
-          50%     { opacity:1;   transform:scale(1.08); }
-        }
         @media(max-width:600px){
           .kc-logo-wrap { width:160px !important; height:160px !important; }
         }
@@ -300,20 +324,6 @@ export default function CinematicIntro() {
         transform:"translateZ(0)",
         ...(holeMask ? { maskImage:holeMask, WebkitMaskImage:holeMask } : {}),
       } as React.CSSProperties} />
-
-      {/* Orbit ring — appears during merge, surrounds both logos */}
-      {isMerge && (
-        <div style={{
-          position:"fixed", top:"50%", left:"50%",
-          transform:"translateX(-50%) translateY(-50%)",
-          width:"380px", height:"380px",
-          borderRadius:"50%",
-          border:"1px solid rgba(201,168,76,0.35)",
-          boxShadow:"0 0 18px rgba(201,168,76,0.15), inset 0 0 18px rgba(160,80,220,0.1)",
-          animation:"kc-ringPulse 1.8s ease-in-out infinite",
-          pointerEvents:"none", zIndex:9997,
-        }} />
-      )}
 
       {/* ── CHARGERS — from LEFT ── */}
       <div className="kc-logo-wrap" style={{ ...baseWrapper, zIndex: 9998 }}>
@@ -359,7 +369,7 @@ export default function CinematicIntro() {
         </div>
       </div>
 
-      {/* Canvas — particles + flash */}
+      {/* Canvas — particles + flash + shockwave */}
       <canvas ref={canvasRef} style={{
         position:"fixed", inset:0, zIndex:10000,
         width:"100%", height:"100%", display:"block",

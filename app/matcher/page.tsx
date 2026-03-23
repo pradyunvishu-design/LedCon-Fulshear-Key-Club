@@ -6,7 +6,7 @@ import Link from "next/link";
 const questions = [
   {
     q: "What causes are you passionate about?",
-    sub: "Select all that apply — you can choose multiple.",
+    sub: "Select all that apply.",
     multi: true,
     opts: [
       { label: "Children & Youth",   icon: "👧" },
@@ -62,6 +62,41 @@ const questions = [
       { label: "Prefer behind-the-scenes",  icon: "🔧" },
     ],
   },
+  {
+    q: "What skills do you want to develop through service?",
+    sub: "Select all that apply.",
+    multi: true,
+    opts: [
+      { label: "Leadership & organizing",    icon: "🎯" },
+      { label: "Teamwork & communication",   icon: "🤝" },
+      { label: "Teaching & mentoring",       icon: "✏️" },
+      { label: "Physical & hands-on work",   icon: "💪" },
+      { label: "Creative & cultural skills", icon: "🎨" },
+    ],
+  },
+  {
+    q: "Who do you most want to serve?",
+    sub: "Select all that apply.",
+    multi: true,
+    opts: [
+      { label: "Young children",              icon: "👧" },
+      { label: "Elderly community members",   icon: "👴" },
+      { label: "Families & people in need",   icon: "🏠" },
+      { label: "Animals & the environment",   icon: "🐾" },
+      { label: "Everyone equally",            icon: "🌍" },
+    ],
+  },
+  {
+    q: "What environment energizes you most?",
+    sub: "Pick one.",
+    multi: false,
+    opts: [
+      { label: "Outdoors — parks, nature, cleanup",  icon: "🌳" },
+      { label: "Indoors — kitchens, libraries",      icon: "🏛️" },
+      { label: "Big events with lots of energy",     icon: "🎉" },
+      { label: "Small, quiet, one-on-one settings",  icon: "🤫" },
+    ],
+  },
 ];
 
 const EVENTS = [
@@ -69,7 +104,7 @@ const EVENTS = [
     name: "General Monthly Meeting",
     type: "Club",
     typeColor: "#1a3a8f",
-    desc: "Connect with fellow Key Clubbers, vote on upcoming events, and earn meeting attendance hours. Open to all members every 1st Tuesday.",
+    desc: "Connect with fellow Key Clubbers, vote on upcoming events, and earn meeting attendance hours. Open to all members every other Wednesday.",
     time: "~1.5 hours",
     tags: ["community", "leadership", "indoor"],
   },
@@ -95,7 +130,7 @@ const EVENTS = [
     typeColor: "#b85c1e",
     desc: "Pack complete holiday meals for families in need. A high-energy, team-based Thanksgiving tradition every November.",
     time: "3–5 hours",
-    tags: ["hunger", "food", "community", "teamwork"],
+    tags: ["hunger", "food", "community", "teamwork", "physical"],
   },
   {
     name: "Library Read-Alouds",
@@ -119,14 +154,38 @@ const EVENTS = [
     typeColor: "#c9a84c",
     desc: "Mentor and cheer on younger kids during a fun-filled sports day. Great for energetic members who love working with youth!",
     time: "4–6 hours",
-    tags: ["youth", "kids", "outdoor", "physical", "teamwork"],
+    tags: ["youth", "kids", "outdoor", "physical", "teamwork", "leadership"],
+  },
+  {
+    name: "Senior Center Visits",
+    type: "Elderly Care",
+    typeColor: "#4e8fe0",
+    desc: "Spend time with elderly residents — play board games, share stories, or help with activities. These visits make a huge difference.",
+    time: "1–3 hours",
+    tags: ["community", "indoor", "elderly"],
+  },
+  {
+    name: "Cultural Festival Volunteer",
+    type: "Cultural Events",
+    typeColor: "#c950a0",
+    desc: "Help plan and run our multicultural events — from lion dances to Princess Night. Bring creativity and enthusiasm!",
+    time: "3–6 hours",
+    tags: ["cultural", "creative", "community", "teamwork"],
+  },
+  {
+    name: "Houston Food Bank Meals Packaging",
+    type: "Hunger",
+    typeColor: "#b85c1e",
+    desc: "Package thousands of meals for families across Houston. Fast-paced, high-impact, and one of our largest service events.",
+    time: "3–4 hours",
+    tags: ["hunger", "food", "teamwork", "physical"],
   },
 ];
 
 const CAUSE_TAGS: Record<string, string[]> = {
   "Children & Youth":  ["youth", "kids"],
   "Environment":       ["environment", "outdoor", "physical"],
-  "Elderly Care":      ["community", "indoor"],
+  "Elderly Care":      ["community", "indoor", "elderly"],
   "Education":         ["education", "teaching", "kids"],
   "Hunger & Food":     ["hunger", "food"],
   "Health & Wellness": ["community", "outdoor"],
@@ -140,20 +199,38 @@ const SERVICE_TAGS: Record<string, string[]> = {
   "Event setup / teamwork":  ["teamwork", "community"],
 };
 
+const SKILL_TAGS: Record<string, string[]> = {
+  "Leadership & organizing":    ["leadership", "teamwork"],
+  "Teamwork & communication":   ["teamwork", "community"],
+  "Teaching & mentoring":       ["teaching", "education", "kids"],
+  "Physical & hands-on work":   ["physical", "outdoor"],
+  "Creative & cultural skills": ["cultural", "creative"],
+};
+
+const COMMUNITY_TAGS: Record<string, string[]> = {
+  "Young children":              ["kids", "youth"],
+  "Elderly community members":   ["elderly", "community"],
+  "Families & people in need":   ["hunger", "food", "community"],
+  "Animals & the environment":   ["environment", "outdoor"],
+  "Everyone equally":            ["community", "teamwork"],
+};
+
 const RANK_COLORS = ["#c9a84c", "#9aabcc", "#c97a4c"];
-const RANK_LABELS = ["Best Match", "Great Fit", "Worth Trying"];
+const RANK_LABELS = ["Perfect Match", "Great Fit", "Worth Trying"];
+
+const TOTAL_Q = questions.length;
 
 export default function MatcherPage() {
   const [step, setStep]       = useState(0);
-  const [answers, setAnswers] = useState<string[][]>(Array.from({ length: 5 }, () => []));
+  const [answers, setAnswers] = useState<string[][]>(Array.from({ length: TOTAL_Q }, () => []));
 
-  const current  = step < 5 ? step : 4;
+  const current  = step < TOTAL_Q ? step : TOTAL_Q - 1;
   const q        = questions[current];
   const selected = answers[current];
 
   const toggle = (label: string) => {
-    setAnswers(prev => {
-      const next = prev.map(a => [...a]);
+    setAnswers((prev: string[][]) => {
+      const next = prev.map((a: string[]) => [...a]);
       if (!q.multi) {
         next[current] = [label];
         return next;
@@ -167,16 +244,18 @@ export default function MatcherPage() {
 
   const canAdvance = selected.length > 0;
   const advance = () => {
-    if (step < 4) setStep(s => s + 1);
-    else setStep(5);
+    if (step < TOTAL_Q - 1) setStep((s: number) => s + 1);
+    else setStep(TOTAL_Q);
   };
-  const back    = () => { if (step > 0) setStep(s => s - 1); };
-  const restart = () => { setStep(0); setAnswers(Array.from({ length: 5 }, () => [])); };
+  const back    = () => { if (step > 0) setStep((s: number) => s - 1); };
+  const restart = () => { setStep(0); setAnswers(Array.from({ length: TOTAL_Q }, () => [])); };
 
   const getResults = () => {
     const userTags = new Set<string>();
-    (answers[0] || []).forEach(a => (CAUSE_TAGS[a] || []).forEach(t => userTags.add(t)));
-    (answers[2] || []).forEach(a => (SERVICE_TAGS[a] || []).forEach(t => userTags.add(t)));
+    (answers[0] || []).forEach((a: string) => (CAUSE_TAGS[a]     || []).forEach((t: string) => userTags.add(t)));
+    (answers[2] || []).forEach((a: string) => (SERVICE_TAGS[a]   || []).forEach((t: string) => userTags.add(t)));
+    (answers[5] || []).forEach((a: string) => (SKILL_TAGS[a]     || []).forEach((t: string) => userTags.add(t)));
+    (answers[6] || []).forEach((a: string) => (COMMUNITY_TAGS[a] || []).forEach((t: string) => userTags.add(t)));
     if (userTags.size === 0) { userTags.add("community"); userTags.add("teamwork"); }
     return EVENTS
       .map(e => ({ ...e, score: e.tags.filter(t => userTags.has(t)).length }))
@@ -184,7 +263,7 @@ export default function MatcherPage() {
       .slice(0, 3);
   };
 
-  const progress = step < 5 ? ((step + 1) / 5) * 100 : 100;
+  const progress = step < TOTAL_Q ? ((step + 1) / TOTAL_Q) * 100 : 100;
 
   return (
     <main className="flex-grow pb-16" style={{ paddingTop: "7rem", minHeight: "100vh", position: "relative", overflow: "hidden" }}>
@@ -240,14 +319,14 @@ export default function MatcherPage() {
         }
         .btn-matcher:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(201,168,76,0.4); }
         .btn-matcher:disabled { opacity: 0.35; cursor: not-allowed; }
-        .btn-back {
+        .btn-matcher-back {
           display: inline-flex; align-items: center; justify-content: center;
           padding: 1.1rem 1.4rem; background: transparent;
           border: 1.5px solid rgba(255,255,255,0.12); color: var(--silver);
           font-weight: 700; font-size: 0.95rem; border-radius: 12px;
           cursor: pointer; transition: all 0.2s; white-space: nowrap; flex-shrink: 0;
         }
-        .btn-back:hover { border-color: rgba(255,255,255,0.35); color: white; }
+        .btn-matcher-back:hover { border-color: rgba(255,255,255,0.35); color: white; }
 
         /* Results */
         .results-header { text-align: center; padding: 2.5rem 2.5rem 0; }
@@ -291,25 +370,23 @@ export default function MatcherPage() {
           </div>
           <h1 className="matcher-title">Find Your Perfect <br /><span className="highlight">Service Match.</span></h1>
           <p style={{ color: "var(--silver)", maxWidth: "520px", margin: "0 auto", lineHeight: "1.7", fontSize: "1.05rem", opacity: 0.8 }}>
-            5 quick questions. We score every event against your answers and surface your best-fit opportunities.
+            8 quick questions. We score every event against your answers and surface your best-fit opportunities.
           </p>
         </div>
 
         <div className="quiz-shell">
-          {step < 5 ? (
+          {step < TOTAL_Q ? (
             <>
-              {/* Progress bar */}
               <div className="quiz-top">
                 <div className="quiz-progress-bar">
                   <div className="quiz-progress-fill" style={{ width: `${progress}%` }} />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px", fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--silver)" }}>
-                  <span>Question {step + 1} of 5</span>
+                  <span>Question {step + 1} of {TOTAL_Q}</span>
                   <span style={{ color: "var(--gold)" }}>{Math.round(progress)}%</span>
                 </div>
               </div>
 
-              {/* Question */}
               <div className="quiz-step">
                 <h2 className="quiz-q">{q.q}</h2>
                 <p className="quiz-q-sub">{q.sub}</p>
@@ -334,20 +411,19 @@ export default function MatcherPage() {
                 </div>
                 <div className="quiz-actions">
                   {step > 0 && (
-                    <button className="btn-back" onClick={back}>← Back</button>
+                    <button className="btn-matcher-back" onClick={back}>← Back</button>
                   )}
                   <button
                     className="btn-matcher"
                     onClick={advance}
                     disabled={!canAdvance}
                   >
-                    {step === 4 ? "See My Matches →" : "Continue →"}
+                    {step === TOTAL_Q - 1 ? "See My Matches →" : "Continue →"}
                   </button>
                 </div>
               </div>
             </>
           ) : (
-            /* Results */
             (() => {
               const results = getResults();
               return (

@@ -195,8 +195,17 @@ export default function ImpactSection() {
         }
         .impact-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          grid-template-columns: repeat(4, 1fr);
           gap: 1.5rem; max-width: 1000px; margin: 0 auto;
+        }
+        .impact-card:nth-child(5) { grid-column: 2; }
+        .impact-card:nth-child(6) { grid-column: 3; }
+        @media(max-width:800px){
+          .impact-grid { grid-template-columns: repeat(2, 1fr); }
+          .impact-card:nth-child(5), .impact-card:nth-child(6) { grid-column: auto; }
+        }
+        @media(max-width:480px){
+          .impact-grid { grid-template-columns: 1fr; }
         }
         .impact-card {
           padding: 2.5rem 2rem; text-align: center;

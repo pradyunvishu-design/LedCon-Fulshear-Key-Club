@@ -6,7 +6,6 @@ const linkGroups = [
     color: "rgba(201,168,76,0.35)",
     border: "rgba(201,168,76,0.6)",
     links: [
-      { title: "Service Hours Portal", desc: "Log and track your volunteer hours", href: "https://www.lcisd.org", icon: "⏱" },
       { title: "Event Sign-Ups", desc: "Register for upcoming service events", href: "https://www.signupgenius.com", icon: "📋" },
       { title: "Remind 101", desc: "Text @cfhs-key to 81010 for updates", href: "sms:81010?body=@cfhs-key", icon: "📱" },
       { title: "Contact Officers", desc: "fulshearkeyclub@lcisd.org", href: "mailto:fulshearkeyclub@lcisd.org", icon: "✉️" },
@@ -18,7 +17,9 @@ const linkGroups = [
     border: "rgba(200,80,180,0.6)",
     links: [
       { title: "Instagram", desc: "@fulshearkeyclub — photos, updates & events", href: "https://www.instagram.com/fulshearkeyclub", icon: "📸" },
-      { title: "School Website", desc: "Fulshear High School official site", href: "https://www.lcisd.org/FulshearHS", icon: "🏫" },
+      { title: "T-O District Instagram", desc: "@tokeyclub — Texas-Oklahoma district updates", href: "https://www.instagram.com/tokeyclub", icon: "📸" },
+      { title: "Texas Key Club Instagram", desc: "@texaskeyclub — statewide Key Club news", href: "https://www.instagram.com/texaskeyclub", icon: "📸" },
+      { title: "TSA", desc: "Technology Student Association", href: "https://tsaweb.org", icon: "💻" },
     ],
   },
   {
@@ -70,8 +71,9 @@ export default function LinksPage() {
         }
         .links-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(240px, 320px));
           gap: 1rem;
+          justify-content: center;
         }
         .link-card {
           display: flex; align-items: flex-start; gap: 1rem;
