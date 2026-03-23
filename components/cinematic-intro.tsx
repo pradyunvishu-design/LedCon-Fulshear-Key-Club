@@ -75,6 +75,16 @@ export default function CinematicIntro() {
       }
 
       ctx2.putImageData(id, 0, 0);
+
+      // Hard circular crop — anything outside the inscribed circle becomes transparent.
+      // This guarantees zero checkerboard bleed regardless of edge anti-aliasing.
+      ctx2.globalCompositeOperation = "destination-in";
+      ctx2.beginPath();
+      ctx2.arc(SIZE / 2, SIZE / 2, SIZE / 2, 0, Math.PI * 2);
+      ctx2.fillStyle = "#fff";
+      ctx2.fill();
+      ctx2.globalCompositeOperation = "source-over";
+
       setChargersSrc(c.toDataURL("image/png"));
     };
     img.src = "/chargers-logo.png";
@@ -333,6 +343,7 @@ export default function CinematicIntro() {
         <div style={{ width:"100%", height:"100%", animation:charAnim, position:"relative" }}>
           <div style={{
             position:"absolute", inset:0, borderRadius:"50%", overflow:"hidden",
+            background:"#0a0212",
             boxShadow:"0 0 0 2px rgba(180,100,255,0.45), 0 0 18px rgba(160,80,220,0.5)",
             animation: isSpinning ? "kc-coinSpin 5s linear infinite" : "none",
           }}>
@@ -365,6 +376,7 @@ export default function CinematicIntro() {
         <div style={{ width:"100%", height:"100%", animation:kcAnim, position:"relative" }}>
           <div style={{
             position:"absolute", inset:0, borderRadius:"50%", overflow:"hidden",
+            background:"#020709",
             boxShadow:"0 0 0 2px rgba(201,168,76,0.5), 0 0 18px rgba(201,168,76,0.45)",
             animation: isSpinning ? "kc-coinSpin 5s linear infinite" : "none",
           }}>
