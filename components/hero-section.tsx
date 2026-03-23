@@ -498,17 +498,17 @@ export default function HeroSection() {
           clip-path: circle(50% at 50% 50%);
         }
 
-        /* Back face of the coin (mirrored logo) */
+        /* Back face of the coin — Fulshear Chargers logo */
         .coin-back {
           transform: rotateY(180deg);
           z-index:1;
+          background: #0a0212;
         }
         .coin-back img {
           width:100%; height:100%;
-          object-fit: cover;
+          object-fit: contain;
           border-radius:50%;
           clip-path: circle(50% at 50% 50%);
-          transform: scaleX(-1);
         }
 
         /* Coin edge - visible when flipping sideways */
@@ -687,7 +687,7 @@ export default function HeroSection() {
                 </div>
                 <div className="coin-face coin-back">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/screen_transparent.png" alt="" />
+                  <img src="/chargers-logo.png" alt="Fulshear Chargers" />
                 </div>
                 <div className="coin-edge" />
               </div>

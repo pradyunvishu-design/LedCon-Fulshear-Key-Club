@@ -268,19 +268,17 @@ export default function CinematicIntro() {
 
       {/* ── CHARGERS — from LEFT, purple ── */}
       <div style={{ ...baseWrapper, zIndex: 9997 }}>
-        {isSpinning && (
-          <div style={{
-            position:"absolute", inset:"-45%", borderRadius:"50%",
-            background:"radial-gradient(circle, rgba(160,80,220,0.55) 0%, rgba(100,40,180,0.25) 55%, transparent 72%)",
-            animation:"kc-halo 1.6s ease-in-out infinite",
-            pointerEvents:"none",
-          }} />
-        )}
+        {/* Purple radiating glow — always visible */}
+        <div style={{
+          position:"absolute", inset:"-40%", borderRadius:"50%",
+          background:"radial-gradient(circle, rgba(160,80,220,0.45) 0%, rgba(120,50,200,0.15) 50%, transparent 70%)",
+          animation:"kc-halo 2s ease-in-out infinite",
+          pointerEvents:"none",
+        }} />
         <div style={{ width:"100%", height:"100%", animation:charAnim, position:"relative" }}>
           <div style={{
             position:"absolute", inset:0, borderRadius:"50%", overflow:"hidden",
-            background:"#0a0212",
-            boxShadow:"0 0 0 2px rgba(180,100,255,0.45), 0 0 18px rgba(160,80,220,0.5)",
+            boxShadow:"0 0 0 2px rgba(180,100,255,0.5), 0 0 22px rgba(160,80,220,0.55), 0 0 55px rgba(140,60,220,0.2)",
             animation: isSpinning ? "kc-coinSpin 5s linear infinite" : "none",
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -290,7 +288,6 @@ export default function CinematicIntro() {
               style={{
                 width:"100%", height:"100%",
                 objectFit:"contain", display:"block",
-                filter:"drop-shadow(0 0 7px rgba(180,100,255,0.55))",
               }}
             />
           </div>
@@ -299,19 +296,17 @@ export default function CinematicIntro() {
 
       {/* ── KEY CLUB — from RIGHT, gold ── */}
       <div style={{ ...baseWrapper, zIndex: 9998 }}>
-        {isSpinning && (
-          <div style={{
-            position:"absolute", inset:"-45%", borderRadius:"50%",
-            background:"radial-gradient(circle, rgba(201,168,76,0.55) 0%, rgba(26,58,143,0.25) 55%, transparent 72%)",
-            animation:"kc-halo 1.6s ease-in-out infinite 0.8s",
-            pointerEvents:"none",
-          }} />
-        )}
+        {/* Gold radiating glow — always visible */}
+        <div style={{
+          position:"absolute", inset:"-40%", borderRadius:"50%",
+          background:"radial-gradient(circle, rgba(201,168,76,0.45) 0%, rgba(180,140,50,0.15) 50%, transparent 70%)",
+          animation:"kc-halo 2s ease-in-out infinite 1s",
+          pointerEvents:"none",
+        }} />
         <div style={{ width:"100%", height:"100%", animation:kcAnim, position:"relative" }}>
           <div style={{
             position:"absolute", inset:0, borderRadius:"50%", overflow:"hidden",
-            background:"#020709",
-            boxShadow:"0 0 0 2px rgba(201,168,76,0.5), 0 0 18px rgba(201,168,76,0.45)",
+            boxShadow:"0 0 0 2px rgba(201,168,76,0.55), 0 0 22px rgba(201,168,76,0.5), 0 0 55px rgba(201,168,76,0.2)",
             animation: isSpinning ? "kc-coinSpin 5s linear infinite" : "none",
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -321,7 +316,6 @@ export default function CinematicIntro() {
               style={{
                 width:"100%", height:"100%",
                 objectFit:"cover", display:"block",
-                filter:"drop-shadow(0 0 7px rgba(201,168,76,0.5))",
               }}
             />
           </div>
