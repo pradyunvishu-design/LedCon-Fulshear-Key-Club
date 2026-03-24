@@ -5,30 +5,39 @@ import React, { useState, useEffect } from "react";
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DAYS   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
+// Keys use 1-indexed months to match JS Date month parsing in filters below.
+// General Meetings moved from "every other Wednesday" → 1st Tuesday each month at 4:00 PM.
+// Divisional Council also consolidated to 1st Tuesday (stacked same day, different time).
 const allEvents: Record<string, { title: string; time: string; loc: string; type: string; desc: string }[]> = {
-  "2026-2-4":  [{ title: "Divisional Council Meeting",  time: "5:00 PM – 6:30 PM",  loc: "Fulshear High School",             type: "Meeting",    desc: "Monthly council meeting with division officers and chapter representatives." }],
-  "2026-2-11": [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
-  "2026-2-8":  [{ title: "Community Food Pantry",       time: "9:00 AM – 12:00 PM", loc: "5757 Flewellen Oaks Ln #303",     type: "Volunteer",  desc: "Help sort and distribute groceries to families in need at the local food pantry." }],
-  "2026-2-12": [{ title: "Park Clean-up",               time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",               type: "Service",    desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
-  "2026-2-18": [{ title: "H-E-B Food Drive",            time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",          type: "Service",    desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
-  "2026-2-23": [{ title: "Children's Book Reading",     time: "4:00 PM – 5:30 PM",  loc: "Fulshear Branch Library",         type: "Volunteer",  desc: "Read to kids ages 4–8 at the library. Great for members who love working with children." }],
-  "2026-2-25": [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
-  "2026-2-28": [{ title: "End of Month Social",         time: "6:00 PM – 8:00 PM",  loc: "Fulshear Town Square",            type: "Social",     desc: "Celebrate a great month with fellow members. Food, fun, and club bonding." }],
+  // Feb 3 = 1st Tuesday of February 2026
+  "2026-2-3":  [
+    { title: "Key Club General Meeting",   time: "4:00 PM – 5:00 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",   desc: "Monthly general meeting — 1st Tuesday of each month at 4:00 PM. Attendance required for service hour credit." },
+    { title: "Divisional Council Meeting", time: "5:30 PM – 7:00 PM",  loc: "Fulshear High School",             type: "Meeting",   desc: "Monthly council meeting with division officers and chapter representatives." },
+  ],
+  "2026-2-8":  [{ title: "Community Food Pantry",   time: "9:00 AM – 12:00 PM", loc: "5757 Flewellen Oaks Ln #303",     type: "Volunteer",  desc: "Help sort and distribute groceries to families in need at the local food pantry." }],
+  "2026-2-12": [{ title: "Park Clean-up",            time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",               type: "Service",    desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
+  "2026-2-18": [{ title: "H-E-B Food Drive",         time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",          type: "Service",    desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
+  "2026-2-23": [{ title: "Children's Book Reading",  time: "4:00 PM – 5:30 PM",  loc: "Fulshear Branch Library",         type: "Volunteer",  desc: "Read to kids ages 4–8 at the library. Great for members who love working with children." }],
+  "2026-2-28": [{ title: "End of Month Social",      time: "6:00 PM – 8:00 PM",  loc: "Fulshear Town Square",            type: "Social",     desc: "Celebrate a great month with fellow members. Food, fun, and club bonding." }],
 
-  "2026-3-4":  [{ title: "Divisional Council Meeting",  time: "5:00 PM – 6:30 PM",  loc: "Fulshear High School",             type: "Meeting",    desc: "Monthly council meeting with division officers and chapter representatives." }],
-  "2026-3-11": [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
-  "2026-3-12": [{ title: "Park Clean-up",               time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",               type: "Service",    desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
-  "2026-3-15": [{ title: "Bake Sale Fundraiser",        time: "7:30 AM – 3:00 PM",  loc: "Fulshear High School Lobby",      type: "Fundraiser", desc: "Annual bake sale to raise funds for district conference travel and club supplies." }],
-  "2026-3-19": [{ title: "H-E-B Food Drive",            time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",          type: "Service",    desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
-  "2026-3-22": [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
-  "2026-3-28": [{ title: "Pediatric Hospital Visit",    time: "1:00 PM – 4:00 PM",  loc: "Texas Children's Hospital Katy", type: "Volunteer",  desc: "Bring crafts and spend time with pediatric patients. Background check required in advance." }],
+  // Mar 3 = 1st Tuesday of March 2026
+  "2026-3-3":  [
+    { title: "Key Club General Meeting",   time: "4:00 PM – 5:00 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",   desc: "Monthly general meeting — 1st Tuesday of each month at 4:00 PM. Attendance required for service hour credit." },
+    { title: "Divisional Council Meeting", time: "5:30 PM – 7:00 PM",  loc: "Fulshear High School",             type: "Meeting",   desc: "Monthly council meeting with division officers and chapter representatives." },
+  ],
+  "2026-3-12": [{ title: "Park Clean-up",            time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",               type: "Service",    desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
+  "2026-3-15": [{ title: "Bake Sale Fundraiser",     time: "7:30 AM – 3:00 PM",  loc: "Fulshear High School Lobby",      type: "Fundraiser", desc: "Annual bake sale to raise funds for district conference travel and club supplies." }],
+  "2026-3-19": [{ title: "H-E-B Food Drive",         time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",          type: "Service",    desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
+  "2026-3-28": [{ title: "Pediatric Hospital Visit", time: "1:00 PM – 4:00 PM",  loc: "Texas Children's Hospital Katy",  type: "Volunteer",  desc: "Bring crafts and spend time with pediatric patients. Background check required in advance." }],
 
-  "2026-4-1":  [{ title: "Divisional Council Meeting",  time: "5:00 PM – 6:30 PM",  loc: "Fulshear High School",             type: "Meeting",    desc: "Monthly council meeting with division officers and chapter representatives." }],
-  "2026-4-8":  [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
-  "2026-4-11": [{ title: "Earth Day Park Cleanup",      time: "8:00 AM – 12:00 PM", loc: "Exploration Park, Fulshear",      type: "Service",    desc: "Celebrate Earth Day by removing litter and planting native wildflowers at Exploration Park." }],
-  "2026-4-18": [{ title: "Blood Drive Volunteer",       time: "9:00 AM – 3:00 PM",  loc: "Fulshear High School Cafeteria",  type: "Volunteer",  desc: "Volunteer at the school's annual blood drive — help with check-in, refreshments, and donor support." }],
-  "2026-4-22": [{ title: "Key Club General Meeting",    time: "4:15 PM – 5:15 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",    desc: "All-member general meeting — held every other Wednesday at 4:15 PM. Attendance required for service hour credit." }],
-  "2026-4-25": [{ title: "Senior Center Visit",         time: "2:00 PM – 5:00 PM",  loc: "Cinco Ranch Senior Living",       type: "Volunteer",  desc: "Spend the afternoon with residents — play games, share stories, and bring homemade cards." }],
+  // Apr 7 = 1st Tuesday of April 2026 (Apr 1 is Wednesday, so 1st Tue is Apr 7)
+  "2026-4-7":  [
+    { title: "Key Club General Meeting",   time: "4:00 PM – 5:00 PM",  loc: "Fulshear High School · LGI Room", type: "Meeting",   desc: "Monthly general meeting — 1st Tuesday of each month at 4:00 PM. Attendance required for service hour credit." },
+    { title: "Divisional Council Meeting", time: "5:30 PM – 7:00 PM",  loc: "Fulshear High School",             type: "Meeting",   desc: "Monthly council meeting with division officers and chapter representatives." },
+  ],
+  "2026-4-11": [{ title: "Earth Day Park Cleanup",   time: "8:00 AM – 12:00 PM", loc: "Exploration Park, Fulshear",      type: "Service",    desc: "Celebrate Earth Day by removing litter and planting native wildflowers at Exploration Park." }],
+  "2026-4-18": [{ title: "Blood Drive Volunteer",    time: "9:00 AM – 3:00 PM",  loc: "Fulshear High School Cafeteria",  type: "Volunteer",  desc: "Volunteer at the school's annual blood drive — help with check-in, refreshments, and donor support." }],
+  "2026-4-25": [{ title: "Senior Center Visit",      time: "2:00 PM – 5:00 PM",  loc: "Cinco Ranch Senior Living",       type: "Volunteer",  desc: "Spend the afternoon with residents — play games, share stories, and bring homemade cards." }],
 };
 
 const TYPE_COLOR: Record<string, string> = {
@@ -78,8 +87,9 @@ export default function CalendarPage() {
   const trail = (7 - (gridDays.length % 7)) % 7;
   for (let d = 1; d <= trail; d++) gridDays.push({ date: d, current: false });
 
+  // Keys use 1-indexed months; viewMonth is 0-indexed (JS Date) — add 1 to match
   const monthEvents: EventItem[] = Object.entries(allEvents)
-    .filter(([k]) => { const [y,m] = k.split("-").map(Number); return y === viewYear && m === viewMonth; })
+    .filter(([k]) => { const [y,m] = k.split("-").map(Number); return y === viewYear && m === viewMonth + 1; })
     .flatMap(([k, evs]) => { const day = Number(k.split("-")[2]); return evs.map(ev => ({ ...ev, day })); })
     .sort((a, b) => a.day - b.day);
 
@@ -378,13 +388,14 @@ export default function CalendarPage() {
           </div>
         ) : (
           /* ALL EVENTS LIST VIEW */
-          <div className="list-view fade-in" style={{ maxWidth:780, margin:"0 auto" }}>
+          <div className="list-view" style={{ maxWidth:780, margin:"0 auto" }}>
             {Object.entries(
               Object.entries(allEvents)
                 .flatMap(([k, evs]) => { const [y,m,d] = k.split("-").map(Number); return evs.map(ev => ({ ...ev, day:d, month:m, year:y })); })
-                .sort((a,b) => new Date(a.year, a.month, a.day).getTime() - new Date(b.year, b.month, b.day).getTime())
+                // month is 1-indexed in keys; JS Date months are 0-indexed → subtract 1
+                .sort((a,b) => new Date(a.year, a.month - 1, a.day).getTime() - new Date(b.year, b.month - 1, b.day).getTime())
                 .reduce((acc, ev) => {
-                  const key = `${MONTHS[ev.month]} ${ev.year}`;
+                  const key = `${MONTHS[ev.month - 1]} ${ev.year}`;
                   (acc[key] ??= []).push(ev);
                   return acc;
                 }, {} as Record<string, (EventItem & { month:number; year:number })[]>)
