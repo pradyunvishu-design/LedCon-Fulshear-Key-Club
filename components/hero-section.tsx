@@ -267,12 +267,49 @@ export default function HeroSection() {
       <style>{`
         /* ───── GLOBAL HERO KEYFRAMES ───── */
         @keyframes coinFlip {
+          /* pause: KC front fully visible */
           0%   { transform: rotateY(0deg); }
-          18%  { transform: rotateY(0deg); }      /* pause: show KC front */
-          38%  { transform: rotateY(180deg); }    /* flip to Chargers */
-          58%  { transform: rotateY(180deg); }    /* pause: show Chargers back */
-          78%  { transform: rotateY(360deg); }    /* flip back to KC */
-          100% { transform: rotateY(360deg); }    /* pause before loop */
+          24%  { transform: rotateY(0deg); animation-timing-function: ease-in-out; }
+          /* fast flip to Chargers */
+          37%  { transform: rotateY(180deg); }
+          /* pause: Chargers back fully visible */
+          60%  { transform: rotateY(180deg); animation-timing-function: ease-in-out; }
+          /* fast flip back to KC */
+          73%  { transform: rotateY(360deg); }
+          /* pause before loop */
+          100% { transform: rotateY(360deg); }
+        }
+
+        /* Synchronized glow: gold during KC phase → purple during Chargers phase */
+        @keyframes coinGlowAnim {
+          0%    { filter: drop-shadow(0 0 45px rgba(201,168,76,0.7)) drop-shadow(0 0 90px rgba(26,58,143,0.5)); }
+          24%   { filter: drop-shadow(0 0 45px rgba(201,168,76,0.7)) drop-shadow(0 0 90px rgba(26,58,143,0.5)); }
+          30.5% { filter: drop-shadow(0 0 65px rgba(155,65,235,0.9)) drop-shadow(0 0 140px rgba(110,30,225,0.65)); }
+          37%   { filter: drop-shadow(0 0 85px rgba(170,80,255,1.0)) drop-shadow(0 0 200px rgba(130,40,245,0.85)); }
+          60%   { filter: drop-shadow(0 0 85px rgba(170,80,255,1.0)) drop-shadow(0 0 200px rgba(130,40,245,0.85)); }
+          66.5% { filter: drop-shadow(0 0 65px rgba(155,65,235,0.9)) drop-shadow(0 0 140px rgba(110,30,225,0.65)); }
+          73%   { filter: drop-shadow(0 0 45px rgba(201,168,76,0.7)) drop-shadow(0 0 90px rgba(26,58,143,0.5)); }
+          100%  { filter: drop-shadow(0 0 45px rgba(201,168,76,0.7)) drop-shadow(0 0 90px rgba(26,58,143,0.5)); }
+        }
+
+        /* Ghost Chargers image: nearly invisible behind KC, blooms purple with Chargers */
+        @keyframes chargersGhostAnim {
+          0%    { opacity: 0.04; filter: blur(4px) drop-shadow(0 0 4px rgba(160,80,220,0.1)); }
+          24%   { opacity: 0.04; filter: blur(4px) drop-shadow(0 0 4px rgba(160,80,220,0.1)); }
+          37%   { opacity: 0.24; filter: blur(0px) drop-shadow(0 0 50px rgba(170,80,255,1.0)) drop-shadow(0 0 100px rgba(130,40,240,0.7)); }
+          60%   { opacity: 0.24; filter: blur(0px) drop-shadow(0 0 50px rgba(170,80,255,1.0)) drop-shadow(0 0 100px rgba(130,40,240,0.7)); }
+          73%   { opacity: 0.04; filter: blur(4px) drop-shadow(0 0 4px rgba(160,80,220,0.1)); }
+          100%  { opacity: 0.04; filter: blur(4px) drop-shadow(0 0 4px rgba(160,80,220,0.1)); }
+        }
+
+        /* Purple ambient halo behind coin — fades in/out with Chargers phase */
+        @keyframes purpleHaloAnim {
+          0%   { opacity: 0; transform: scale(0.88); }
+          24%  { opacity: 0; transform: scale(0.88); }
+          37%  { opacity: 1; transform: scale(1);    }
+          60%  { opacity: 1; transform: scale(1);    }
+          73%  { opacity: 0; transform: scale(0.88); }
+          100% { opacity: 0; transform: scale(0.88); }
         }
         @keyframes ringPulse {
           0%,100% { transform: scale(1);   opacity: 0.55; }
@@ -394,6 +431,7 @@ export default function HeroSection() {
           .hero-logo-coin         { width:136px; height:136px; }
           .coin-edge              { width:136px; height:136px; }
           .hero-chargers-bg       { width:156px !important; height:156px !important; }
+          .coin-purple-halo       { width:170px; height:170px; }
           .hero-title             { font-size: clamp(2.8rem, 14vw, 5rem); }
           .hero-subtitle          { font-size: 0.8rem; }
           .hero-district-label    { font-size: 0.58rem; letter-spacing: 0.1em; }
@@ -487,12 +525,28 @@ export default function HeroSection() {
           width:320px; height:320px;
           position:relative; z-index:1;
           transform-style: preserve-3d;
-          animation: coinFlip 7s cubic-bezier(0.37, 0, 0.63, 1) infinite;
-          /* Optimized drop-shadow for performance */
-          filter: drop-shadow(0 0 40px rgba(201,168,76,0.6)) drop-shadow(0 0 100px rgba(26,58,143,0.4));
+          /* coinFlip + coinGlowAnim stay in perfect sync — same duration, same start */
+          animation: coinFlip 9s linear infinite,
+                     coinGlowAnim 9s linear infinite;
         }
         .hero-logo-coin:hover {
           animation-play-state: paused;
+        }
+
+        /* Purple ambient halo — blooms behind the coin during Chargers phase */
+        .coin-purple-halo {
+          position: absolute;
+          width: 380px; height: 380px;
+          border-radius: 50%;
+          background: radial-gradient(circle,
+            rgba(140,50,230,0.22) 0%,
+            rgba(110,25,210,0.12) 45%,
+            transparent 70%
+          );
+          box-shadow: 0 0 90px rgba(160,80,255,0.45), 0 0 180px rgba(130,40,240,0.28);
+          pointer-events: none;
+          z-index: 0;
+          animation: purpleHaloAnim 9s linear infinite;
         }
 
         /* Front face of the coin */
@@ -513,18 +567,30 @@ export default function HeroSection() {
           clip-path: circle(50% at 50% 50%);
         }
 
-        /* Back face of the coin — Fulshear Chargers logo (inverted) */
+        /* Back face of the coin — Fulshear Chargers logo as vivid purple silhouette */
         .coin-back {
           transform: rotateY(180deg);
           z-index:1;
-          background: #050318;
+          background: radial-gradient(circle, #0d0228 0%, #050318 70%);
         }
         .coin-back img {
           width:100%; height:100%;
           object-fit: contain;
           border-radius:50%;
           clip-path: circle(50% at 50% 50%);
-          filter: invert(1) brightness(1.15);
+          /* brightness(0): all pixels → black  |  invert(1): black → white
+             sepia+hue-rotate+saturate: white → vivid violet-purple
+             drop-shadow: glowing purple halo around the silhouette */
+          filter: brightness(0) invert(1)
+                  sepia(1) hue-rotate(240deg) saturate(2.8) brightness(1.25)
+                  drop-shadow(0 0 18px rgba(200,150,255,0.95))
+                  drop-shadow(0 0 6px rgba(255,255,255,0.5));
+        }
+
+        /* Animated ghost Chargers image (CSS-driven, synced to coin cycle) */
+        .hero-chargers-bg {
+          animation: floatY 9s ease-in-out infinite 2.4s,
+                     chargersGhostAnim 9s linear infinite;
         }
 
         /* Coin edge - visible when flipping sideways */
@@ -695,7 +761,7 @@ export default function HeroSection() {
               <div className="logo-ring logo-ring-2" />
               <div className="logo-ring logo-ring-3" />
               <div className="logo-ring logo-ring-4" />
-              {/* Fulshear logo behind the coin — faint, purple-tinted */}
+              {/* Fulshear ghost image — CSS animates opacity/glow in sync with coin */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/chargers-logo.png"
@@ -706,13 +772,12 @@ export default function HeroSection() {
                   position:"absolute",
                   width:"370px", height:"370px",
                   objectFit:"contain",
-                  opacity:0.18,
-                  filter:"blur(1px) drop-shadow(0 0 18px rgba(160,80,220,0.6)) saturate(0.7)",
                   zIndex:0,
                   pointerEvents:"none",
-                  animation:"floatY 7s ease-in-out infinite 2.4s",
                 }}
               />
+              {/* Purple ambient halo — appears behind coin during Chargers phase */}
+              <div className="coin-purple-halo" />
               <div className="hero-logo-coin">
                 <div className="coin-face coin-front">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
