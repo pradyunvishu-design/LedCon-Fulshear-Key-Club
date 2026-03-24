@@ -19,7 +19,6 @@ const linkGroups = [
       { title: "Instagram", desc: "@fulshearkeyclub — photos, updates & events", href: "https://www.instagram.com/fulshearkeyclub", icon: "📸" },
       { title: "T-O District Instagram", desc: "@tokeyclub — Texas-Oklahoma district updates", href: "https://www.instagram.com/tokeyclub", icon: "📸" },
       { title: "Texas Key Club Instagram", desc: "@texaskeyclub — statewide Key Club news", href: "https://www.instagram.com/texaskeyclub", icon: "📸" },
-      { title: "TSA", desc: "Technology Student Association", href: "https://tsaweb.org", icon: "💻" },
     ],
   },
   {
