@@ -267,49 +267,48 @@ export default function HeroSection() {
       <style>{`
         /* ───── GLOBAL HERO KEYFRAMES ───── */
         @keyframes coinFlip {
-          /* pause: KC front fully visible */
+          /* KC front — long pause so it reads clearly */
           0%   { transform: rotateY(0deg); }
-          24%  { transform: rotateY(0deg); animation-timing-function: ease-in-out; }
-          /* fast flip to Chargers */
-          37%  { transform: rotateY(180deg); }
-          /* pause: Chargers back fully visible */
-          60%  { transform: rotateY(180deg); animation-timing-function: ease-in-out; }
-          /* fast flip back to KC */
-          73%  { transform: rotateY(360deg); }
-          /* pause before loop */
+          28%  { transform: rotateY(0deg); animation-timing-function: ease-in-out; }
+          /* flip to Chargers */
+          38%  { transform: rotateY(180deg); }
+          /* Chargers back — long pause so logo is readable */
+          64%  { transform: rotateY(180deg); animation-timing-function: ease-in-out; }
+          /* flip back to KC */
+          74%  { transform: rotateY(360deg); }
           100% { transform: rotateY(360deg); }
         }
 
-        /* Synchronized glow: gold during KC phase → purple during Chargers phase */
+        /* Glow switches AFTER flip lands — near-instant jump at 38% and 64% */
         @keyframes coinGlowAnim {
-          0%    { filter: drop-shadow(0 0 45px rgba(201,168,76,0.7)) drop-shadow(0 0 90px rgba(26,58,143,0.5)); }
-          24%   { filter: drop-shadow(0 0 45px rgba(201,168,76,0.7)) drop-shadow(0 0 90px rgba(26,58,143,0.5)); }
-          30.5% { filter: drop-shadow(0 0 65px rgba(155,65,235,0.9)) drop-shadow(0 0 140px rgba(110,30,225,0.65)); }
-          37%   { filter: drop-shadow(0 0 85px rgba(170,80,255,1.0)) drop-shadow(0 0 200px rgba(130,40,245,0.85)); }
-          60%   { filter: drop-shadow(0 0 85px rgba(170,80,255,1.0)) drop-shadow(0 0 200px rgba(130,40,245,0.85)); }
-          66.5% { filter: drop-shadow(0 0 65px rgba(155,65,235,0.9)) drop-shadow(0 0 140px rgba(110,30,225,0.65)); }
-          73%   { filter: drop-shadow(0 0 45px rgba(201,168,76,0.7)) drop-shadow(0 0 90px rgba(26,58,143,0.5)); }
-          100%  { filter: drop-shadow(0 0 45px rgba(201,168,76,0.7)) drop-shadow(0 0 90px rgba(26,58,143,0.5)); }
+          0%    { filter: drop-shadow(0 0 38px rgba(201,168,76,0.5)) drop-shadow(0 0 65px rgba(26,58,143,0.35)); }
+          28%   { filter: drop-shadow(0 0 38px rgba(201,168,76,0.5)) drop-shadow(0 0 65px rgba(26,58,143,0.35)); }
+          37.9% { filter: drop-shadow(0 0 38px rgba(201,168,76,0.5)) drop-shadow(0 0 65px rgba(26,58,143,0.35)); }
+          38%   { filter: drop-shadow(0 0 48px rgba(150,60,230,0.6)) drop-shadow(0 0 100px rgba(110,30,220,0.38)); }
+          64%   { filter: drop-shadow(0 0 48px rgba(150,60,230,0.6)) drop-shadow(0 0 100px rgba(110,30,220,0.38)); }
+          64.1% { filter: drop-shadow(0 0 38px rgba(201,168,76,0.5)) drop-shadow(0 0 65px rgba(26,58,143,0.35)); }
+          74%   { filter: drop-shadow(0 0 38px rgba(201,168,76,0.5)) drop-shadow(0 0 65px rgba(26,58,143,0.35)); }
+          100%  { filter: drop-shadow(0 0 38px rgba(201,168,76,0.5)) drop-shadow(0 0 65px rgba(26,58,143,0.35)); }
         }
 
-        /* Ghost Chargers image: nearly invisible behind KC, blooms purple with Chargers */
+        /* Ghost Chargers: hidden during KC, appears only when Chargers face is fully showing */
         @keyframes chargersGhostAnim {
-          0%    { opacity: 0.04; filter: blur(4px) drop-shadow(0 0 4px rgba(160,80,220,0.1)); }
-          24%   { opacity: 0.04; filter: blur(4px) drop-shadow(0 0 4px rgba(160,80,220,0.1)); }
-          37%   { opacity: 0.24; filter: blur(0px) drop-shadow(0 0 50px rgba(170,80,255,1.0)) drop-shadow(0 0 100px rgba(130,40,240,0.7)); }
-          60%   { opacity: 0.24; filter: blur(0px) drop-shadow(0 0 50px rgba(170,80,255,1.0)) drop-shadow(0 0 100px rgba(130,40,240,0.7)); }
-          73%   { opacity: 0.04; filter: blur(4px) drop-shadow(0 0 4px rgba(160,80,220,0.1)); }
-          100%  { opacity: 0.04; filter: blur(4px) drop-shadow(0 0 4px rgba(160,80,220,0.1)); }
+          0%    { opacity: 0.04; filter: blur(3px); }
+          37.9% { opacity: 0.04; filter: blur(3px); }
+          38%   { opacity: 0.18; filter: blur(0px) drop-shadow(0 0 28px rgba(170,80,255,0.55)) drop-shadow(0 0 55px rgba(130,40,240,0.35)); }
+          64%   { opacity: 0.18; filter: blur(0px) drop-shadow(0 0 28px rgba(170,80,255,0.55)) drop-shadow(0 0 55px rgba(130,40,240,0.35)); }
+          64.1% { opacity: 0.04; filter: blur(3px); }
+          100%  { opacity: 0.04; filter: blur(3px); }
         }
 
-        /* Purple ambient halo behind coin — fades in/out with Chargers phase */
+        /* Purple halo: off during KC and flip, on only when Chargers face shows */
         @keyframes purpleHaloAnim {
-          0%   { opacity: 0; transform: scale(0.88); }
-          24%  { opacity: 0; transform: scale(0.88); }
-          37%  { opacity: 1; transform: scale(1);    }
-          60%  { opacity: 1; transform: scale(1);    }
-          73%  { opacity: 0; transform: scale(0.88); }
-          100% { opacity: 0; transform: scale(0.88); }
+          0%    { opacity: 0; }
+          37.9% { opacity: 0; }
+          38%   { opacity: 0.8; }
+          64%   { opacity: 0.8; }
+          64.1% { opacity: 0; }
+          100%  { opacity: 0; }
         }
         @keyframes ringPulse {
           0%,100% { transform: scale(1);   opacity: 0.55; }
@@ -526,8 +525,8 @@ export default function HeroSection() {
           position:relative; z-index:1;
           transform-style: preserve-3d;
           /* coinFlip + coinGlowAnim stay in perfect sync — same duration, same start */
-          animation: coinFlip 9s linear infinite,
-                     coinGlowAnim 9s linear infinite;
+          animation: coinFlip 12s linear infinite,
+                     coinGlowAnim 12s linear infinite;
         }
         .hero-logo-coin:hover {
           animation-play-state: paused;
@@ -539,14 +538,14 @@ export default function HeroSection() {
           width: 380px; height: 380px;
           border-radius: 50%;
           background: radial-gradient(circle,
-            rgba(140,50,230,0.22) 0%,
-            rgba(110,25,210,0.12) 45%,
-            transparent 70%
+            rgba(130,45,215,0.16) 0%,
+            rgba(100,20,200,0.08) 50%,
+            transparent 72%
           );
-          box-shadow: 0 0 90px rgba(160,80,255,0.45), 0 0 180px rgba(130,40,240,0.28);
+          box-shadow: 0 0 55px rgba(150,70,240,0.28), 0 0 110px rgba(120,35,225,0.16);
           pointer-events: none;
           z-index: 0;
-          animation: purpleHaloAnim 9s linear infinite;
+          animation: purpleHaloAnim 12s linear infinite;
         }
 
         /* Front face of the coin */
@@ -567,7 +566,7 @@ export default function HeroSection() {
           clip-path: circle(50% at 50% 50%);
         }
 
-        /* Back face of the coin — Fulshear Chargers logo as vivid purple silhouette */
+        /* Back face of the coin — Fulshear Chargers logo, purple-tinted but detail-preserving */
         .coin-back {
           transform: rotateY(180deg);
           z-index:1;
@@ -578,19 +577,18 @@ export default function HeroSection() {
           object-fit: contain;
           border-radius:50%;
           clip-path: circle(50% at 50% 50%);
-          /* brightness(0): all pixels → black  |  invert(1): black → white
-             sepia+hue-rotate+saturate: white → vivid violet-purple
-             drop-shadow: glowing purple halo around the silhouette */
-          filter: brightness(0) invert(1)
-                  sepia(1) hue-rotate(240deg) saturate(2.8) brightness(1.25)
-                  drop-shadow(0 0 18px rgba(200,150,255,0.95))
-                  drop-shadow(0 0 6px rgba(255,255,255,0.5));
+          /* Boost brightness so dark logo pixels become visible on dark bg,
+             then tint purple while keeping tonal detail intact */
+          filter: brightness(3) contrast(1.4)
+                  sepia(0.8) hue-rotate(225deg) saturate(2.2)
+                  brightness(0.95)
+                  drop-shadow(0 0 10px rgba(190,140,255,0.45));
         }
 
         /* Animated ghost Chargers image (CSS-driven, synced to coin cycle) */
         .hero-chargers-bg {
           animation: floatY 9s ease-in-out infinite 2.4s,
-                     chargersGhostAnim 9s linear infinite;
+                     chargersGhostAnim 12s linear infinite;
         }
 
         /* Coin edge - visible when flipping sideways */
