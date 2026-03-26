@@ -55,7 +55,7 @@ export default function Home() {
 
 function SchooLinksSection() {
   return (
-    <section style={{ padding: "8rem 0 6rem", position: "relative", overflow: "hidden" }}>
+    <section id="schoolinks" style={{ padding: "clamp(4rem, 10vw, 8rem) 0 clamp(3rem, 8vw, 6rem)", position: "relative", overflow: "hidden" }}>
       <style>{`
         .schoolinks-bg {
           position: absolute;
@@ -74,7 +74,7 @@ function SchooLinksSection() {
         }
         .schoolinks-header {
           text-align: center;
-          margin-bottom: 3rem;
+          margin-bottom: clamp(2rem, 5vw, 3rem);
         }
         .schoolinks-section-label {
           font-size: 0.65rem;
@@ -96,24 +96,26 @@ function SchooLinksSection() {
         }
         .schoolinks-description {
           color: var(--silver);
-          font-size: 0.95rem;
+          font-size: clamp(0.85rem, 2vw, 0.95rem);
           max-width: 600px;
           margin: 0 auto 2.5rem;
           line-height: 1.7;
         }
         .schoolinks-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 2rem;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: clamp(1rem, 3vw, 2rem);
         }
         .schoolinks-card {
-          padding: 2rem;
+          padding: clamp(1.2rem, 4vw, 2rem);
           border-radius: 16px;
           background: rgba(10, 15, 30, 0.6);
           border: 1px solid rgba(100, 149, 237, 0.12);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
           transition: all 0.3s ease;
+          display: flex;
+          flex-direction: column;
         }
         .schoolinks-card:hover {
           transform: translateY(-6px);
@@ -133,20 +135,24 @@ function SchooLinksSection() {
           border-radius: 12px;
           margin-bottom: 1.5rem;
           border: 1px solid rgba(255, 255, 255, 0.1);
-          max-height: 300px;
+          aspect-ratio: 4/3;
           object-fit: cover;
         }
         .schoolinks-desc {
-          font-size: 0.9rem;
+          font-size: 0.85rem;
           color: var(--silver);
           line-height: 1.6;
         }
-        @media (max-width: 600px) {
+        @media (max-width: 650px) {
           .schoolinks-grid {
             grid-template-columns: 1fr;
           }
           .schoolinks-wrapper {
-            padding: 0 1rem;
+            padding: 0 1.25rem;
+          }
+          .schoolinks-img {
+             aspect-ratio: auto;
+             max-height: 250px;
           }
         }
       `}</style>
