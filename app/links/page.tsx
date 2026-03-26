@@ -7,7 +7,6 @@ const linkGroups = [
     border: "rgba(201,168,76,0.6)",
     links: [
       { title: "Event Sign-Ups", desc: "Register for upcoming service events", href: "https://www.signupgenius.com", icon: "📋" },
-      { title: "Remind 101", desc: "Text @cfhs-key to 81010 for updates", href: "sms:81010?body=@cfhs-key", icon: "📱" },
       { title: "Contact Officers", desc: "fulshearkeyclub@lcisd.org", href: "mailto:fulshearkeyclub@lcisd.org", icon: "✉️" },
     ],
   },
