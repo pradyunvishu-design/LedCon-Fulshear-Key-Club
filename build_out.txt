@@ -1,0 +1,28 @@
+
+> next-app@0.1.0 build
+> next build
+
+▲ Next.js 16.2.1 (Turbopack)
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+  Using external babel configuration from C:\Users\12242\.gemini\antigravity\scratch\LedCon-Fulshear-Key-Club\.babelrc
+⚠ It looks like there is a custom Babel configuration that can be removed.
+✓ Compiled successfully in 3.2s
+  Running TypeScript ...
+Failed to type check.
+
+./app/page.tsx:225:88
+Type error: Type '{ objectFit: string; objectPosition: string; maxHeight: string; } | {}' is not assignable to type 'CSSProperties | undefined'.
+  Type '{ objectFit: string; objectPosition: string; maxHeight: string; }' is not assignable to type 'Properties<string | number, string & {}>'.
+    Types of property 'objectFit' are incompatible.
+      Type 'string' is not assignable to type 'ObjectFit | undefined'.
+
+  [90m223 |[0m ...[32minks-card">[0m
+  [90m224 |[0m ...[32mp-num">Step {item.step}</div>[0m
+[31m[1m>[0m [90m225 |[0m ... ${item.step}[32m`} className="schoolinks-img" style={item.step === "3" ? step3ImageStyle ...[0m
+  [90m    |[0m                                               [31m[1m^[0m
+  [90m226 |[0m ...[32m>{item.desc}</p>[0m
+  [90m227 |[0m ...
+  [90m228 |[0m ...
+Next.js build worker exited with code: 1 and signal: null

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import HeroSection from "@/components/hero-section";
 import AboutSection from "@/components/about-section";
 import OfficersSection from "@/components/officers-section";
@@ -20,7 +20,7 @@ const schoolinksSteps = [
 ];
 
 // Custom style for centering the Step 3 image
-const step3ImageStyle = {
+const step3ImageStyle: React.CSSProperties = {
   objectFit: 'contain',
   objectPosition: 'center',
   maxHeight: '300px', // Adjust as needed to make it bigger but fit
