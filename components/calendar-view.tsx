@@ -54,6 +54,10 @@ const allEvents: Record<string, EventData[]> = {
   "2025-05-01": [{ title: "Lunches of Love", time: "Throughout the year", loc: "Fulshear Community Center, 8525 FM 359, Fulshear, TX 77441", type: "Recurring", desc: "Help pack and deliver lunches to families in need across the community." }],
   "2025-05-10": [{ title: "Mother's Day 5K Fun Run", time: "7:00 AM – 10:00 AM", loc: "Freedom Park, 511 Tenth St, Katy, TX 77493", type: "Service", desc: "Volunteer at the Mother's Day fun run — hand out medals and water." }],
   "2025-05-17": [{ title: "End of Year Banquet", time: "6:00 PM – 9:00 PM", loc: "Fulshear High School, 9302 Charger Way, Fulshear, TX 77441", type: "Community", desc: "Celebrate the year's achievements with the Key Club. Awards, food, and fun!" }],
+  "2026-02-03": [{ title: "Key Club General Meeting", time: "4:00 PM – 5:00 PM", loc: "Fulshear High School · LGI Room", type: "Meeting", desc: "Monthly general meeting — 1st Tuesday of each month at 4:00 PM. All members required to attend." }],
+  "2026-03-03": [{ title: "Key Club General Meeting", time: "4:00 PM – 5:00 PM", loc: "Fulshear High School · LGI Room", type: "Meeting", desc: "Monthly general meeting — 1st Tuesday of each month at 4:00 PM. All members required to attend." }],
+  "2026-04-07": [{ title: "Key Club General Meeting", time: "4:00 PM – 5:00 PM", loc: "Fulshear High School · LGI Room", type: "Meeting", desc: "Monthly general meeting — 1st Tuesday of each month at 4:00 PM. All members required to attend." }],
+  "2026-05-05": [{ title: "Key Club General Meeting", time: "4:00 PM – 5:00 PM", loc: "Fulshear High School · LGI Room", type: "Meeting", desc: "Monthly general meeting — 1st Tuesday of each month at 4:00 PM. All members required to attend." }],
 };
 
 const TYPE_COLOR: Record<string, string> = {
@@ -243,28 +247,72 @@ export default function CalendarView() {
 
         .cal-no-events { color: rgba(255,255,255,0.4); font-size: 0.85rem; text-align: center; margin-top: 2rem; padding: 2rem 1rem; border: 1px dashed rgba(255,255,255,0.1); border-radius: 16px; }
 
+        /* ── All Events redesigned ── */
+        .cal-list-shell { width: 100%; }
+        .cal-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .cal-list-header h2 { font-size: 1.6rem; font-weight: 900; color: white; letter-spacing: -0.02em; }
+        .cal-list-total { font-size: 0.75rem; font-weight: 800; color: #c9a84c; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.25); padding: 6px 16px; border-radius: 20px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+
+        .cal-list-group { margin-bottom: 2.8rem; }
+        .cal-list-month-hdr { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+        .cal-list-month-hdr span { font-size: 0.72rem; font-weight: 900; color: #c9a84c; text-transform: uppercase; letter-spacing: 0.2em; white-space: nowrap; }
+        .cal-list-month-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(201,168,76,0.35), transparent); }
+
+        .cal-list-card { display: flex; align-items: stretch; gap: 0; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden; margin-bottom: 0.85rem; }
+        .cal-list-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); transform: translateY(-3px); box-shadow: 0 10px 35px rgba(0,0,0,0.3); }
+
+        .cal-list-accent { width: 4px; flex-shrink: 0; }
+        .cal-list-date { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.2rem 1.4rem; min-width: 72px; border-right: 1px solid rgba(255,255,255,0.06); text-align: center; flex-shrink: 0; }
+        .cal-list-day { font-size: 2rem; font-weight: 900; color: white; line-height: 1; }
+        .cal-list-mon { font-size: 0.6rem; font-weight: 800; color: #c9a84c; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 4px; }
+
+        .cal-list-body { flex: 1; padding: 1.2rem 1.5rem; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+        .cal-list-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+        .cal-list-title { font-size: 1rem; font-weight: 800; color: white; line-height: 1.4; }
+        .cal-list-badge { font-size: 0.55rem; font-weight: 900; padding: 4px 12px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; flex-shrink: 0; align-self: flex-start; margin-top: 2px; }
+        .cal-list-meta { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; }
+        .cal-list-meta-item { font-size: 0.78rem; color: rgba(255,255,255,0.5); display: flex; align-items: center; gap: 5px; min-width: 0; }
+        .cal-list-meta-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; }
+
         @media (max-width: 1024px) { .cal-grid-layout { grid-template-columns: 1fr; gap: 2rem; } }
         @media (max-width: 768px) {
-          .cal-shell { padding: 0 1.2rem; }
+          .cal-shell { padding: 0 1rem; overflow-x: hidden; }
           .cal-page-header h1 { font-size: 2rem; }
           .cal-d-cell { min-height: 55px; padding: 5px; border-radius: 10px; }
           .cal-d-num { font-size: 0.8rem; }
           .cal-d-dot { width: 4px; height: 4px; }
           .cal-e-card { padding: 0.9rem; }
-          .cal-modal-box { width: 96%; }
+          .cal-e-nm { white-space: normal; word-break: break-word; }
+          .cal-modal-box { width: 96%; max-height: 92vh; overflow-y: auto; }
           .cal-modal-content { padding: 1.5rem; }
           .cal-modal-title { font-size: 1.3rem; }
           .cal-modal-map-area { height: 180px; }
+          .cal-list-meta-item span { max-width: 200px; }
+          .cal-list-header h2 { font-size: 1.3rem; }
+          .cal-list-day { font-size: 1.6rem; }
+          .cal-list-date { min-width: 58px; padding: 1rem; }
+          .cal-list-body { padding: 1rem 1.1rem; }
         }
         @media (max-width: 480px) {
+          .cal-shell { padding: 0 0.8rem; }
           .cal-d-lbl { font-size: 0.55rem; letter-spacing: 0.05em; }
           .cal-d-cell { min-height: 45px; padding: 4px; border-radius: 8px; gap: 2px; }
           .cal-d-num { font-size: 0.7rem; }
-          .cal-e-nm { font-size: 0.85rem; }
+          .cal-e-nm { font-size: 0.85rem; white-space: normal; }
           .cal-e-day { font-size: 1.3rem; }
           .cal-e-date { padding-right: 0.6rem; min-width: 38px; }
-          .cal-modal-content { padding: 1.2rem; }
+          .cal-e-top { flex-wrap: wrap; }
+          .cal-e-bdg { align-self: flex-start; }
+          .cal-modal-content { padding: 1rem; }
           .cal-modal-actions { flex-direction: column; }
+          .cal-list-header { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+          .cal-list-meta-item span { max-width: 160px; }
+          .cal-list-top { gap: 0.5rem; }
+          .cal-list-body { padding: 0.9rem 1rem; }
+          .cal-list-date { min-width: 52px; padding: 0.8rem 0.8rem; }
+          .cal-list-day { font-size: 1.4rem; }
+          .cal-view-toggle { width: 90%; }
+          .cal-v-btn { padding: 0.6rem 1.4rem; font-size: 0.7rem; }
         }
       `}</style>
 
@@ -370,34 +418,50 @@ export default function CalendarView() {
             </div>
           </div>
         ) : (
-          /* All Events List View */
-          <div className="cal-glass" style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <div className="cal-e-header">
-              <div className="cal-e-title">All Events</div>
-              <div className="cal-e-count">{sortedKeys.reduce((acc, k) => acc + allEvents[k].length, 0)} total</div>
+          /* All Events List View — grouped by month */
+          <div className="cal-list-shell">
+            <div className="cal-list-header">
+              <h2>All Events</h2>
+              <div className="cal-list-total">{sortedKeys.reduce((acc, k) => acc + allEvents[k].length, 0)} events</div>
             </div>
-            <div className="cal-e-scrl" style={{ maxHeight: '650px' }}>
-              {sortedKeys.flatMap(k => allEvents[k].map((e, idx) => {
+            {(() => {
+              const groups: { label: string; events: Array<EventData & { date: string; dayNum: number }> }[] = [];
+              const seen: Record<string, number> = {};
+              sortedKeys.forEach(k => {
                 const [y, m, d] = k.split("-");
                 const dt = new Date(+y, +m - 1, +d);
-                return (
-                  <div key={k + e.title + idx} className="cal-e-card" onClick={() => setSelectedEvent({ ...e, date: k, dayNum: dt.getDate() })}>
-                    <div className="cal-e-date">
-                      <div className="cal-e-day">{dt.getDate()}</div>
-                      <div className="cal-e-mon">{MONTHS[dt.getMonth()].substring(0, 3)} {y}</div>
-                    </div>
-                    <div className="cal-e-inf">
-                      <div className="cal-e-top">
-                        <div className="cal-e-nm">{e.title}</div>
-                        <div className="cal-e-bdg" style={{ color: TYPE_COLOR[e.type] || '#fff', background: `${TYPE_COLOR[e.type]}15`, border: `1px solid ${TYPE_COLOR[e.type]}40` }}>{e.type}</div>
-                      </div>
-                      <div className="cal-e-det">📍 {e.loc.length > 50 ? e.loc.substring(0, 50) + '…' : e.loc}</div>
-                      <div className="cal-e-det">🕒 {e.time}</div>
-                    </div>
+                const label = `${MONTHS[dt.getMonth()]} ${y}`;
+                if (seen[label] === undefined) { seen[label] = groups.length; groups.push({ label, events: [] }); }
+                allEvents[k].forEach(e => groups[seen[label]].events.push({ ...e, date: k, dayNum: dt.getDate() }));
+              });
+              return groups.map(({ label, events }) => (
+                <div key={label} className="cal-list-group">
+                  <div className="cal-list-month-hdr">
+                    <span>{label}</span>
+                    <div className="cal-list-month-line" />
                   </div>
-                );
-              }))}
-            </div>
+                  {events.map((e, i) => (
+                    <div key={i} className="cal-list-card" onClick={() => setSelectedEvent(e)}>
+                      <div className="cal-list-accent" style={{ background: TYPE_COLOR[e.type] || '#fff' }} />
+                      <div className="cal-list-date">
+                        <div className="cal-list-day">{e.dayNum}</div>
+                        <div className="cal-list-mon">{label.split(" ")[0].substring(0, 3)}</div>
+                      </div>
+                      <div className="cal-list-body">
+                        <div className="cal-list-top">
+                          <div className="cal-list-title">{e.title}</div>
+                          <div className="cal-list-badge" style={{ color: TYPE_COLOR[e.type] || '#fff', background: `${TYPE_COLOR[e.type]}18`, border: `1px solid ${TYPE_COLOR[e.type]}45` }}>{e.type}</div>
+                        </div>
+                        <div className="cal-list-meta">
+                          <div className="cal-list-meta-item">🕒 <span>{e.time}</span></div>
+                          <div className="cal-list-meta-item">📍 <span>{e.loc}</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ));
+            })()}
           </div>
         )}
 
