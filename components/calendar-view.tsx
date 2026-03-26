@@ -85,69 +85,77 @@ export default function CalendarView() {
   }).sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   return (
-    <main className="flex-grow pt-24 pb-16">
+    <main className="flex-grow pb-16" style={{ marginTop: '8rem' }}>
       <style>{`
-        .cal-shell { max-width: 1300px; margin: 0 auto; padding: 0 1.5rem; font-family: inherit; }
+        .cal-shell { max-width: 1536px; margin: 0 auto; padding: 0 4%; font-family: inherit; }
         .page-header { text-align: center; margin-bottom: 2rem; }
-        .page-header h1 { font-size: clamp(2rem, 3.5vw, 2.75rem); font-weight: 800; color: white; margin-bottom: 0.5rem; }
+        .page-header h1 { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; color: white; margin-bottom: 0.5rem; }
         .page-header h1 span { color: var(--gold, #c9a84c); font-style: italic; }
-        .page-header p { color: var(--silver, #aebdcc); font-size: 0.95rem; }
+        .page-header p { color: var(--silver, #aebdcc); font-size: 0.85rem; }
 
-        .view-toggle { display: flex; margin: 0 auto 2rem; width: fit-content; background: rgba(10, 15, 30, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; padding: 4px; }
-        .v-btn { padding: 0.5rem 1.5rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; color: var(--silver); background: transparent; border: none; transition: 0.3s; cursor: pointer; }
-        .v-btn.active { background: var(--blue, #1d4ed8); color: white; box-shadow: 0 0 15px rgba(29, 78, 216, 0.5); }
+        .view-toggle { display: flex; margin: 0 auto 2rem; width: fit-content; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); border-radius: 30px; padding: 4px; }
+        .v-btn { padding: 0.5rem 1.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: var(--silver); background: transparent; border: none; transition: 0.3s; cursor: pointer; }
+        .v-btn.active { background: var(--blue, #1d4ed8); color: white; box-shadow: 0 0 15px rgba(29, 78, 216, 0.4); }
 
         .cal-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.5rem; }
-        .glass-box { background: rgba(15, 20, 35, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(201, 168, 76, 0.15); border-radius: 20px; padding: 1.5rem; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .glass-box { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 1.5rem; box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.01), 0 8px 32px rgba(0, 0, 0, 0.4); transition: transform 0.3s ease; }
 
         .m-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .m-title { font-size: 1.4rem; font-weight: 800; color: white; }
-        .m-sub { font-size: 0.75rem; color: rgba(255,255,255,0.5); text-align: center; }
-        .n-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); display: grid; place-items: center; cursor: pointer; transition: 0.2s; }
+        .m-title { font-size: 1.25rem; font-weight: 800; color: white; }
+        .m-sub { font-size: 0.7rem; color: rgba(255,255,255,0.5); text-align: center; }
+        .n-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.08); display: grid; place-items: center; cursor: pointer; transition: 0.3s; }
         .n-btn:hover { background: rgba(201, 168, 76, 0.2); border-color: var(--gold); }
-        .t-btn { display: block; margin: 0 auto 1.5rem; background: transparent; color: var(--gold); border: 1px solid var(--gold); font-size: 0.7rem; font-weight: 700; padding: 3px 12px; border-radius: 12px; cursor: pointer; }
+        .t-btn { display: block; margin: 0 auto 1.5rem; background: transparent; color: var(--gold); border: 1px solid rgba(201, 168, 76, 0.3); font-size: 0.65rem; font-weight: 700; padding: 4px 14px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .t-btn:hover { background: rgba(201, 168, 76, 0.1); }
 
         .d-head { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 0.5rem; }
-        .d-lbl { font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; }
+        .d-lbl { font-size: 0.6rem; font-weight: 800; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; }
         .d-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-        .d-cell { aspect-ratio: 1; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 6px; display: flex; flex-direction: column; cursor: pointer; transition: 0.2s; }
+        .d-cell { aspect-ratio: 1; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 6px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: 0.2s; }
         .d-cell:hover { border-color: var(--gold); background: rgba(201, 168, 76, 0.1); transform: translateY(-2px); }
-        .d-num { font-size: 0.85rem; font-weight: 700; color: white; margin-bottom: auto; }
+        .d-num { font-size: 0.8rem; font-weight: 700; color: white; margin-bottom: auto; }
         .d-num.off { color: rgba(255,255,255,0.1); }
         .d-dots { display: flex; flex-wrap: wrap; gap: 3px; }
-        .d-dot { width: 5px; height: 5px; border-radius: 50%; }
+        .d-dot { width: 4px; height: 4px; border-radius: 50%; }
 
         .leg { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
-        .leg-i { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; color: rgba(255,255,255,0.5); text-transform: uppercase; font-weight: 700; }
+        .leg-i { display: flex; align-items: center; gap: 6px; font-size: 0.6rem; color: rgba(255,255,255,0.5); text-transform: uppercase; font-weight: 700; }
 
         .e-head { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
-        .e-title { font-size: 0.8rem; font-weight: 800; color: white; letter-spacing: 0.1em; }
-        .e-scrl { display: flex; flex-direction: column; gap: 1rem; max-height: 450px; overflow-y: auto; padding-right: 0.5rem; }
+        .e-title { font-size: 0.75rem; font-weight: 800; color: white; letter-spacing: 0.1em; }
+        .e-scrl { display: flex; flex-direction: column; gap: 0.8rem; max-height: 400px; overflow-y: auto; padding-right: 0.5rem; }
         .e-scrl::-webkit-scrollbar { width: 4px; }
         .e-scrl::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-        .e-card { display: flex; gap: 1rem; padding: 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; cursor: pointer; transition: 0.2s; }
-        .e-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+        .e-card { display: flex; gap: 1rem; padding: 0.8rem; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .e-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); }
         .e-date { text-align: center; min-width: 40px; }
-        .e-day { font-size: 1.3rem; font-weight: 800; color: white; line-height: 1; }
-        .e-mon { font-size: 0.6rem; font-weight: 800; color: var(--gold); text-transform: uppercase; margin-top: 4px; }
+        .e-day { font-size: 1.2rem; font-weight: 900; color: white; line-height: 1; }
+        .e-mon { font-size: 0.55rem; font-weight: 800; color: var(--gold); text-transform: uppercase; margin-top: 4px; }
         .e-inf { flex-grow: 1; }
-        .e-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.3rem; }
-        .e-nm { font-size: 0.95rem; font-weight: 700; color: white; }
-        .e-bdg { font-size: 0.55rem; font-weight: 800; padding: 3px 8px; border-radius: 10px; border: 1px solid currentColor; text-transform: uppercase; }
-        .e-det { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+        .e-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.2rem; }
+        .e-nm { font-size: 0.85rem; font-weight: 700; color: white; }
+        .e-bdg { font-size: 0.5rem; font-weight: 800; padding: 3px 6px; border-radius: 8px; border: 1px solid currentColor; text-transform: uppercase; }
+        .e-det { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
 
-        .m-dim { position: fixed; inset: 0; background: rgba(10,15,30,0.4); backdrop-filter: blur(8px); display: grid; place-items: center; z-index: 1000; }
-        .m-box { background: var(--navy, #0a0f1e); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 2.5rem; max-width: 450px; width: 90%; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
-        .m-cls { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.05); border: none; color: white; font-size: 1.2rem; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; opacity: 0.7; display: grid; place-items: center; }
-        .m-cls:hover { opacity: 1; background: rgba(255,255,255,0.1); }
-        .m-b { display: inline-block; font-size: 0.65rem; font-weight: 800; padding: 3px 10px; border-radius: 10px; border: 1px solid currentColor; margin-bottom: 1rem; text-transform: uppercase; }
-        .m-t { font-size: 1.5rem; font-weight: 800; color: white; margin-bottom: 0.5rem; }
-        .m-i { font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-bottom: 0.3rem; }
-        .m-d { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(255,255,255,0.8); line-height: 1.5; }
-        .m-lnk { display: inline-block; margin-top: 1.5rem; background: var(--blue, #3b82f6); color: white; font-size: 0.85rem; font-weight: 700; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; transition: 0.2s; }
+        .m-dim { position: fixed; inset: 0; background: rgba(0,0,0,0.15); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: grid; place-items: center; z-index: 1000; }
+        .m-box { background: rgba(15, 20, 35, 0.7); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 2.5rem; max-width: 450px; width: 90%; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+        .m-cls { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.05); border: none; color: white; font-size: 1.2rem; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; opacity: 0.7; display: grid; place-items: center; transition: 0.2s; }
+        .m-cls:hover { opacity: 1; background: rgba(255,255,255,0.15); }
+        .m-b { display: inline-block; font-size: 0.6rem; font-weight: 800; padding: 3px 8px; border-radius: 8px; border: 1px solid currentColor; margin-bottom: 1rem; text-transform: uppercase; }
+        .m-t { font-size: 1.3rem; font-weight: 800; color: white; margin-bottom: 0.5rem; }
+        .m-i { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-bottom: 0.3rem; }
+        .m-d { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; color: rgba(255,255,255,0.8); line-height: 1.5; }
+        .m-lnk { display: inline-block; margin-top: 1.5rem; background: var(--blue, #3b82f6); color: white; font-size: 0.8rem; font-weight: 700; padding: 0.5rem 1.2rem; border-radius: 8px; text-decoration: none; transition: 0.2s; }
         .m-lnk:hover { background: #2563eb; transform: translateY(-1px); }
 
         @media (max-width: 900px) { .cal-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) {
+          .cal-shell { padding: 0 1rem; }
+          .page-header h1 { font-size: 1.8rem; }
+          .d-cell { padding: 4px; border-radius: 8px; }
+          .e-nm { font-size: 0.8rem; }
+          .e-day { font-size: 1.1rem; }
+        }
       `}</style>
       <div className="cal-shell fade-in">
         <div className="page-header">
