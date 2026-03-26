@@ -292,18 +292,18 @@ export default function CalendarPage() {
         </div>
 
         {/* View toggle */}
-        <div style={{ display:"flex", justifyContent:"center" }}>
+        <div style={{ display:"flex", justifyContent:"center", marginBottom:"2rem" }}>
           <div className="cal-toggle">
-            <button className={`cal-toggle-btn${view==="month" ? " active" : ""}`} onClick={() => setView("month")}>Month</button>
-            <button className={`cal-toggle-btn${view==="list"  ? " active" : ""}`} onClick={() => setView("list")}>All Events</button>
+            <button className={`cal-toggle-btn${view==="month" ? " active" : ""}`} onClick={() => { setView("month"); setSelected(null); }}>Month</button>
+            <button className={`cal-toggle-btn${view==="list"  ? " active" : ""}`} onClick={() => { setView("list"); setSelected(null); }}>All Events</button>
           </div>
         </div>
 
-        {view === "month" ? (
-          <div className="cal-grid-layout fade-in">
+        {view === "month" && (
+          <div key={`month-${viewYear}-${viewMonth}`} className="cal-grid-layout fade-in">
 
             {/* Calendar */}
-            <div className="cal-shell">
+            <div className="cal-shell" key="calendar-shell">
               <div className="cal-nav-row">
                 <button className="cal-nav-btn" onClick={prevMonth} aria-label="Previous">‹</button>
                 <div className="cal-month-label">
@@ -386,13 +386,13 @@ export default function CalendarPage() {
               </div>
             </div>
           </div>
-        ) : (
+        )}
+        {view === "list" && (
           /* ALL EVENTS LIST VIEW */
-          <div className="list-view" style={{ maxWidth:780, margin:"0 auto" }}>
+          <div key="list-view" className="list-view" style={{ maxWidth:780, margin:"0 auto" }}>
             {Object.entries(
               Object.entries(allEvents)
                 .flatMap(([k, evs]) => { const [y,m,d] = k.split("-").map(Number); return evs.map(ev => ({ ...ev, day:d, month:m, year:y })); })
-                // month is 1-indexed in keys; JS Date months are 0-indexed → subtract 1
                 .sort((a,b) => new Date(a.year, a.month - 1, a.day).getTime() - new Date(b.year, b.month - 1, b.day).getTime())
                 .reduce((acc, ev) => {
                   const key = `${MONTHS[ev.month - 1]} ${ev.year}`;
@@ -406,7 +406,7 @@ export default function CalendarPage() {
                   <div key={i} className={`event-card${selected === ev ? " active":""}`} style={{ marginBottom:"0.55rem" }} onClick={() => setSelected(ev)}>
                     <div className="event-card-date">
                       <span className="event-card-day">{ev.day}</span>
-                      <span className="event-card-mon">{MONTHS[ev.month].slice(0,3)}</span>
+                      <span className="event-card-mon">{MONTHS[ev.month - 1].slice(0,3)}</span>
                     </div>
                     <div className="event-card-bar" />
                     <div className="event-card-info">
