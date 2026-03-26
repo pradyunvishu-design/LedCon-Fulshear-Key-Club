@@ -169,7 +169,7 @@ export default function OfficersSection() {
                 <div className="officer-title">{o.title}</div>
                 <div className="officer-name">{o.name}</div>
                 <div className="officer-year">{o.year}</div>
-                <div className="officer-email">{o.email}</div>
+                <a href={`mailto:${o.email}`} className="officer-email">{o.email}</a>
                 <div className="officer-quote">"{o.quote}"</div>
               </div>
             );

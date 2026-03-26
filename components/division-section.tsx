@@ -116,8 +116,8 @@ export default function DivisionSection() {
             <div className="division-card-title">Sponsor</div>
             {[
               ["Sponsoring Org",   "Texas-Oklahoma District"],
-              ["Sponsor Contact",  "tokeyclub.com"],
-              ["Sponsor Email",    "district@tokeyclub.com"],
+              ["Sponsor Website",  "tokeyclub.com"],
+              ["Sponsor Contact",  "techpro@tokeyclub.com"],
               ["Parent Org",       "Kiwanis International"],
               ["Int'l Website",    "keyclub.org"],
               ["Founded",          "1925"],

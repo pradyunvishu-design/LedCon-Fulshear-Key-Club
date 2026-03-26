@@ -304,9 +304,9 @@ export default function ImpactSection() {
           </div>
 
           <div style={{ maxWidth: "800px", margin: "0 auto", textAlign: "center", background: "rgba(201,168,76,0.05)", border: "1px solid rgba(201,168,76,0.2)", borderRadius: "16px", padding: "2rem" }}>
-            <h3 style={{ fontSize: "1.2rem", color: "white", marginBottom: "0.5rem" }}>Recent Highlights</h3>
+            <h3 style={{ fontSize: "1.2rem", color: "white", marginBottom: "0.5rem" }}>This Year in Service</h3>
             <p style={{ color: "var(--silver)", fontSize: "0.95rem", lineHeight: "1.6" }}>
-              This year alone, our members have successfully hosted 3 community blood drives, partnered with the Houston Food Bank to package over 5,000 meals, and tutored 120+ local elementary students. Our commitment to service continues to grow every single week.
+              From packing lunches at the Fulshear Community Center every month to showing up at festivals, food drives, and school events across Fort Bend County — our members put in real hours for real people. Every number on this dashboard represents someone our club showed up for.
             </p>
           </div>
         </div>
