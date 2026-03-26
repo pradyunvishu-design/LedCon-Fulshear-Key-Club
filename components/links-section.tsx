@@ -2,32 +2,32 @@
 
 const links = [
   {
-    icon: "",
-    title: "District Website",
-    desc: "Texas-Oklahoma Key Club District",
-    url: "https://tokeyclub.com",
-    label: "tokeyclub.com",
+    icon: "🔗",
+    title: "ClassLink",
+    desc: "Access SchooLinks & Canvas",
+    url: "https://login.classlink.com/my/lcisd",
+    label: "login.classlink.com",
   },
   {
-    icon: "",
-    title: "Key Club International",
-    desc: "Official KCI Site",
-    url: "https://www.keyclub.org",
-    label: "keyclub.org",
-  },
-  {
-    icon: "",
+    icon: "📸",
     title: "Club Instagram",
     desc: "Follow us @fulshearkeyclub",
     url: "https://instagram.com/fulshearkeyclub",
     label: "@fulshearkeyclub",
   },
   {
-    icon: "",
-    title: "T-O District Instagram",
-    desc: "Texas-Oklahoma District Key Club",
-    url: "https://instagram.com/tokeyclub",
-    label: "@tokeyclub",
+    icon: "🌐",
+    title: "District Website",
+    desc: "Texas-Oklahoma Key Club District",
+    url: "https://tokeyclub.com",
+    label: "tokeyclub.com",
+  },
+  {
+    icon: "🌍",
+    title: "Key Club International",
+    desc: "Official KCI Site",
+    url: "https://www.keyclub.org",
+    label: "keyclub.org",
   },
 ];
 

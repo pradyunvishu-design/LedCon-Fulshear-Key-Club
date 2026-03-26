@@ -7,29 +7,29 @@ const DAYS   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 // meetings are on the 2nd Tuesday of each month in the library at 4pm
 const allEvents: Record<string, { title: string; time: string; loc: string; type: string; desc: string }[]> = {
-  "2026-2-10":  [
+  "2026-02-10":  [
     { title: "Key Club General Meeting",   time: "4:00 PM – 5:00 PM",  loc: "Fulshear High School · Library", type: "Meeting",   desc: "Monthly general meeting — 2nd Tuesday of each month at 4:00 PM. Attendance required for service hour credit." },
   ],
-  "2026-2-8":  [{ title: "Community Food Pantry",   time: "9:00 AM – 12:00 PM", loc: "5757 Flewellen Oaks Ln #303",     type: "Volunteer",  desc: "Help sort and distribute groceries to families in need at the local food pantry." }],
-  "2026-2-12": [{ title: "Park Clean-up",            time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",               type: "Service",    desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
-  "2026-2-18": [{ title: "H-E-B Food Drive",         time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",          type: "Service",    desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
-  "2026-2-23": [{ title: "Children's Book Reading",  time: "4:00 PM – 5:30 PM",  loc: "Fulshear Branch Library",         type: "Volunteer",  desc: "Read to kids ages 4–8 at the library. Great for members who love working with children." }],
-  "2026-2-28": [{ title: "End of Month Social",      time: "6:00 PM – 8:00 PM",  loc: "Fulshear Town Square",            type: "Social",     desc: "Celebrate a great month with fellow members. Food, fun, and club bonding." }],
+  "2026-02-08":  [{ title: "Community Food Pantry",   time: "9:00 AM – 12:00 PM", loc: "5757 Flewellen Oaks Ln #303",     type: "Volunteer",  desc: "Help sort and distribute groceries to families in need at the local food pantry." }],
+  "2026-02-12": [{ title: "Park Clean-up",            time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",               type: "Service",    desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
+  "2026-02-18": [{ title: "H-E-B Food Drive",         time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",          type: "Service",    desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
+  "2026-02-23": [{ title: "Children's Book Reading",  time: "4:00 PM – 5:30 PM",  loc: "Fulshear Branch Library",         type: "Volunteer",  desc: "Read to kids ages 4–8 at the library. Great for members who love working with children." }],
+  "2026-02-28": [{ title: "End of Month Social",      time: "6:00 PM – 8:00 PM",  loc: "Fulshear Town Square",            type: "Social",     desc: "Celebrate a great month with fellow members. Food, fun, and club bonding." }],
 
-  "2026-3-10":  [
+  "2026-03-10":  [
     { title: "Key Club General Meeting",   time: "4:00 PM – 5:00 PM",  loc: "Fulshear High School · Library", type: "Meeting",   desc: "Monthly general meeting — 2nd Tuesday of each month at 4:00 PM. Attendance required for service hour credit." },
   ],
-  "2026-3-12": [{ title: "Park Clean-up",            time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",               type: "Service",    desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
-  "2026-3-15": [{ title: "Bake Sale Fundraiser",     time: "7:30 AM – 3:00 PM",  loc: "Fulshear High School Lobby",      type: "Fundraiser", desc: "Annual bake sale to raise funds for district conference travel and club supplies." }],
-  "2026-3-19": [{ title: "H-E-B Food Drive",         time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",          type: "Service",    desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
-  "2026-3-28": [{ title: "Pediatric Hospital Visit", time: "1:00 PM – 4:00 PM",  loc: "Texas Children's Hospital Katy",  type: "Volunteer",  desc: "Bring crafts and spend time with pediatric patients. Background check required in advance." }],
+  "2026-03-12": [{ title: "Park Clean-up",            time: "8:00 AM – 11:00 AM", loc: "Cross Creek Ranch",               type: "Service",    desc: "Community park beautification — bring gloves and wear closed-toe shoes." }],
+  "2026-03-15": [{ title: "Bake Sale Fundraiser",     time: "7:30 AM – 3:00 PM",  loc: "Fulshear High School Lobby",      type: "Fundraiser", desc: "Annual bake sale to raise funds for district conference travel and club supplies." }],
+  "2026-03-19": [{ title: "H-E-B Food Drive",         time: "10:00 AM – 2:00 PM", loc: "4950 FM 1463, Katy, TX",          type: "Service",    desc: "Stand outside H-E-B and collect non-perishable food donations for local families." }],
+  "2026-03-28": [{ title: "Pediatric Hospital Visit", time: "1:00 PM – 4:00 PM",  loc: "Texas Children's Hospital Katy",  type: "Volunteer",  desc: "Bring crafts and spend time with pediatric patients. Background check required in advance." }],
 
-  "2026-4-14":  [
+  "2026-04-14":  [
     { title: "Key Club General Meeting",   time: "4:00 PM – 5:00 PM",  loc: "Fulshear High School · Library", type: "Meeting",   desc: "Monthly general meeting — 2nd Tuesday of each month at 4:00 PM. Attendance required for service hour credit." },
   ],
-  "2026-4-11": [{ title: "Earth Day Park Cleanup",   time: "8:00 AM – 12:00 PM", loc: "Exploration Park, Fulshear",      type: "Service",    desc: "Celebrate Earth Day by removing litter and planting native wildflowers at Exploration Park." }],
-  "2026-4-18": [{ title: "Blood Drive Volunteer",    time: "9:00 AM – 3:00 PM",  loc: "Fulshear High School Cafeteria",  type: "Volunteer",  desc: "Volunteer at the school's annual blood drive — help with check-in, refreshments, and donor support." }],
-  "2026-4-25": [{ title: "Senior Center Visit",      time: "2:00 PM – 5:00 PM",  loc: "Cinco Ranch Senior Living",       type: "Volunteer",  desc: "Spend the afternoon with residents — play games, share stories, and bring homemade cards." }],
+  "2026-04-11": [{ title: "Earth Day Park Cleanup",   time: "8:00 AM – 12:00 PM", loc: "Exploration Park, Fulshear",      type: "Service",    desc: "Celebrate Earth Day by removing litter and planting native wildflowers at Exploration Park." }],
+  "2026-04-18": [{ title: "Blood Drive Volunteer",    time: "9:00 AM – 3:00 PM",  loc: "Fulshear High School Cafeteria",  type: "Volunteer",  desc: "Volunteer at the school's annual blood drive — help with check-in, refreshments, and donor support." }],
+  "2026-04-25": [{ title: "Senior Center Visit",      time: "2:00 PM – 5:00 PM",  loc: "Cinco Ranch Senior Living",       type: "Volunteer",  desc: "Spend the afternoon with residents — play games, share stories, and bring homemade cards." }],
 };
 
 const TYPE_COLOR: Record<string, string> = {

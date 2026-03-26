@@ -78,7 +78,7 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: "Home", href: "/#hero" },
+    { label: "Home", href: "/" },
     { label: "Volunteer Matcher", href: "/matcher" },
     { label: "Calendar", href: "/calendar" },
     { label: "About", href: "/about" },

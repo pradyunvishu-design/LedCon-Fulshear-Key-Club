@@ -103,22 +103,23 @@ function SchooLinksSection() {
         .schoolinks-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: clamp(2rem, 4vw, 3.5rem);
+          gap: clamp(2.5rem, 5vw, 4rem);
           grid-template-areas:
-            "step1 step2"
-            "step3 step4";
+            "step2 step1"
+            "step4 step3";
         }
         .schoolinks-card {
-          padding: clamp(1.5rem, 5vw, 2.5rem);
-          border-radius: 20px;
-          background: rgba(10, 15, 30, 0.65);
-          border: 1px solid rgba(100, 149, 237, 0.15);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          transition: all 0.3s ease;
+          padding: clamp(1.5rem, 5vw, 3rem);
+          border-radius: 24px;
+          background: rgba(10, 15, 30, 0.75);
+          border: 1px solid rgba(100, 149, 237, 0.2);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
           display: flex;
           flex-direction: column;
           height: 100%;
+          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
         }
         .schoolinks-card:nth-child(1) { grid-area: step1; }
         .schoolinks-card:nth-child(2) { grid-area: step2; }
@@ -156,12 +157,13 @@ function SchooLinksSection() {
         }
         .schoolinks-img {
           width: 100%;
-          border-radius: 16px;
-          margin-bottom: 1.8rem;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          aspect-ratio: 4/3;
-          object-fit: cover;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+          border-radius: 18px;
+          margin-bottom: 2rem;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          aspect-ratio: 16/10;
+          object-fit: contain;
+          background: rgba(0, 0, 0, 0.2);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
         }
         .schoolinks-desc {
           font-size: clamp(0.9rem, 2vw, 1rem);

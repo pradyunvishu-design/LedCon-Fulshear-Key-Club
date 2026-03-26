@@ -141,10 +141,8 @@ export default function ContactSection() {
         }
         .footer-links a:hover { color:var(--gold); }
         .footer-copy { font-size: 0.72rem; color: var(--silver); opacity: 0.5; text-align: right; }
-        .contact-card-last { grid-column: 2; }
         @media (max-width: 900px) {
           .contact-grid { grid-template-columns: repeat(2, 1fr); }
-          .contact-card-last { grid-column: auto; }
           .footer-links { display:none; }
         }
         @media (max-width: 500px) {
@@ -166,7 +164,7 @@ export default function ContactSection() {
             <a
               key={c.title}
               href={c.href}
-              className={`contact-card glass-card fade-in${i === contacts.length - 1 ? " contact-card-last" : ""}`}
+              className="contact-card glass-card fade-in"
               target={c.href.startsWith("http") ? "_blank" : undefined}
               rel="noopener noreferrer"
               style={{ "--cc-glow": c.glow, "--cc-border": c.border } as React.CSSProperties}
@@ -182,8 +180,8 @@ export default function ContactSection() {
         <div className="site-footer">
           <div className="footer-logo">CFHS <span>·</span> Key Club</div>
           <ul className="footer-links">
-            {["about", "events", "officers", "contact"].map((l) => (
-              <li key={l}><a href={`#${l}`}>{l}</a></li>
+            {["about", "calendar", "officers", "contact"].map((l) => (
+              <li key={l}><a href={`/${l}`}>{l}</a></li>
             ))}
           </ul>
           <div className="footer-copy">© 2026 Fulshear Key Club · Texas-Oklahoma District · All Rights Reserved</div>
