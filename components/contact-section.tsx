@@ -43,9 +43,9 @@ const contacts = [
   },
   {
     title: "Meetings",
-    val: "Library",
-    sub: "2nd Tuesday of every month · 4:00 PM",
-    href: "#",
+    val: "LGI Room",
+    sub: "1st Tuesday of every month · 4:00 PM",
+    href: "/calendar",
     glow: "rgba(201,168,76,0.3)",
     border: "rgba(201,168,76,0.5)",
   },
@@ -97,19 +97,6 @@ export default function ContactSection() {
           box-shadow: 0 25px 55px rgba(0,0,0,0.5), 0 0 40px var(--cc-glow, rgba(201,168,76,0.2));
           border-color: var(--cc-border, rgba(201,168,76,0.5)) !important;
         }
-        .contact-icon-wrap {
-          width:60px; height:60px; border-radius:50%;
-          background:linear-gradient(135deg,rgba(26,58,143,0.3),rgba(8,21,48,0.8));
-          border:1px solid rgba(255,255,255,0.08);
-          display:flex; align-items:center; justify-content:center;
-          margin:0 auto 1.2rem;
-          transition:box-shadow 0.3s, transform 0.3s;
-        }
-        .contact-card:hover .contact-icon-wrap {
-          box-shadow: 0 0 25px var(--cc-glow, rgba(201,168,76,0.3));
-          transform:scale(1.1);
-        }
-        .contact-icon { font-size: 1.6rem; display: block; }
         .contact-title {
           font-size: 0.65rem; letter-spacing: 0.2em;
           text-transform: uppercase; color: var(--gold);
@@ -169,8 +156,6 @@ export default function ContactSection() {
               rel="noopener noreferrer"
               style={{ "--cc-glow": c.glow, "--cc-border": c.border } as React.CSSProperties}
             >
-              <div className="contact-icon-wrap">
-              </div>
               <div className="contact-title">{c.title}</div>
               <div className="contact-val">{c.val}</div>
               <div className="contact-sub">{c.sub}</div>
