@@ -112,8 +112,8 @@ function SchooLinksSection() {
           grid-template-columns: 1fr 1fr;
           gap: clamp(2.5rem, 5vw, 4rem);
           grid-template-areas:
-            "step2 step1"
-            "step4 step3";
+            "step1 step2"
+            "step3 step4";
         }
         .schoolinks-card {
           padding: clamp(1.5rem, 5vw, 3rem);
