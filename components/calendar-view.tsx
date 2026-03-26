@@ -108,9 +108,12 @@ export default function CalendarView() {
   };
   const goToToday = () => setCurrentDate(new Date());
 
+  // Match events by month+day across ALL years so every month shows its full history
   const getEventsForDate = (day: number) => {
-    const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return allEvents[key] || [];
+    const suffix = `-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return Object.entries(allEvents)
+      .filter(([k]) => k.endsWith(suffix))
+      .flatMap(([, evs]) => evs);
   };
 
   const isToday = (day: number) => today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
@@ -118,9 +121,14 @@ export default function CalendarView() {
   const sortedKeys = Object.keys(allEvents).sort();
   const monthEvents = Array.from({ length: daysInMonth }).flatMap((_, i) => {
     const day = i + 1;
-    const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return (allEvents[key] || []).map(e => ({ ...e, date: key, dayNum: day }));
-  }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    const suffix = `-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return Object.entries(allEvents)
+      .filter(([k]) => k.endsWith(suffix))
+      .flatMap(([k, evs]) => evs.map(e => ({ ...e, date: k, dayNum: day })));
+  }).sort((a, b) => {
+    if (a.dayNum !== b.dayNum) return (a.dayNum ?? 0) - (b.dayNum ?? 0);
+    return a.date.localeCompare(b.date);
+  });
 
   const getMapUrl = (loc: string) => {
     return `https://maps.google.com/maps?q=${encodeURIComponent(loc)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
@@ -397,7 +405,7 @@ export default function CalendarView() {
                     <style>{`.cal-e-card:hover::after { background: var(--card-color); }`}</style>
                     <div className="cal-e-date">
                       <div className="cal-e-day">{e.dayNum}</div>
-                      <div className="cal-e-mon">{MONTHS[month].substring(0, 3)}</div>
+                      <div className="cal-e-mon">{MONTHS[month].substring(0, 3)} {e.date.split("-")[0]}</div>
                     </div>
                     <div className="cal-e-inf">
                       <div className="cal-e-top">
