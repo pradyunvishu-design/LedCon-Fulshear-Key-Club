@@ -79,13 +79,13 @@ export default function Navbar() {
 
   const navLinks = [
     { label: "Home", href: "/" },
-    { label: "Volunteer Matcher", href: "/#matcher" },
+    { label: "Volunteer Matcher", href: "/matcher" },
     { label: "Calendar", href: "/calendar" },
-    { label: "About", href: "/#about" },
-    { label: "Officers", href: "/#officers" },
-    { label: "Links", href: "/#links" },
-    { label: "Impact", href: "/#impact" },
-    { label: "Contact", href: "/#contact" },
+    { label: "About", href: "/about" },
+    { label: "Officers", href: "/officers" },
+    { label: "Links", href: "/links" },
+    { label: "Impact", href: "/impact" },
+    { label: "Contact", href: "/contact" },
   ];
 
   return (
