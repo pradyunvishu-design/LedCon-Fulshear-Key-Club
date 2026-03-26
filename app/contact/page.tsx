@@ -19,15 +19,14 @@ export default function ContactPage() {
         <h3 style={{ fontSize: "1.8rem", color: "white", marginBottom: "2.5rem", textAlign: "center" }}>Frequently Asked Questions</h3>
         
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", maxWidth: "800px", margin: "0 auto" }}>
-          
-          <div style={{ background: "rgba(10,15,30,0.8)", padding: "2rem", borderRadius: "12px", border: "1px solid rgba(201,168,76,0.15)", backdropFilter: "blur(10px)" }}>
+            <div style={{ background: "rgba(10,15,30,0.8)", padding: "clamp(1.2rem, 4vw, 2rem)", borderRadius: "12px", border: "1px solid rgba(201,168,76,0.15)", backdropFilter: "blur(10px)" }}>
             <h4 style={{ color: "white", fontSize: "1.05rem", marginBottom: "0.5rem" }}>When and where are general meetings?</h4>
-            <p style={{ color: "var(--silver)", fontSize: "0.9rem", lineHeight: "1.6" }}>We meet in the LGI room every other Wednesday directly after school at 4:15 PM. Check the calendar tab for the exact dates!</p>
+            <p style={{ color: "var(--silver)", fontSize: "0.9rem", lineHeight: "1.6" }}>We meet in the library on the 2nd Tuesday of every month at 4:00 PM. Check the Calendar tab for the exact dates!</p>
           </div>
 
-          <div style={{ background: "rgba(10,15,30,0.8)", padding: "2rem", borderRadius: "12px", border: "1px solid rgba(100,149,237,0.15)", backdropFilter: "blur(10px)" }}>
+           <div style={{ background: "rgba(10,15,30,0.8)", padding: "clamp(1.2rem, 4vw, 2rem)", borderRadius: "12px", border: "1px solid rgba(100,149,237,0.15)", backdropFilter: "blur(10px)" }}>
             <h4 style={{ color: "white", fontSize: "1.05rem", marginBottom: "0.5rem" }}>How do I track my volunteer hours?</h4>
-            <p style={{ color: "var(--silver)", fontSize: "0.9rem", lineHeight: "1.6" }}>All hours are tracked via our digital district portal. Once you attend an event, the secretary will log your attendance. You can also submit external community service hours using the Google Form found in our Linktree.</p>
+            <p style={{ color: "var(--silver)", fontSize: "0.9rem", lineHeight: "1.6" }}>All hours are tracked via SchooLinks. To log your hours, sign in to ClassLink, click on SchooLinks, and follow the 'Experience Tracking' steps to add your entry. Check out the tutorial on the home page for a step-by-step guide!</p>
           </div>
 
           <div style={{ background: "rgba(10,15,30,0.8)", padding: "2rem", borderRadius: "12px", border: "1px solid rgba(201,168,76,0.15)", backdropFilter: "blur(10px)" }}>

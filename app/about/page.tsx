@@ -12,9 +12,9 @@ const pillars = [
 ];
 
 const steps = [
-  { num: "01", title: "Attend a General Meeting",  desc: "Come to any meeting held every other Wednesday directly after school at 4:15 PM in the LGI Room. No commitment needed — just show up and see if Key Club is right for you." },
-  { num: "02", title: "Complete Membership Form",  desc: "Fill out the digital membership form (linked on our Canvas course and Remind) and pay the $20 annual dues. That's it — you're officially a member!" },
-  { num: "03", title: "Start Earning Service Hours", desc: "Sign up for an event through our link-tree or Remind. Your hours are logged by officers after each event and tracked on the district portal." },
+  { num: "01", title: "Attend a General Meeting",  desc: "Come to our meetings held in the library on the 2nd Tuesday of every month at 4:00 PM. No commitment needed — just show up and see if Key Club is right for you." },
+  { num: "02", title: "Complete Membership Form",  desc: "Fill out the digital membership form (linked on our Canvas course) and pay the $20 annual dues. That's it — you're officially a member!" },
+  { num: "03", title: "Start Earning Service Hours", desc: "Sign up for an event through our link-tree. Your hours are logged by officers after each event and tracked on SchooLinks." },
 ];
 
 const requirements = [
@@ -27,8 +27,8 @@ const requirements = [
 ];
 
 const faqs = [
-  { q: "How do I track my volunteer hours?",     a: "All hours are tracked via the Texas-Oklahoma District member portal at tokeyclub.com — sign in with your school email, then navigate to 'My Hours' to see your logged attendance. After each Key Club event, our secretary records attendance within 48 hours. To submit external community service hours, use the Google Form linked in our Linktree. If you have questions about your hours balance, contact our Secretary directly." },
-  { q: "When and where are general meetings?",   a: "We meet in the LGI room every other Wednesday directly after school at 4:15 PM. Check the Calendar tab for the exact dates!" },
+  { q: "How do I track my volunteer hours?",     a: "All hours are tracked via SchooLinks. To log your hours, sign in to ClassLink, click on SchooLinks, and follow the 'Experience Tracking' steps to add your entry. After each Key Club event, our secretary records attendance, but you should also log your external hours there. Check out the step-by-step tutorial on the home page for help! If you have questions about your hours balance, contact our Secretary directly." },
+  { q: "When and where are general meetings?",   a: "We meet in the library on the 2nd Tuesday of every month at 4:00 PM. Check the Calendar tab for the exact dates!" },
   { q: "What happens if I miss a meeting?",      a: "If you miss a meeting, please read the meeting slides posted on our Canvas course and message an officer to stay updated. Missing too many meetings may impact your active membership status." },
   { q: "Can I join mid-year?",                   a: "Yes! We accept new members year-round. Just show up to a meeting, fill out the form, and pay dues. You'll start earning hours right away." },
   { q: "Do I need prior volunteering experience?", a: "Not at all. Key Club is open to all Fulshear High School students regardless of experience. We'll guide you through everything from your first event." },

@@ -6,6 +6,7 @@ const linkGroups = [
     color: "rgba(201,168,76,0.35)",
     border: "rgba(201,168,76,0.6)",
     links: [
+      { title: "ClassLink", desc: "Log in to access SchooLinks and other school apps", href: "https://login.classlink.com/my/lcisd", icon: "🔐" },
       { title: "Event Sign-Ups", desc: "Register for upcoming service events", href: "https://www.signupgenius.com", icon: "📋" },
       { title: "Contact Officers", desc: "fulshearkeyclub@lcisd.org", href: "mailto:fulshearkeyclub@lcisd.org", icon: "✉️" },
     ],
@@ -17,7 +18,7 @@ const linkGroups = [
     links: [
       { title: "Instagram", desc: "@fulshearkeyclub — photos, updates & events", href: "https://www.instagram.com/fulshearkeyclub", icon: "📸" },
       { title: "T-O District Instagram", desc: "@tokeyclub — Texas-Oklahoma district updates", href: "https://www.instagram.com/tokeyclub", icon: "📸" },
-      { title: "Texas Key Club Instagram", desc: "@texaskeyclub — statewide Key Club news", href: "https://www.instagram.com/texaskeyclub", icon: "📸" },
+
     ],
   },
   {
@@ -29,7 +30,7 @@ const linkGroups = [
       { title: "Key Club International", desc: "Global headquarters for Key Club", href: "https://www.keyclub.org", icon: "🌍" },
       { title: "Kiwanis International", desc: "The parent organization of Key Club", href: "https://www.kiwanis.org", icon: "🤝" },
       { title: "Circle K International", desc: "Key Club's college-level equivalent", href: "https://www.circlek.org", icon: "🎓" },
-      { title: "KIWIN'S", desc: "Kiwanis-family club for young women", href: "https://www.tokeyclub.com", icon: "💜" },
+
     ],
   },
   {
