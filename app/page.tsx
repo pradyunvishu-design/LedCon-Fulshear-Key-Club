@@ -13,14 +13,13 @@ import dynamic from "next/dynamic";
 const CinematicIntro = dynamic(() => import("@/components/cinematic-intro"), { ssr: false });
 
 const schoolinksSteps = [
-  { step: "Step 1", desc: "Log in via ClassLink and click on the 'Engage' tab on the left sidebar.", img: "/schoolinks/step1.png" },
-  { step: "Step 2", desc: "Select 'Experience Tracking' from the dropdown menu.", img: "/schoolinks/step2.png" },
-  { step: "Step 3", desc: "Click the '+ Add entry' button to start logging your hours.", img: "/schoolinks/step3.png" },
-  { step: "Step 4", desc: "Fill out all the required info like the organization name, date, and hours worked. Then click Save.", img: "/schoolinks/step4.png" },
+  { step: "1", desc: "Log in via ClassLink and click on the 'Engage' tab on the left sidebar.", img: "/schoolinks/step1.png" },
+  { step: "2", desc: "Select 'Experience Tracking' from the dropdown menu.", img: "/schoolinks/step2.png" },
+  { step: "3", desc: "Click the '+ Add entry' button to start logging your hours.", img: "/schoolinks/step3.png" },
+  { step: "4", desc: "Fill out all the required info like the organization name, date, and hours worked. Then click Save.", img: "/schoolinks/step4.png" },
 ];
 
 export default function Home() {
-  // makes stuff fade in when you scroll down
   useEffect(() => {
     const els = document.querySelectorAll(".fade-in, .slide-in-left, .slide-in-right");
     const observer = new IntersectionObserver(
@@ -68,13 +67,13 @@ function SchooLinksSection() {
         .schoolinks-wrapper {
           position: relative;
           z-index: 1;
-          max-width: 1200px;
+          max-width: 1400px;
           margin: 0 auto;
           padding: 0 2rem;
         }
         .schoolinks-header {
           text-align: center;
-          margin-bottom: clamp(2rem, 5vw, 3rem);
+          margin-bottom: clamp(2.5rem, 6vw, 4rem);
         }
         .schoolinks-section-label {
           font-size: 0.65rem;
@@ -85,7 +84,7 @@ function SchooLinksSection() {
           margin-bottom: 1rem;
         }
         .schoolinks-section-heading {
-          font-size: clamp(2rem, 5vw, 3.5rem);
+          font-size: clamp(2.2rem, 5.5vw, 3.8rem);
           font-weight: 900;
           letter-spacing: -0.02em;
           margin-bottom: 1rem;
@@ -96,63 +95,108 @@ function SchooLinksSection() {
         }
         .schoolinks-description {
           color: var(--silver);
-          font-size: clamp(0.85rem, 2vw, 0.95rem);
-          max-width: 600px;
-          margin: 0 auto 2.5rem;
-          line-height: 1.7;
+          font-size: clamp(0.9rem, 2.2vw, 1.05rem);
+          max-width: 700px;
+          margin: 0 auto 3rem;
+          line-height: 1.8;
         }
         .schoolinks-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: clamp(1rem, 3vw, 2rem);
+          grid-template-columns: 1fr 1fr;
+          gap: clamp(2rem, 4vw, 3.5rem);
+          grid-template-areas:
+            "step1 step2"
+            "step3 step4";
         }
         .schoolinks-card {
-          padding: clamp(1.2rem, 4vw, 2rem);
-          border-radius: 16px;
-          background: rgba(10, 15, 30, 0.6);
-          border: 1px solid rgba(100, 149, 237, 0.12);
+          padding: clamp(1.5rem, 5vw, 2.5rem);
+          border-radius: 20px;
+          background: rgba(10, 15, 30, 0.65);
+          border: 1px solid rgba(100, 149, 237, 0.15);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
           transition: all 0.3s ease;
           display: flex;
           flex-direction: column;
+          height: 100%;
         }
+        .schoolinks-card:nth-child(1) { grid-area: step1; }
+        .schoolinks-card:nth-child(2) { grid-area: step2; }
+        .schoolinks-card:nth-child(3) { grid-area: step3; }
+        .schoolinks-card:nth-child(4) { grid-area: step4; }
         .schoolinks-card:hover {
-          transform: translateY(-6px);
-          border-color: rgba(201, 168, 76, 0.35);
-          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+          transform: translateY(-8px);
+          border-color: rgba(201, 168, 76, 0.4);
+          box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
         }
         .schoolinks-step-num {
-          font-size: 0.7rem;
-          font-weight: 700;
-          letter-spacing: 0.1em;
+          font-size: 0.75rem;
+          font-weight: 800;
+          letter-spacing: 0.15em;
           text-transform: uppercase;
           color: var(--gold);
-          margin-bottom: 0.75rem;
+          margin-bottom: 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .schoolinks-step-num::before {
+          content: '';
+          display: inline-block;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, var(--gold), rgba(201, 168, 76, 0.6));
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.65rem;
+          font-weight: 900;
+          color: var(--navy);
         }
         .schoolinks-img {
           width: 100%;
-          border-radius: 12px;
-          margin-bottom: 1.5rem;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          margin-bottom: 1.8rem;
+          border: 1px solid rgba(255, 255, 255, 0.12);
           aspect-ratio: 4/3;
           object-fit: cover;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
         .schoolinks-desc {
-          font-size: 0.85rem;
+          font-size: clamp(0.9rem, 2vw, 1rem);
           color: var(--silver);
-          line-height: 1.6;
+          line-height: 1.7;
+          flex-grow: 1;
         }
-        @media (max-width: 650px) {
+        @media (max-width: 900px) {
           .schoolinks-grid {
             grid-template-columns: 1fr;
+            grid-template-areas:
+              "step1"
+              "step2"
+              "step3"
+              "step4";
+            gap: clamp(1.5rem, 3vw, 2.5rem);
           }
           .schoolinks-wrapper {
-            padding: 0 1.25rem;
+            padding: 0 1.5rem;
+          }
+        }
+        @media (max-width: 600px) {
+          .schoolinks-wrapper {
+            padding: 0 1rem;
           }
           .schoolinks-img {
-             aspect-ratio: auto;
-             max-height: 250px;
+            aspect-ratio: auto;
+            max-height: 280px;
+            margin-bottom: 1.2rem;
+          }
+          .schoolinks-card {
+            padding: clamp(1rem, 4vw, 1.5rem);
+          }
+          .schoolinks-desc {
+            font-size: 0.85rem;
           }
         }
       `}</style>
@@ -168,8 +212,8 @@ function SchooLinksSection() {
         <div className="schoolinks-grid fade-in">
           {schoolinksSteps.map((item, idx) => (
             <div key={idx} className="schoolinks-card">
-              <div className="schoolinks-step-num">{item.step}</div>
-              <img src={item.img} alt={item.step} className="schoolinks-img" />
+              <div className="schoolinks-step-num">Step {item.step}</div>
+              <img src={item.img} alt={`Step ${item.step}`} className="schoolinks-img" />
               <p className="schoolinks-desc">{item.desc}</p>
             </div>
           ))}

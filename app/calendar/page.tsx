@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DAYS   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
-// Meetings: 2nd Tuesday of each month at 4:00 PM in the Library.
+// meetings are on the 2nd Tuesday of each month in the library at 4pm
 const allEvents: Record<string, { title: string; time: string; loc: string; type: string; desc: string }[]> = {
   "2026-2-10":  [
     { title: "Key Club General Meeting",   time: "4:00 PM – 5:00 PM",  loc: "Fulshear High School · Library", type: "Meeting",   desc: "Monthly general meeting — 2nd Tuesday of each month at 4:00 PM. Attendance required for service hour credit." },
@@ -41,7 +41,7 @@ const TYPE_COLOR: Record<string, string> = {
 };
 
 export default function CalendarPage() {
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 1, 1)); // February 2026
+  const [currentDate, setCurrentDate] = useState(new Date(2026, 1, 1));
   const [view, setView] = useState<"month" | "list">("month");
 
   useEffect(() => {

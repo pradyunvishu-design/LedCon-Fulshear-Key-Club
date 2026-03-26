@@ -47,7 +47,7 @@ export default function AboutPage() {
   return (
     <main className="flex-grow pt-8">
       <style>{`
-        /* ── PILLARS ── */
+        /* what we do section */
         .pillars-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; }
         .pillar-card {
           padding:2rem 1.5rem; border-radius:16px;
@@ -63,7 +63,7 @@ export default function AboutPage() {
         .pillar-title { font-size:1rem; font-weight:800; color:white; margin-bottom:0.6rem; }
         .pillar-desc { font-size:0.82rem; color:var(--silver); line-height:1.7; }
 
-        /* ── STEPS ── */
+        /* how to join section */
         .steps-list { display:flex; flex-direction:column; gap:1.5rem; }
         .step-card {
           display:flex; gap:1.75rem; align-items:flex-start;
@@ -82,7 +82,7 @@ export default function AboutPage() {
         .step-title { font-size:1.05rem; font-weight:800; color:white; margin-bottom:0.4rem; }
         .step-desc { font-size:0.85rem; color:var(--silver); line-height:1.75; }
 
-        /* ── REQUIREMENTS ── */
+        /* membership requirements section */
         .req-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
         .req-card {
           padding:1.4rem 1.5rem; border-radius:14px;
@@ -93,7 +93,7 @@ export default function AboutPage() {
         .req-label { font-size:0.65rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:0.4rem; }
         .req-value { font-size:0.9rem; font-weight:600; color:white; line-height:1.4; }
 
-        /* ── FAQ ── */
+        /* questions and answers section */
         .faq-list { display:flex; flex-direction:column; gap:0.75rem; }
         .faq-item {
           border-radius:14px; overflow:hidden;
@@ -109,7 +109,7 @@ export default function AboutPage() {
         .faq-q:hover { color:var(--gold); }
         .faq-a { padding:0 1.5rem 1.2rem; font-size:0.85rem; color:var(--silver); line-height:1.75; }
 
-        /* ── ABOUT SECTION WRAPPERS ── */
+        /* section styling and layout */
         .about-extra-section { padding:5rem 0; position:relative; }
         .about-section-inner { max-width:1200px; margin:0 auto; padding:0 2rem; }
         .about-section-header { text-align:center; margin-bottom:3rem; }

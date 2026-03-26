@@ -43,19 +43,11 @@ const contacts = [
   },
   {
     title: "Meetings",
-    val: "LGI Room",
-    sub: "Every other Wednesday · 4:15 PM after school",
+    val: "Library",
+    sub: "2nd Tuesday of every month · 4:00 PM",
     href: "#",
     glow: "rgba(201,168,76,0.3)",
     border: "rgba(201,168,76,0.5)",
-  },
-  {
-    title: "Remind 101",
-    val: "@cfhs-key",
-    sub: "Text to 81010",
-    href: "#",
-    glow: "rgba(100,200,255,0.3)",
-    border: "rgba(100,200,255,0.5)",
   },
 ];
 

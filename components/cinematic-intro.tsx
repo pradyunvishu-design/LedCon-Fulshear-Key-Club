@@ -19,7 +19,7 @@ interface Particle {
 }
 
 export default function CinematicIntro() {
-  // Play once per browser session — skip if already seen this visit
+  // only play the intro once per session
   const [show] = useState(() => {
     if (typeof window === "undefined") return true;
     return sessionStorage.getItem("kc-intro-played") !== "1";
