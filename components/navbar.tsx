@@ -79,13 +79,13 @@ export default function Navbar() {
 
   const navLinks = [
     { label: "Home", href: "/" },
-    { label: "Volunteer Matcher", href: "/matcher" },
+    { label: "Volunteer Matcher", href: "/#matcher" },
     { label: "Calendar", href: "/calendar" },
-    { label: "About", href: "/about" },
-    { label: "Officers", href: "/officers" },
-    { label: "Links", href: "/links" },
-    { label: "Impact", href: "/impact" },
-    { label: "Contact", href: "/contact" },
+    { label: "About", href: "/#about" },
+    { label: "Officers", href: "/#officers" },
+    { label: "Links", href: "/#links" },
+    { label: "Impact", href: "/#impact" },
+    { label: "Contact", href: "/#contact" },
   ];
 
   return (
@@ -106,10 +106,12 @@ export default function Navbar() {
           pointer-events:none; z-index:0;
         }
         .kc-nav.scrolled {
-          background: rgba(5,13,26,0.88);
-          backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
-          border-bottom:1px solid rgba(201,168,76,0.2);
-          padding:0.9rem 3rem;
+          background: rgba(5, 12, 25, 0.75);
+          backdrop-filter: blur(32px) saturate(150%);
+          -webkit-backdrop-filter: blur(32px) saturate(150%);
+          border-bottom: 1px solid rgba(201, 168, 76, 0.35);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(201, 168, 76, 0.15);
+          padding: 0.9rem 3rem;
         }
         .kc-nav-logo {
           font-size:1rem; font-weight:900; letter-spacing:0.12em;

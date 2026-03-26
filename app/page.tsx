@@ -222,7 +222,7 @@ function SchooLinksSection() {
           {schoolinksSteps.map((item, idx) => (
             <div key={idx} className="schoolinks-card">
               <div className="schoolinks-step-num">Step {item.step}</div>
-              <img src={item.img} alt={`Step ${item.step}`} className="schoolinks-img" style={item.step === "3" ? step3ImageStyle : {}} />
+              <img src={item.img} alt={`Step ${item.step}`} className="schoolinks-img" style={item.step === "3" ? step3ImageStyle : undefined} />
               <p className="schoolinks-desc">{item.desc}</p>
             </div>
           ))}
