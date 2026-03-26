@@ -220,7 +220,7 @@ export default function CalendarPage() {
               {Array.from({ length: firstDay }).map((_, i) => <div key={`empty-${i}`} />)}
               {Array.from({ length: daysInMonth }).map((_, i) => {
                 const dayNum = i + 1;
-                const dateKey = `${year}-${month + 1}-${dayNum}`;
+                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
                 const events = allEvents[dateKey] || [];
                 return (
                   <div key={dayNum} className="day-cell">

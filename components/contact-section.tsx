@@ -64,8 +64,8 @@ export default function ContactSection() {
         .contact-header { text-align: center; margin-bottom: 4rem; }
         .contact-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1.25rem;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 1.5rem;
           margin-bottom: 6rem;
         }
         .contact-card {
