@@ -13,11 +13,18 @@ import dynamic from "next/dynamic";
 const CinematicIntro = dynamic(() => import("@/components/cinematic-intro"), { ssr: false });
 
 const schoolinksSteps = [
-  { step: "1", desc: "Log in via ClassLink and click on the 'Engage' tab on the left sidebar.", img: "/schoolinks/step1.png" },
-  { step: "2", desc: "Select 'Experience Tracking' from the dropdown menu.", img: "/schoolinks/step2.png" },
-  { step: "3", desc: "Click the '+ Add entry' button to start logging your hours.", img: "/schoolinks/step3.png" },
+  { step: "1", desc: "Log in via ClassLink and click on the \'Engage\' tab on the left sidebar.", img: "/schoolinks/step1.png" },
+  { step: "2", desc: "Select \'Experience Tracking\' from the dropdown menu.", img: "/schoolinks/step2.png" },
+  { step: "3", desc: "Click the \'+ Add entry\' button to start logging your hours.", img: "/schoolinks/step3.png" },
   { step: "4", desc: "Fill out all the required info like the organization name, date, and hours worked. Then click Save.", img: "/schoolinks/step4.png" },
 ];
+
+// Custom style for centering the Step 3 image
+const step3ImageStyle = {
+  objectFit: 'contain',
+  objectPosition: 'center',
+  maxHeight: '300px', // Adjust as needed to make it bigger but fit
+};
 
 export default function Home() {
   useEffect(() => {
@@ -215,7 +222,7 @@ function SchooLinksSection() {
           {schoolinksSteps.map((item, idx) => (
             <div key={idx} className="schoolinks-card">
               <div className="schoolinks-step-num">Step {item.step}</div>
-              <img src={item.img} alt={`Step ${item.step}`} className="schoolinks-img" />
+              <img src={item.img} alt={`Step ${item.step}`} className="schoolinks-img" style={item.step === "3" ? step3ImageStyle : {}} />
               <p className="schoolinks-desc">{item.desc}</p>
             </div>
           ))}
