@@ -5,16 +5,16 @@ import AboutSection from "@/components/about-section";
 import DivisionSection from "@/components/division-section";
 
 const pillars = [
-  { icon: "👧", title: "Children & Youth",       desc: "Mentoring, tutoring, and running events that enrich the lives of kids in our community — from reading programs to STEM nights." },
-  { icon: "🌿", title: "Environment & Parks",     desc: "Creek cleanups, park beautification, and tree planting drives that keep Fulshear green for generations to come." },
-  { icon: "🍱", title: "Hunger & Food Security",  desc: "Food pantry shifts, H-E-B food drives, and Thanksgiving basket packing to ensure no neighbor goes without a meal." },
-  { icon: "📚", title: "Education & Literacy",    desc: "Library read-alouds, essay competitions, and tutoring sessions that spark a love of learning in students of all ages." },
+  { icon: "👧", title: "Children & Youth",       desc: "From tutoring sessions to school carnivals and wax museums, we show up for the kids in our community — making education a little more fun along the way." },
+  { icon: "🌿", title: "Environment & Parks",     desc: "We get our hands dirty so Fulshear stays beautiful. Trail cleanups, tree plantings, and highway beautification events are all part of what we do." },
+  { icon: "🍱", title: "Hunger & Food Security",  desc: "No one should go hungry. We pack food boxes, volunteer at pantries, and join drives to make sure families across Fort Bend County have what they need." },
+  { icon: "📚", title: "Education & Literacy",    desc: "We believe in the power of learning — whether it's helping run a UIL competition, supporting a literacy event, or just showing up for the students around us." },
 ];
 
 const steps = [
-  { num: "01", title: "Attend a General Meeting",  desc: "Come to our meetings held in the library on the 2nd Tuesday of every month at 4:00 PM. No commitment needed — just show up and see if Key Club is right for you." },
-  { num: "02", title: "Complete Membership Form",  desc: "Fill out the digital membership form (linked on our Canvas course) and pay the $20 annual dues. That's it — you're officially a member!" },
-  { num: "03", title: "Start Earning Service Hours", desc: "Sign up for an event through our link-tree. Your hours are logged by officers after each event and tracked on SchooLinks." },
+  { num: "01", title: "Come to a General Meeting",  desc: "Our meetings are in the LGI Room on the 1st Tuesday of every month at 4:00 PM. No pressure — just stop by, see what we're about, and meet the officers. You don't have to commit to anything that day." },
+  { num: "02", title: "Fill Out the Membership Form",  desc: "Once you're ready, complete the digital form linked on our Canvas course and pay the $20 annual dues. After that, you're officially in and can start earning hours right away." },
+  { num: "03", title: "Sign Up for Events & Log Hours", desc: "Browse upcoming service events on our sign-up page and grab a spot. After each event, officers record attendance — just make sure to also log any outside hours yourself on SchooLinks." },
 ];
 
 const requirements = [
@@ -27,11 +27,11 @@ const requirements = [
 ];
 
 const faqs = [
-  { q: "How do I track my volunteer hours?",     a: "All hours are tracked via SchooLinks. To log your hours, sign in to ClassLink, click on SchooLinks, and follow the 'Experience Tracking' steps to add your entry. After each Key Club event, our secretary records attendance, but you should also log your external hours there. Check out the step-by-step tutorial on the home page for help! If you have questions about your hours balance, contact our Secretary directly." },
-  { q: "When and where are general meetings?",   a: "We meet in the library on the 2nd Tuesday of every month at 4:00 PM. Check the Calendar tab for the exact dates!" },
-  { q: "What happens if I miss a meeting?",      a: "If you miss a meeting, please read the meeting slides posted on our Canvas course and message an officer to stay updated. Missing too many meetings may impact your active membership status." },
-  { q: "Can I join mid-year?",                   a: "Yes! We accept new members year-round. Just show up to a meeting, fill out the form, and pay dues. You'll start earning hours right away." },
-  { q: "Do I need prior volunteering experience?", a: "Not at all. Key Club is open to all Fulshear High School students regardless of experience. We'll guide you through everything from your first event." },
+  { q: "How do I track my volunteer hours?",     a: "Hours are logged through SchooLinks. Sign into ClassLink, open SchooLinks, and use the 'Experience Tracking' section to add your entry. After Key Club events, our Secretary records attendance on the back end — but if you volunteer somewhere on your own, make sure to log those yourself too. There's a step-by-step tutorial on the home page if you need a walkthrough. Questions about your hours? Reach out to our Secretary directly." },
+  { q: "When and where are general meetings?",   a: "We meet in the LGI Room on the 1st Tuesday of every month at 4:00 PM. Head over to the Calendar page for the full list of dates this year." },
+  { q: "What happens if I miss a meeting?",      a: "Life happens — just make sure to check the meeting slides on Canvas and message an officer to catch up on anything important. That said, consistent attendance is required to stay in good standing, so try not to make missing meetings a habit." },
+  { q: "Can I join mid-year?",                   a: "Absolutely. We welcome new members throughout the entire school year. Come to any meeting, fill out the form, pay your dues, and you're in — you can start signing up for events the same week." },
+  { q: "Do I need prior volunteering experience?", a: "Nope! Key Club is open to every Fulshear High School student, no matter your background or experience level. We'll walk you through your first event and make sure you feel comfortable from day one." },
 ];
 
 export default function AboutPage() {

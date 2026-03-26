@@ -115,11 +115,12 @@ export default function DivisionSection() {
           <div className="division-card glass-card fade-in">
             <div className="division-card-title">Sponsor</div>
             {[
-              ["District", "Texas-Oklahoma District"],
-              ["Website", "tokeyclub.com"],
-              ["Parent Org", "Kiwanis International"],
-              ["Int'l Website", "keyclub.org"],
-              ["Founded", "1925"],
+              ["Sponsoring Org",   "Texas-Oklahoma District"],
+              ["Sponsor Contact",  "tokeyclub.com"],
+              ["Sponsor Email",    "district@tokeyclub.com"],
+              ["Parent Org",       "Kiwanis International"],
+              ["Int'l Website",    "keyclub.org"],
+              ["Founded",          "1925"],
             ].map(([k, v]) => (
               <div key={k} className="division-row">
                 <span className="div-key">{k}</span>

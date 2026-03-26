@@ -200,13 +200,13 @@ export default function AboutSection() {
 
             <div className="about-text-card">
               <p className="about-desc">
-                Key Club International is the <strong>oldest and largest</strong> service organization for high school students. Our student-led club teaches leadership through service, preparing members to become caring and capable leaders.
+                Key Club International is the <strong>world's largest</strong> service organization for high school students — founded in 1925 and still going strong. At Fulshear, we're completely student-led, which means the ideas, the events, and the energy all come from us.
               </p>
             </div>
 
             <div className="about-text-card">
               <p className="about-desc" style={{ marginBottom: 0 }}>
-                As part of the <strong>Texas-Oklahoma District</strong>, Fulshear Key Club carries on a century-long tradition of building character, developing leadership, and transforming communities — one act of service at a time.
+                We're part of the <strong>Texas-Oklahoma District</strong>, one of the most active Key Club districts in the country. Whether it's a food drive down the street or a community festival across the county, every hour we put in adds up to something that actually matters.
               </p>
             </div>
 
