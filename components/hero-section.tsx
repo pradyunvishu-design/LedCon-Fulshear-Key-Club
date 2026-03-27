@@ -105,16 +105,21 @@ export default function HeroSection() {
       }
 
       // ── SHOOTING STARS / COMETS ──
+      // Spawn rate slowed, stars avoid centre 280px radius where logo sits
       starTimer++;
-      if (starTimer > 70 + Math.random() * 100) {
+      if (starTimer > 180 + Math.random() * 160) {
         spawnStar(); starTimer = 0;
       }
+      const cx = W / 2, cy = H / 2, noGoR = 280;
       for (let i = stars.length - 1; i >= 0; i--) {
         const s = stars[i];
         s.x += s.vx; s.y += s.vy; s.life++;
+        // Skip rendering while inside the logo zone
+        const distC = Math.sqrt((s.x - cx) ** 2 + (s.y - cy) ** 2);
+        if (distC < noGoR) { if (s.life >= s.maxLife || s.x > W + 100 || s.y > H + 100) stars.splice(i, 1); continue; }
         const progress = s.life / s.maxLife;
-        const trailLen = 90 * (1 - progress);
-        const alpha = (1 - progress) * 0.9;
+        const trailLen = 65 * (1 - progress);
+        const alpha = (1 - progress) * 0.42;
 
         // Comet tail gradient
         const tdx = -s.vx / Math.sqrt(s.vx * s.vx + s.vy * s.vy);
@@ -129,20 +134,20 @@ export default function HeroSection() {
 
         ctx.beginPath();
         ctx.strokeStyle = tailGrad;
-        ctx.lineWidth = s.size * 1.5;
+        ctx.lineWidth = s.size * 1.2;
         ctx.lineCap = "round";
         ctx.moveTo(s.x, s.y);
         ctx.lineTo(s.x + tdx * trailLen, s.y + tdy * trailLen);
         ctx.stroke();
 
         // Comet head glow
-        const headGrad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.size * 4);
-        headGrad.addColorStop(0, `rgba(255,255,255,${alpha * 0.9})`);
-        headGrad.addColorStop(0.4, `rgba(201,168,76,${alpha * 0.4})`);
+        const headGrad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.size * 3);
+        headGrad.addColorStop(0, `rgba(255,255,255,${alpha * 0.8})`);
+        headGrad.addColorStop(0.4, `rgba(201,168,76,${alpha * 0.35})`);
         headGrad.addColorStop(1, "transparent");
         ctx.fillStyle = headGrad;
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.size * 4, 0, Math.PI * 2);
+        ctx.arc(s.x, s.y, s.size * 3, 0, Math.PI * 2);
         ctx.fill();
 
         if (s.life >= s.maxLife || s.x > W + 100 || s.y > H + 100) stars.splice(i, 1);
