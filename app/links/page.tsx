@@ -7,7 +7,9 @@ const linkGroups = [
     border: "rgba(201,168,76,0.6)",
     links: [
       { title: "ClassLink", desc: "Log in to access SchooLinks and other school apps", href: "https://login.classlink.com/my/lcisd", icon: "🔐" },
-      { title: "Event Sign-Ups", desc: "Register for upcoming service events", href: "https://www.signupgenius.com", icon: "📋" },
+      { title: "Event Sign-Ups", desc: "Register for upcoming service events", href: "/calendar", icon: "📋" },
+      { title: "Key Club Canvas", desc: "Announcements, meeting slides, and membership forms", href: "https://lcisd.instructure.com/courses/127230", icon: "📚" },
+      { title: "Service Hour Log", desc: "Submit club hours as well as your SchooLinks entry", href: "https://docs.google.com/forms/d/e/1FAIpQLSeZE9zNv9yGKKcc1cKnZn-IcJIapnr054bNA2uypLOM-uiduw/viewform?usp=header", icon: "⏱️" },
       { title: "Contact Officers", desc: "fulshearkeyclub@lcisd.org", href: "mailto:fulshearkeyclub@lcisd.org", icon: "✉️" },
     ],
   },

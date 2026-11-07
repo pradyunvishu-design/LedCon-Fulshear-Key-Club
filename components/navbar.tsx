@@ -21,12 +21,32 @@ export default function Navbar() {
     setMenuOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        document.querySelector<HTMLButtonElement>(".kc-hamburger")?.focus();
+      }
+    };
+    const onResize = () => { if (window.innerWidth > 1050) setMenuOpen(false); };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("resize", onResize);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [menuOpen]);
+
   const navCanvasRef = useRef<HTMLCanvasElement>(null);
 
   // Purple sparkle particles floating across the nav bar
   useEffect(() => {
     const canvas = navCanvasRef.current;
-    if (!canvas) return;
+    if (!canvas || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -95,7 +115,7 @@ export default function Navbar() {
         .kc-nav {
           position: fixed; top:0; left:0; right:0; z-index:100;
           display:flex; align-items:center; justify-content:space-between;
-          padding:1.4rem 3rem;
+          padding:1.2rem clamp(1rem, 3vw, 3rem); gap:2rem; background:rgba(5,13,26,0.92);
           transition: padding 0.4s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
           transform: translateZ(0);
           backface-visibility: hidden;
@@ -116,10 +136,10 @@ export default function Navbar() {
         .kc-nav-logo {
           font-size:1rem; font-weight:900; letter-spacing:0.12em;
           text-transform:uppercase; color:var(--white); position:relative;
-          text-decoration:none;
+          text-decoration:none; white-space:nowrap;
         }
         .kc-nav-logo span { color:var(--gold); }
-        .kc-nav-links { display:flex; gap:2rem; list-style:none; margin:0; padding:0; }
+        .kc-nav-links { display:flex; gap:clamp(1rem, 1.8vw, 2rem); list-style:none; margin:0; padding:0; }
         .kc-nav-links a {
           font-size:0.7rem; font-weight:700; letter-spacing:0.12em;
           text-transform:uppercase; color:var(--silver);
@@ -147,14 +167,14 @@ export default function Navbar() {
           background:var(--white); border-radius:2px; transition:all 0.3s;
         }
         .mobile-menu {
-          position:fixed; inset:0; top:0; left:0; width:100vw; height:100vh;
+          position:fixed; inset:0; width:100%; height:100dvh; padding:88px 24px 24px; overflow-y:auto;
           background:rgba(5,13,26,0.97); backdrop-filter:blur(10px);
           z-index:99; display:flex; flex-direction:column;
-          align-items:center; justify-content:center; gap:2rem;
-          opacity: 0; pointer-events: none; transition: opacity 0.3s;
+          align-items:center; justify-content:flex-start; gap:clamp(0.65rem, 3vh, 1.5rem);
+          opacity: 0; visibility:hidden; pointer-events: none; transition: opacity 0.3s;
         }
         .mobile-menu.open {
-          opacity: 1; pointer-events: auto;
+          opacity: 1; visibility:visible; pointer-events: auto;
         }
         .mobile-menu a {
           font-size:1.5rem; font-weight:700; letter-spacing:0.15em;
@@ -167,7 +187,7 @@ export default function Navbar() {
           .kc-nav-links{ gap:1.2rem; }
           .kc-nav-links a{ font-size:0.63rem; letter-spacing:0.08em; }
         }
-        @media(max-width:900px){
+        @media(max-width:1050px){
           .kc-nav{ padding:1rem 1.5rem; }
           .kc-nav.scrolled{ padding:0.75rem 1.5rem; }
           .kc-nav-links{ display:none; }
@@ -180,16 +200,16 @@ export default function Navbar() {
         <ul className="kc-nav-links" style={{position:"relative",zIndex:1}}>
           {navLinks.map((l) => (
             <li key={l.href}>
-              <Link href={l.href} className={pathname === l.href ? "active" : ""}>{l.label}</Link>
+              <Link href={l.href} aria-current={pathname === l.href ? "page" : undefined} className={pathname === l.href ? "active" : ""}>{l.label}</Link>
             </li>
           ))}
         </ul>
-        <button className="kc-hamburger" style={{position:"relative",zIndex:1}} onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+        <button className="kc-hamburger" style={{position:"relative",zIndex:1}} onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-navigation">
           <span /><span /><span />
         </button>
       </nav>
 
-      <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+      <div id="mobile-navigation" aria-hidden={!menuOpen} inert={!menuOpen} className={`mobile-menu ${menuOpen ? "open" : ""}`}>
         {navLinks.map((l) => (
           <Link key={l.href} href={l.href} className={pathname === l.href ? "active" : ""} onClick={() => setMenuOpen(false)}>
             {l.label}

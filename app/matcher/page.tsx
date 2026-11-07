@@ -20,18 +20,6 @@ const questions = [
     ],
   },
   {
-    q: "When are you available to volunteer?",
-    sub: "Select all that apply.",
-    multi: true,
-    opts: [
-      { label: "Weekday afternoons (after school)", icon: "🏫" },
-      { label: "Weekday evenings",                  icon: "🌙" },
-      { label: "Saturday mornings",                 icon: "☀️" },
-      { label: "Saturday afternoons",               icon: "🌤️" },
-      { label: "Sundays",                           icon: "🌅" },
-    ],
-  },
-  {
     q: "What type of service do you enjoy most?",
     sub: "Select all that apply.",
     multi: true,
@@ -41,27 +29,6 @@ const questions = [
       { label: "Food service or sorting",  icon: "🍽️" },
       { label: "Teaching or tutoring",     icon: "✏️" },
       { label: "Event setup / teamwork",   icon: "📋" },
-    ],
-  },
-  {
-    q: "How long can you commit per event?",
-    sub: "Pick one.",
-    multi: false,
-    opts: [
-      { label: "1–2 hours",       icon: "⏱️" },
-      { label: "2–4 hours",       icon: "⏰" },
-      { label: "Half day (4–6h)", icon: "🕐" },
-      { label: "Full day",        icon: "📅" },
-    ],
-  },
-  {
-    q: "How do you prefer to work?",
-    sub: "Pick one.",
-    multi: false,
-    opts: [
-      { label: "Love meeting new people!",  icon: "🤝" },
-      { label: "Fine in small groups",      icon: "👥" },
-      { label: "Prefer behind-the-scenes",  icon: "🔧" },
     ],
   },
   {
@@ -88,17 +55,6 @@ const questions = [
       { label: "Everyone equally",            icon: "🌍" },
     ],
   },
-  {
-    q: "What environment energizes you most?",
-    sub: "Pick one.",
-    multi: false,
-    opts: [
-      { label: "Outdoors — parks, nature, cleanup",  icon: "🌳" },
-      { label: "Indoors — kitchens, libraries",      icon: "🏛️" },
-      { label: "Big events with lots of energy",     icon: "🎉" },
-      { label: "Small, quiet, one-on-one settings",  icon: "🤫" },
-    ],
-  },
 ];
 
 const EVENT_TAGS: Record<string, string[]> = {
@@ -113,12 +69,14 @@ const EVENT_TAGS: Record<string, string[]> = {
 };
 
 const EVENTS = [
-  ...Object.entries(datedEvents).flatMap(([date, events]) => events.map(event => ({
+  ...Object.entries(datedEvents).flatMap(([date, events]) => events.filter(event => event.type !== "Meeting").map(event => ({
     name: event.title,
     type: event.type,
     typeColor: "#c9a84c",
     desc: event.desc + " Location: " + event.loc + ".",
     time: date + " · " + event.time,
+    endDate: event.endDate ?? date,
+    signupUrl: event.signupUrl ?? event.sourceUrl,
     tags: EVENT_TAGS[event.title] ?? ["community"],
   }))),
   ...recurringEvents.map(event => ({
@@ -127,6 +85,8 @@ const EVENTS = [
     typeColor: "#4e8fe0",
     desc: event.desc,
     time: event.time,
+    endDate: "",
+    signupUrl: event.signupUrl ?? event.sourceUrl,
     tags: EVENT_TAGS[event.title] ?? ["community"],
   })),
 ];
@@ -165,7 +125,7 @@ const COMMUNITY_TAGS: Record<string, string[]> = {
 };
 
 const RANK_COLORS = ["#c9a84c", "#9aabcc", "#c97a4c"];
-const RANK_LABELS = ["Perfect Match", "Great Fit", "Worth Trying"];
+const RANK_LABELS = ["Closest Interest Match", "Also Consider", "Worth Exploring"];
 
 const TOTAL_Q = questions.length;
 
@@ -202,11 +162,13 @@ export default function MatcherPage() {
   const getResults = () => {
     const userTags = new Set<string>();
     (answers[0] || []).forEach((a: string) => (CAUSE_TAGS[a]     || []).forEach((t: string) => userTags.add(t)));
-    (answers[2] || []).forEach((a: string) => (SERVICE_TAGS[a]   || []).forEach((t: string) => userTags.add(t)));
-    (answers[5] || []).forEach((a: string) => (SKILL_TAGS[a]     || []).forEach((t: string) => userTags.add(t)));
-    (answers[6] || []).forEach((a: string) => (COMMUNITY_TAGS[a] || []).forEach((t: string) => userTags.add(t)));
+    (answers[1] || []).forEach((a: string) => (SERVICE_TAGS[a]   || []).forEach((t: string) => userTags.add(t)));
+    (answers[2] || []).forEach((a: string) => (SKILL_TAGS[a]     || []).forEach((t: string) => userTags.add(t)));
+    (answers[3] || []).forEach((a: string) => (COMMUNITY_TAGS[a] || []).forEach((t: string) => userTags.add(t)));
     if (userTags.size === 0) { userTags.add("community"); userTags.add("teamwork"); }
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
     return EVENTS
+      .filter(event => !event.endDate || event.endDate >= today)
       .map(e => ({ ...e, score: e.tags.filter(t => userTags.has(t)).length }))
       .sort((a, b) => b.score - a.score)
       .slice(0, 3);
@@ -291,7 +253,7 @@ export default function MatcherPage() {
         }
         .result-card:hover { border-color: rgba(201,168,76,0.25); transform: translateX(4px); }
         .result-rank-num { font-size: 1.7rem; font-weight: 900; opacity: 0.35; flex-shrink: 0; width: 2rem; text-align: center; line-height: 1; padding-top: 0.1rem; }
-        .result-body { flex: 1; }
+        .result-body { min-width:0; overflow-wrap:anywhere; flex: 1; }
         .result-type-badge { display: inline-block; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; border-radius: 99px; margin-bottom: 0.45rem; }
         .result-name { font-size: 1rem; font-weight: 800; color: white; margin-bottom: 0.35rem; }
         .result-desc { font-size: 0.82rem; color: var(--silver); line-height: 1.65; }
@@ -319,7 +281,7 @@ export default function MatcherPage() {
           </div>
           <h1 className="matcher-title">Find Your Perfect <br /><span className="highlight">Service Match.</span></h1>
           <p style={{ color: "var(--silver)", maxWidth: "520px", margin: "0 auto", lineHeight: "1.7", fontSize: "1.05rem", opacity: 0.8 }}>
-            8 quick questions. We score every event against your answers and surface your best-fit opportunities.
+            4 quick questions about your interests. Explore current opportunities, then check the dates, requirements, and available shifts.
           </p>
         </div>
 
@@ -343,7 +305,9 @@ export default function MatcherPage() {
                   {q.opts.map(opt => {
                     const isSelected = selected.includes(opt.label);
                     return (
-                      <div
+                      <button
+                        type="button"
+                        aria-pressed={isSelected}
                         key={opt.label}
                         className={`quiz-option${isSelected ? " selected" : ""}`}
                         onClick={() => toggle(opt.label)}
@@ -354,7 +318,7 @@ export default function MatcherPage() {
                           ? <div className="quiz-check">{isSelected ? "✓" : ""}</div>
                           : <div className="quiz-radio" />
                         }
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
@@ -380,7 +344,7 @@ export default function MatcherPage() {
                   <div className="results-header">
                     <span className="results-trophy">🎯</span>
                     <div className="results-title">Your Top Matches</div>
-                    <p className="results-sub" style={{ marginBottom: "1.5rem" }}>Based on your answers, here are the events we think you&apos;ll love most.</p>
+                    <p className="results-sub" style={{ marginBottom: "1.5rem" }}>Ranked by shared interests. Confirm the schedule and service-hour eligibility before signing up.</p>
                   </div>
                   <div className="results-list">
                     {results.map((event, i) => (
@@ -394,6 +358,7 @@ export default function MatcherPage() {
                           </div>
                           <div className="result-name">{event.name}</div>
                           <div className="result-desc">{event.desc}</div>
+                          {event.signupUrl && <a href={event.signupUrl} target="_blank" rel="noopener noreferrer" style={{ color: "var(--gold)", textDecoration: "underline", display: "inline-block", margin: "12px 0" }}>View details & sign-up ↗</a>}
                           <div className="result-meta">⏱ {event.time} &nbsp;·&nbsp; {RANK_LABELS[i]}</div>
                         </div>
                       </div>

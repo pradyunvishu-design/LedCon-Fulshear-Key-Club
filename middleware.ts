@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * Edge-runtime rate limiter.
  *
- * Limits each IP to MAX_REQUESTS per WINDOW_MS.
+ * Limits API requests from each IP to MAX_REQUESTS per WINDOW_MS.
+ * Public pages, images, and Next.js prefetches must not consume this budget.
  * Returns HTTP 429 with a Retry-After header on excess requests.
  *
  * Note: state is per-edge-node (in-memory Map).  This is intentionally
@@ -71,7 +72,7 @@ export function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-// Apply to all routes except Next.js internals and static assets
+// Protect API endpoints only; this public static site has no write endpoints.
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon\\.ico).*)"],
+  matcher: ["/api/:path*"],
 };

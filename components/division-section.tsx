@@ -73,10 +73,15 @@ export default function DivisionSection() {
           font-size: 0.875rem;
           color: var(--white);
           font-weight: 600;
-          text-align: right;
+          text-align: right; min-width:0; overflow-wrap:anywhere;
         }
-        @media (max-width: 700px) {
+        @media (max-width: 900px) {
           .division-grid { grid-template-columns: 1fr; }
+          .division-card { padding:1.5rem; }
+        }
+        @media (max-width:500px) {
+          .division-row { flex-direction:column; gap:0.3rem; }
+          .div-val { text-align:left; }
         }
       `}</style>
       <div className="section-wrapper">
@@ -115,11 +120,10 @@ export default function DivisionSection() {
             ))}
           </div>
           <div className="division-card glass-card fade-in">
-            <div className="division-card-title">Sponsor</div>
+            <div className="division-card-title">District & Organization</div>
             {[
-              ["Sponsoring Org",   "Texas-Oklahoma District"],
-              ["Sponsor Website",  "tokeyclub.com"],
-              ["Sponsor Contact",  "techpro@tokeyclub.com"],
+              ["District",   "Texas-Oklahoma District"],
+              ["District Website",  "tokeyclub.com"],
               ["Parent Org",       "Kiwanis International"],
               ["Int'l Website",    "keyclub.org"],
               ["Founded",          "1925"],
