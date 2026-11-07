@@ -8,6 +8,9 @@ import DivisionSection from "@/components/division-section";
 import LinksSection from "@/components/links-section";
 import ContactSection from "@/components/contact-section";
 import ImpactSection from "@/components/impact-section";
+import dynamic from "next/dynamic";
+
+const CinematicIntro = dynamic(() => import("@/components/cinematic-intro"), { ssr: false });
 
 const schoolinksSteps = [
   { step: "1", desc: "Log in via ClassLink and click on the \'Engage\' tab on the left sidebar.", img: "/schoolinks/step1.png" },
@@ -43,7 +46,7 @@ export default function Home() {
 
   return (
     <>
-
+      <CinematicIntro />
       <HeroSection />
       <AboutSection />
       <DivisionSection />
