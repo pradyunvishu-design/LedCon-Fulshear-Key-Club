@@ -21,17 +21,17 @@ export default function ContactPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", maxWidth: "800px", margin: "0 auto" }}>
           <div style={{ background: "rgba(10,15,30,0.8)", padding: "1.75rem 2rem", borderRadius: "12px", border: "1px solid rgba(201,168,76,0.15)", backdropFilter: "blur(10px)" }}>
             <h4 style={{ color: "white", fontSize: "1.05rem", marginBottom: "0.5rem" }}>When and where are general meetings?</h4>
-            <p style={{ color: "var(--silver)", fontSize: "0.9rem", lineHeight: "1.6" }}>We meet in the LGI Room on the 1st Tuesday of every month at 4:00 PM. Head to the Calendar page to see all upcoming dates for the rest of the year.</p>
+            <p style={{ color: "var(--silver)", fontSize: "0.9rem", lineHeight: "1.6" }}>We meet in the Library every other Tuesday at 4:00 PM. Our next meeting is December 8, 2026. Check the Calendar page for confirmed dates.</p>
           </div>
 
           <div style={{ background: "rgba(10,15,30,0.8)", padding: "1.75rem 2rem", borderRadius: "12px", border: "1px solid rgba(100,149,237,0.15)", backdropFilter: "blur(10px)" }}>
             <h4 style={{ color: "white", fontSize: "1.05rem", marginBottom: "0.5rem" }}>How do I log my volunteer hours?</h4>
-            <p style={{ color: "var(--silver)", fontSize: "0.9rem", lineHeight: "1.6" }}>All hours go through SchooLinks. Log in via ClassLink, open SchooLinks, and use the Experience Tracking section. After Key Club events, our Secretary logs attendance — but make sure to add any hours from personal volunteering on your own. There&apos;s a full tutorial on the home page if you need help.</p>
+            <p style={{ color: "var(--silver)", fontSize: "0.9rem", lineHeight: "1.6" }}>Submit your hours in both the Key Club Service Hour Log on Canvas and SchooLinks. In SchooLinks, open Engage → Experience Tracking → Volunteer Service Cord and add your entry. Ask your event supervisor to verify it. There&apos;s a full tutorial on the home page.</p>
           </div>
 
           <div style={{ background: "rgba(10,15,30,0.8)", padding: "1.75rem 2rem", borderRadius: "12px", border: "1px solid rgba(201,168,76,0.15)", backdropFilter: "blur(10px)" }}>
             <h4 style={{ color: "white", fontSize: "1.05rem", marginBottom: "0.5rem" }}>How do I join?</h4>
-            <p style={{ color: "var(--silver)", fontSize: "0.9rem", lineHeight: "1.6" }}>Just show up to any general meeting! Once you decide you&apos;re in, fill out the membership form on Canvas and pay the $20 annual dues. You&apos;ll be able to sign up for events right away. No prior experience required — we&apos;ll walk you through everything.</p>
+            <p style={{ color: "var(--silver)", fontSize: "0.9rem", lineHeight: "1.6" }}>Attend a general meeting and complete the Member Interest Form on Canvas before paying the $30 annual dues. The 2026–2027 deadline was October 1; contact the advisor about joining after that date. No prior volunteering experience is required.</p>
           </div>
         </div>
       </div>
