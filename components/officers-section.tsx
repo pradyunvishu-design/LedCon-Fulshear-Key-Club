@@ -1,12 +1,66 @@
 "use client";
 
 const officers = [
-  { title: "President",     name: "Bisan Abdalla",        year: "Class of 2027", email: "ba309494@students.lcisd.org",  quote: "I love engaging with different communities and making a positive impact by helping out!", image: "/officers/bisan.png",   photoScale: "scale(2.6)", photoOrigin: "50% 36%" },
-  { title: "Vice President",name: "Takashi Orellana",     year: "Class of 2026", email: "to256067@students.lcisd.org",  quote: "I love volunteering and getting to connect more with my community & friends.", image: "/officers/takashi.png", photoScale: "scale(2.6)", photoOrigin: "50% 36%" },
-  { title: "Secretary",     name: "Ziruo Yin",            year: "Class of 2027", email: "zy708820@students.lcisd.org",  quote: "I love that we are able to provide volunteer opportunities and participate in them.", image: "/officers/ziruo.png",   photoScale: "scale(2.6)", photoOrigin: "50% 40%" },
-  { title: "Treasurer",     name: "Max Brito",            year: "Class of 2027", email: "mb308473@students.lcisd.org",  quote: "I love connecting with members and providing a way to better our communities.", image: "/officers/max.png",     photoScale: "scale(2.2)", photoOrigin: "50% 46%" },
-  { title: "Editor",        name: "Ahlon Steward",        year: "Class of 2027", email: "AS203213@students.lcisd.org",  quote: "I love how everyone in Key Club is one big community.", image: "/officers/ahlon.png",   photoScale: "scale(1.3)", photoOrigin: "50% 22%" },
-  { title: "Webmaster",     name: "Sesandi Devanarayana", year: "Class of 2027", email: "sd255062@students.lcisd.org",  quote: "I love the impact we are able to leave behind on communities by helping out!", image: "/officers/sesandi.png", photoScale: "scale(2.6)", photoOrigin: "50% 40%" },
+  {
+    "title": "President",
+    "name": "Ranbir Puri",
+    "year": "Class of 2029",
+    "email": "rp311141@students.lcisd.org",
+    "quote": "Key Club provides me an opportunity to serve others, and my community. This allows me to make a true impact!",
+    "image": "/officers/ranbir-puri.jpg",
+    "photoScale": "scale(1)",
+    "photoOrigin": "50% 35%"
+  },
+  {
+    "title": "Vice President",
+    "name": "Sesandi Devanarayana",
+    "year": "Class of 2027",
+    "email": "sd255062@students.lcisd.org",
+    "quote": "I love how I can connect through so many people with the same love and goal of giving back to so many communities! It’s so special to see how like-minded individuals get together to make a true impact!",
+    "image": "/officers/sesandi-devanarayana.jpg",
+    "photoScale": "scale(1)",
+    "photoOrigin": "50% 35%"
+  },
+  {
+    "title": "Secretary",
+    "name": "Mahija Gurram",
+    "year": "Class of 2029",
+    "email": "Mg312848@students.lcisd.org",
+    "quote": "I love learning to contribute to the community and gaining new opportunities",
+    "image": "/officers/mahija-gurram.jpg",
+    "photoScale": "scale(1)",
+    "photoOrigin": "50% 35%"
+  },
+  {
+    "title": "Treasurer",
+    "name": "Max Brito",
+    "year": "Class of 2027",
+    "email": "mb237757@students.lcisd.org",
+    "quote": "I love making an impact in my community and making new friends",
+    "image": "/officers/max-brito.jpg",
+    "photoScale": "scale(1)",
+    "photoOrigin": "50% 35%"
+  },
+  {
+    "title": "Editor",
+    "name": "Camila Valderrama",
+    "year": "Class of 2027",
+    "email": "Cv244867@students.lcisd.org",
+    "quote": "I love Key Club because it has broadened my opportunities to help people in our communities. It has also introduced me to new friends who I would have never crossed paths with if it wasn’t for Key Club.",
+    "image": "/officers/camila-valderrama.jpg",
+    "photoScale": "scale(1)",
+    "photoOrigin": "50% 35%"
+  },
+  {
+    "title": "Webmaster",
+    "name": "Esther Jeon",
+    "year": "Class of 2027",
+    "email": "ej221946@students.lcisd.org",
+    "quote": "What I love about Key Club is how it is one big community, with members who make the club feel like home. I also love being able to give back to my local community, whether that's through food banks, trash pickups, or elementary school volunteering.",
+    "image": "/officers/esther-jeon.jpg",
+    "photoScale": "scale(1)",
+    "photoOrigin": "50% 35%"
+  }
 ];
 
 const colors: Record<string, { glow: string; border: string; fallback: string }> = {
@@ -146,6 +200,7 @@ export default function OfficersSection() {
         <div className="officers-header slide-in-left">
           <p className="section-label">Club Leadership</p>
           <h2 className="section-heading">Meet Our Officers</h2>
+          <p style={{ color: "var(--silver)", marginTop: "1rem" }}>Fulshear Key Club · 2026–2027</p>
         </div>
         <div className="officers-grid">
           {officers.map((o) => {
@@ -164,7 +219,7 @@ export default function OfficersSection() {
               >
                 <div className="officer-avatar">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={o.image} alt={o.name} style={{ transform: o.photoScale, transformOrigin: o.photoOrigin }} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
+                  <img src={o.image} alt={o.name} style={{ transform: o.photoScale, transformOrigin: o.photoOrigin, objectPosition: o.photoOrigin }} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
                 </div>
                 <div className="officer-title">{o.title}</div>
                 <div className="officer-name">{o.name}</div>

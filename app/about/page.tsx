@@ -12,25 +12,43 @@ const pillars = [
 ];
 
 const steps = [
-  { num: "01", title: "Come to a General Meeting",  desc: "Our meetings are in the LGI Room on the 1st Tuesday of every month at 4:00 PM. No pressure — just stop by, see what we're about, and meet the officers. You don't have to commit to anything that day." },
-  { num: "02", title: "Fill Out the Membership Form",  desc: "Once you're ready, complete the digital form linked on our Canvas course and pay the $20 annual dues. After that, you're officially in and can start earning hours right away." },
-  { num: "03", title: "Sign Up for Events & Log Hours", desc: "Browse upcoming service events on our sign-up page and grab a spot. After each event, officers record attendance — just make sure to also log any outside hours yourself on SchooLinks." },
+  { num: "01", title: "Come to a General Meeting",  desc: "Our meetings are in the Library every other Tuesday at 4:00 PM. No pressure — just stop by, see what we're about, and meet the officers. You don't have to commit to anything that day." },
+  { num: "02", title: "Fill Out the Membership Form",  desc: "Complete the Member Interest Form on Canvas before paying the $30 annual dues. The 2026–2027 payment deadline was October 1; contact the advisor about joining after that date." },
+  { num: "03", title: "Sign Up for Events & Log Hours", desc: "Browse the calendar and reserve a volunteer shift. After each event, submit your hours in both the Key Club Service Hour Log linked on Canvas and SchooLinks. Ask your event supervisor to verify your SchooLinks entry." },
 ];
 
 const requirements = [
-  { label: "Meeting Attendance", value: "≥ 50% of general meetings per semester" },
-  { label: "Service Hours",      value: "25+ hours per school year" },
-  { label: "GPA Requirement",    value: "2.5 cumulative GPA" },
-  { label: "Annual Dues",        value: "$20 (one-time at sign-up)" },
-  { label: "Active Status",      value: "Maintained by meeting attendance + hours" },
-  { label: "Dress Code",         value: "Key Club shirt required at official events" },
+  {
+    "label": "Service Hours",
+    "value": "At least 5 hours per semester through Fulshear Key Club"
+  },
+  {
+    "label": "Annual Dues",
+    "value": "$30 for 2026–2027 · contact the advisor for late payments"
+  },
+  {
+    "label": "Hour Reporting",
+    "value": "Submit to both the club Service Hour Log and SchooLinks"
+  },
+  {
+    "label": "Member Conduct",
+    "value": "Respectful conduct and accurate, truthful service-hour submissions"
+  },
+  {
+    "label": "Dress Code",
+    "value": "Follow each event’s clothing and footwear requirements"
+  },
+  {
+    "label": "Club Updates",
+    "value": "Check Canvas announcements, meeting slides, and club bylaws"
+  }
 ];
 
 const faqs = [
-  { q: "How do I track my volunteer hours?",     a: "Hours are logged through SchooLinks. Sign into ClassLink, open SchooLinks, and use the 'Experience Tracking' section to add your entry. After Key Club events, our Secretary records attendance on the back end — but if you volunteer somewhere on your own, make sure to log those yourself too. There's a step-by-step tutorial on the home page if you need a walkthrough. Questions about your hours? Reach out to our Secretary directly." },
-  { q: "When and where are general meetings?",   a: "We meet in the LGI Room on the 1st Tuesday of every month at 4:00 PM. Head over to the Calendar page for the full list of dates this year." },
-  { q: "What happens if I miss a meeting?",      a: "Life happens — just make sure to check the meeting slides on Canvas and message an officer to catch up on anything important. That said, consistent attendance is required to stay in good standing, so try not to make missing meetings a habit." },
-  { q: "Can I join mid-year?",                   a: "Absolutely. We welcome new members throughout the entire school year. Come to any meeting, fill out the form, pay your dues, and you're in — you can start signing up for events the same week." },
+  { q: "How do I track my volunteer hours?",     a: "Submit volunteer hours in both the Key Club Service Hour Log on Canvas and SchooLinks. In SchooLinks, open Engage → Experience Tracking → Volunteer Service Cord and add an entry. Your supervisor must verify it. The home page has a step-by-step walkthrough." },
+  { q: "When and where are general meetings?",   a: "We meet in the Library every other Tuesday at 4:00 PM. Our next meeting is December 8, 2026. Check the Calendar page for confirmed dates." },
+  { q: "What happens if I miss a meeting?",      a: "Read the meeting slides and announcements on Canvas, then contact an officer if you need help catching up. Members must complete at least five service hours per semester through Fulshear Key Club to remain active." },
+  { q: "Can I join mid-year?",                   a: "Contact the advisor or an officer about joining after the October 1 dues deadline. Check Canvas for the current Member Interest Form and payment instructions." },
   { q: "Do I need prior volunteering experience?", a: "Nope! Key Club is open to every Fulshear High School student, no matter your background or experience level. We'll walk you through your first event and make sure you feel comfortable from day one." },
 ];
 

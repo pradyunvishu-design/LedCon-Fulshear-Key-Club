@@ -15,8 +15,8 @@ const CinematicIntro = dynamic(() => import("@/components/cinematic-intro"), { s
 const schoolinksSteps = [
   { step: "1", desc: "Log in via ClassLink and click on the \'Engage\' tab on the left sidebar.", img: "/schoolinks/step1.png" },
   { step: "2", desc: "Select \'Experience Tracking\' from the dropdown menu.", img: "/schoolinks/step2.png" },
-  { step: "3", desc: "Click the \'+ Add entry\' button to start logging your hours.", img: "/schoolinks/step3.png" },
-  { step: "4", desc: "Fill out all the required info like the organization name, date, and hours worked. Then click Save.", img: "/schoolinks/step4_old.png" },
+  { step: "3", desc: "Find \'Volunteer Service Cord\' in Experience Tracking and click the blue \'+\' button to add an entry.", img: "/schoolinks/step3.png" },
+  { step: "4", desc: "Select Volunteer Service Cord, then enter the organization, supervisor email, date, hours/minutes, and a description of your service. Click Save and ask your supervisor to verify the email from info@schoolinks.com. Hours may take up to 30 minutes to appear after approval.", img: "/schoolinks/step4.png" },
 ];
 
 // Custom style for centering the Step 3 image
@@ -215,7 +215,7 @@ function SchooLinksSection() {
           <p className="schoolinks-section-label">How to Track Hours</p>
           <h2 className="schoolinks-section-heading">Tracking Hours on SchooLinks</h2>
           <p className="schoolinks-description">
-            Follow these steps to log your volunteer hours. Access SchooLinks by logging into your ClassLink account first.
+            Submit your hours in both the <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZE9zNv9yGKKcc1cKnZn-IcJIapnr054bNA2uypLOM-uiduw/viewform?usp=header" target="_blank" rel="noopener noreferrer" style={{ color: "var(--gold)", textDecoration: "underline" }}>Key Club Service Hour Log</a> and SchooLinks. Follow these steps after logging in through ClassLink.
           </p>
         </div>
         <div className="schoolinks-grid fade-in">

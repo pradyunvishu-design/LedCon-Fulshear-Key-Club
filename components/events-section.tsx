@@ -1,31 +1,19 @@
 "use client";
 
-const events = [
-  {
-    date: "Apr 05",
-    title: "Divisional Council Meeting",
-    desc: "Monthly division gathering. Officers are required to attend.",
-    tag: "Officers Required",
+import { datedEvents } from "@/lib/club-events";
+
+const events = Object.entries(datedEvents).flatMap(([date, entries]) => {
+  const [, month, day] = date.split("-");
+  const monthLabel = new Date(2000, Number(month) - 1, 1).toLocaleString("en-US", { month: "short" });
+  return entries.map(event => ({
+    date: monthLabel + " " + day,
+    title: event.title,
+    desc: date + " · " + event.loc + " · " + event.time,
+    tag: event.type,
     tagColor: "var(--gold)",
     tagGlow: "rgba(201,168,76,0.25)",
-  },
-  {
-    date: "Apr 12",
-    title: "Community Food Drive",
-    desc: "Fulshear Community Center. Please bring non-perishable food items.",
-    tag: "Volunteer",
-    tagColor: "#4a9eff",
-    tagGlow: "rgba(74,158,255,0.25)",
-  },
-  {
-    date: "Apr 22",
-    title: "Earth Day Park Cleanup",
-    desc: "Local parks throughout Fulshear. Gloves and bags provided.",
-    tag: "Service",
-    tagColor: "#4ecb71",
-    tagGlow: "rgba(78,203,113,0.25)",
-  },
-];
+  }));
+});
 
 export default function EventsSection() {
   return (

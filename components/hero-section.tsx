@@ -806,6 +806,11 @@ export default function HeroSection() {
             Building Tomorrow&apos;s Leaders
           </p>
 
+          <p style={{ color: "var(--gold)", marginBottom: "1rem", fontWeight: 700 }}>240+ members · 1,925 service hours · 2026–2027</p>
+          <Link href="/calendar" style={{ display: "block", maxWidth: "540px", margin: "0 auto 1.5rem", padding: "1rem", border: "1px solid rgba(201,168,76,0.35)", borderRadius: "12px", color: "var(--silver)", lineHeight: 1.6 }}>
+            <strong style={{ color: "var(--gold)" }}>Next meeting: December 8, 2026 · 4:00 PM</strong><br />
+            Library · Every other Tuesday
+          </Link>
           <div className="hero-buttons">
             <Link href="/about" className="btn-hero-primary">Explore →</Link>
             <Link href="/contact" className="btn-hero-secondary">Join Us</Link>

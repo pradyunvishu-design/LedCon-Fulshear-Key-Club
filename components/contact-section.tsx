@@ -19,7 +19,7 @@ const contacts = [
   },
   {
     title: "Lt. Governor",
-    val: "M. Chintalapally",
+    val: "Oswald Fernandez",
     sub: "ltg3s@tokeyclub.com",
     href: "mailto:ltg3s@tokeyclub.com",
     glow: "rgba(100,149,237,0.3)",
@@ -43,8 +43,8 @@ const contacts = [
   },
   {
     title: "Meetings",
-    val: "LGI Room",
-    sub: "1st Tuesday of every month · 4:00 PM",
+    val: "Library",
+    sub: "Every other Tuesday · 4:00 PM",
     href: "/calendar",
     glow: "rgba(201,168,76,0.3)",
     border: "rgba(201,168,76,0.5)",
@@ -169,7 +169,7 @@ export default function ContactSection() {
               <li key={l}><a href={`/${l}`}>{l}</a></li>
             ))}
           </ul>
-          <div className="footer-copy">© 2026 Fulshear Key Club · Texas-Oklahoma District · All Rights Reserved</div>
+          <div className="footer-copy">© 2026–2027 Fulshear Key Club · Texas-Oklahoma District · All Rights Reserved</div>
         </div>
       </div>
     </section>
