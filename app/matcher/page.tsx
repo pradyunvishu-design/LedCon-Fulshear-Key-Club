@@ -1,5 +1,7 @@
 "use client";
 
+import { datedEvents, recurringEvents } from "@/lib/club-events";
+
 import { useState } from "react";
 import Link from "next/link";
 
@@ -99,87 +101,34 @@ const questions = [
   },
 ];
 
+const EVENT_TAGS: Record<string, string[]> = {
+  "Tapestry Event": ["community", "cultural", "creative", "teamwork"],
+  "Elementary UIL": ["education", "kids", "youth", "teamwork"],
+  "Key Club General Meeting": ["community", "leadership", "indoor"],
+  "Friends For Life": ["animals", "community", "teamwork"],
+  "Learn To Be · Online Tutoring": ["education", "teaching", "kids"],
+  "Key Leader Weekend Retreat": ["leadership", "community", "teamwork"],
+  "Kiwanis Club of Katy Chartering Ceremony": ["food", "teamwork", "community"],
+  "Lunches of Love": ["hunger", "food", "community", "teamwork"],
+};
+
 const EVENTS = [
-  {
-    name: "General Monthly Meeting",
-    type: "Club",
-    typeColor: "#1a3a8f",
-    desc: "Connect with fellow Key Clubbers, vote on upcoming events, and earn meeting attendance hours. Open to all members every other Wednesday.",
-    time: "~1.5 hours",
-    tags: ["community", "leadership", "indoor"],
-  },
-  {
-    name: "Creek & Park Cleanup",
-    type: "Environment",
-    typeColor: "#2d7a3a",
-    desc: "Restore local waterways and parks in Fulshear. Gloves and bags provided — just bring energy and good company!",
-    time: "2–4 hours",
-    tags: ["environment", "outdoor", "physical"],
-  },
-  {
-    name: "H-E-B Food Drive",
-    type: "Hunger",
-    typeColor: "#b85c1e",
-    desc: "Collect and sort food donations at our local H-E-B. One of our most impactful ongoing service events for hunger relief.",
-    time: "2–4 hours",
-    tags: ["hunger", "food", "community", "teamwork"],
-  },
-  {
-    name: "Thanksgiving Basket Packing",
-    type: "Hunger",
-    typeColor: "#b85c1e",
-    desc: "Pack complete holiday meals for families in need. A high-energy, team-based Thanksgiving tradition every November.",
-    time: "3–5 hours",
-    tags: ["hunger", "food", "community", "teamwork", "physical"],
-  },
-  {
-    name: "Library Read-Alouds",
-    type: "Education",
-    typeColor: "#7a3a8f",
-    desc: "Read stories to young children at our local library. Perfect for those who love kids and want a calm, meaningful experience.",
-    time: "1–2 hours",
-    tags: ["education", "kids", "youth", "indoor"],
-  },
-  {
-    name: "Peer Tutoring Sessions",
-    type: "Education",
-    typeColor: "#7a3a8f",
-    desc: "Help Fulshear students with math, science, or writing in small group or one-on-one sessions. Flexible scheduling available.",
-    time: "1–2 hours",
-    tags: ["education", "teaching", "indoor", "kids"],
-  },
-  {
-    name: "Youth Sports & Mentoring Day",
-    type: "Children & Youth",
+  ...Object.entries(datedEvents).flatMap(([date, events]) => events.map(event => ({
+    name: event.title,
+    type: event.type,
     typeColor: "#c9a84c",
-    desc: "Mentor and cheer on younger kids during a fun-filled sports day. Great for energetic members who love working with youth!",
-    time: "4–6 hours",
-    tags: ["youth", "kids", "outdoor", "physical", "teamwork", "leadership"],
-  },
-  {
-    name: "Senior Center Visits",
-    type: "Elderly Care",
+    desc: event.desc + " Location: " + event.loc + ".",
+    time: date + " · " + event.time,
+    tags: EVENT_TAGS[event.title] ?? ["community"],
+  }))),
+  ...recurringEvents.map(event => ({
+    name: event.title,
+    type: event.type,
     typeColor: "#4e8fe0",
-    desc: "Spend time with elderly residents — play board games, share stories, or help with activities. These visits make a huge difference.",
-    time: "1–3 hours",
-    tags: ["community", "indoor", "elderly"],
-  },
-  {
-    name: "Cultural Festival Volunteer",
-    type: "Cultural Events",
-    typeColor: "#c950a0",
-    desc: "Help plan and run our multicultural events — from lion dances to Princess Night. Bring creativity and enthusiasm!",
-    time: "3–6 hours",
-    tags: ["cultural", "creative", "community", "teamwork"],
-  },
-  {
-    name: "Houston Food Bank Meals Packaging",
-    type: "Hunger",
-    typeColor: "#b85c1e",
-    desc: "Package thousands of meals for families across Houston. Fast-paced, high-impact, and one of our largest service events.",
-    time: "3–4 hours",
-    tags: ["hunger", "food", "teamwork", "physical"],
-  },
+    desc: event.desc,
+    time: event.time,
+    tags: EVENT_TAGS[event.title] ?? ["community"],
+  })),
 ];
 
 const CAUSE_TAGS: Record<string, string[]> = {
@@ -211,7 +160,7 @@ const COMMUNITY_TAGS: Record<string, string[]> = {
   "Young children":              ["kids", "youth"],
   "Elderly community members":   ["elderly", "community"],
   "Families & people in need":   ["hunger", "food", "community"],
-  "Animals & the environment":   ["environment", "outdoor"],
+  "Animals & the environment":   ["animals", "environment", "outdoor"],
   "Everyone equally":            ["community", "teamwork"],
 };
 
