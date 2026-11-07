@@ -365,84 +365,10 @@ export default function HeroSection() {
         body:not(.intro-done) #hero { opacity: 0; }
 
         /* ───── NAV ───── */
-        .kc-nav {
-          position: fixed; top:0; left:0; right:0; z-index:100;
-          display:flex; align-items:center; justify-content:space-between;
-          padding:1.4rem 3rem;
-          transition: all 0.4s ease;
-          animation: navReveal 0.8s ease both;
-        }
-        .kc-nav.scrolled {
-          background: rgba(5,13,26,0.88);
-          backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
-          border-bottom:1px solid rgba(201,168,76,0.2);
-          padding:0.9rem 3rem;
-        }
-        .kc-nav-logo {
-          font-size:1rem; font-weight:900; letter-spacing:0.12em;
-          text-transform:uppercase; color:var(--white); position:relative;
-        }
-        .kc-nav-logo span { color:var(--gold); }
-        .kc-nav-links { display:flex; gap:2.5rem; list-style:none; }
-        .kc-nav-links a {
-          font-size:0.72rem; font-weight:700; letter-spacing:0.14em;
-          text-transform:uppercase; color:var(--silver);
-          transition:color 0.2s; position:relative;
-        }
-        .kc-nav-links a::after {
-          content:''; position:absolute; bottom:-3px; left:0;
-          width:0; height:1px; background:var(--gold); transition:width 0.3s;
-        }
-        .kc-nav-links a:hover { color:var(--gold); }
-        .kc-nav-links a:hover::after { width:100%; }
-        .kc-hamburger {
-          display:none; flex-direction:column; gap:5px;
-          cursor:pointer; background:none; border:none; padding:4px;
-        }
-        .kc-hamburger span {
-          display:block; width:24px; height:2px;
-          background:var(--white); border-radius:2px; transition:all 0.3s;
-        }
-        @media(max-width:768px){
-          .kc-nav{ padding:1rem 1.5rem; }
-          .kc-nav.scrolled{ padding:0.75rem 1.5rem; }
-          .kc-nav-links{ display:none; }
-          .kc-hamburger{ display:flex; }
-          .mobile-menu{
-            position:fixed; inset:0;
-            background:rgba(5,13,26,0.97);
-            z-index:99; display:flex; flex-direction:column;
-            align-items:center; justify-content:center; gap:2rem;
-          }
-          .mobile-menu a{
-            font-size:1.5rem; font-weight:700; letter-spacing:0.15em;
-            text-transform:uppercase; color:var(--white); transition:color 0.2s;
-          }
-          .mobile-menu a:hover{ color:var(--gold); }
-        }
-
-        @media(max-width:600px){
-          .hero-logo-outer        { width:170px; height:170px; }
-          .logo-conic-ring        { width:162px; height:162px; }
-          .logo-ring-1            { width:158px; height:158px; }
-          .logo-ring-2            { width:190px; height:190px; }
-          .logo-ring-3            { width:212px; height:212px; }
-          .logo-ring-4            { width:235px; height:235px; }
-          .hero-logo-coin         { width:136px; height:136px; }
-          .coin-edge              { width:136px; height:136px; }
-          .hero-chargers-bg       { width:156px !important; height:156px !important; }
-          .coin-purple-halo       { width:170px; height:170px; }
-          .hero-title             { font-size: clamp(2.8rem, 14vw, 5rem); }
-          .hero-subtitle          { font-size: 0.8rem; }
-          .hero-district-label    { font-size: 0.58rem; letter-spacing: 0.1em; }
-          .hero-cta-group         { gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
-          .hero-cta-primary,
-          .hero-cta-secondary     { font-size: 0.78rem; padding: 0.7rem 1.4rem; }
-        }
-
         /* ───── HERO ───── */
         .hero-section {
-          position:relative; width:100vw; height:100vh;
+          position:relative; width:100%; min-height:100svh; height:auto;
+          padding:112px 1rem 150px;
           display:flex; flex-direction:column;
           align-items:center; justify-content:center; overflow:hidden;
           background: radial-gradient(ellipse 100% 90% at 50% 50%, #081530 0%, #020709 100%);
@@ -458,7 +384,7 @@ export default function HeroSection() {
         .hero-logo-entrance {
           animation: slideFlipEntrance 2.2s cubic-bezier(0.16, 1, 0.3, 1) both;
           animation-delay: 0.2s;
-          margin-bottom:1.5rem;
+          margin-bottom:5rem;
           perspective: 1200px;
         }
         .hero-logo-outer {
@@ -628,7 +554,7 @@ export default function HeroSection() {
         /* ───── HERO TEXT ───── */
         .hero-content {
           position:relative; z-index:2;
-          text-align:center;
+          text-align:center; width:100%;
           display:flex; flex-direction:column;
           align-items:center; gap:0;
         }
@@ -741,6 +667,27 @@ export default function HeroSection() {
           background:linear-gradient(to bottom, var(--gold), transparent);
           opacity:0.6;
         }
+        @media(max-width:600px){
+          .hero-section { padding:100px 1rem 130px; }
+          .hero-logo-entrance { margin-bottom:3.5rem; }
+          .hero-logo-outer        { width:170px; height:170px; }
+          .logo-conic-ring        { width:162px; height:162px; }
+          .logo-ring-1            { width:158px; height:158px; }
+          .logo-ring-2            { width:190px; height:190px; }
+          .logo-ring-3            { width:212px; height:212px; }
+          .logo-ring-4            { width:235px; height:235px; }
+          .hero-logo-coin         { width:136px; height:136px; }
+          .coin-edge              { width:136px; height:136px; }
+          .hero-chargers-bg       { width:156px !important; height:156px !important; }
+          .coin-purple-halo       { width:170px; height:170px; }
+          .hero-title             { font-size: clamp(2.8rem, 14vw, 5rem); }
+          .hero-subtitle          { font-size: 0.8rem; }
+          .hero-district-label    { font-size: 0.58rem; letter-spacing: 0.1em; }
+          .hero-cta-group         { gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+          .hero-cta-primary,
+          .hero-cta-secondary     { font-size: 0.78rem; padding: 0.7rem 1.4rem; }
+        }
+
       `}</style>
 
 

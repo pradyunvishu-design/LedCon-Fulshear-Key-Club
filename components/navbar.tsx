@@ -111,12 +111,15 @@ export default function Navbar() {
   return (
     <>
       <style>{`
+        .kc-nav-reveal-zone {
+          position: fixed; inset: 0 0 auto; height: 16px; z-index: 100;
+        }
         /* ───── NAV ───── */
         .kc-nav {
           position: fixed; top:0; left:0; right:0; z-index:100;
           display:flex; align-items:center; justify-content:space-between;
           padding:1.2rem clamp(1rem, 3vw, 3rem); gap:2rem; background:rgba(5,13,26,0.92);
-          transition: padding 0.4s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+          transition: transform 0.3s ease, padding 0.4s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
           transform: translateZ(0);
           backface-visibility: hidden;
           overflow: hidden;
@@ -193,7 +196,17 @@ export default function Navbar() {
           .kc-nav-links{ display:none; }
           .kc-hamburger{ display:flex; }
         }
+        @media (hover: hover) and (pointer: fine) {
+          .kc-nav { transform: translateY(calc(-100% - 40px)); }
+          .kc-nav-reveal-zone:hover .kc-nav,
+          .kc-nav-reveal-zone:focus-within .kc-nav,
+          .kc-nav-reveal-zone.menu-open .kc-nav { transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .kc-nav { transition: none; }
+        }
       `}</style>
+      <div className={`kc-nav-reveal-zone${menuOpen ? " menu-open" : ""}`}>
       <nav className={`kc-nav${scrolled ? " scrolled" : ""}`}>
         <canvas ref={navCanvasRef} className="nav-particle-canvas" />
         <Link href="/" className="kc-nav-logo" style={{position:"relative",zIndex:1}}>CFHS <span>·</span> KEY CLUB</Link>
@@ -208,6 +221,7 @@ export default function Navbar() {
           <span /><span /><span />
         </button>
       </nav>
+      </div>
 
       <div id="mobile-navigation" aria-hidden={!menuOpen} inert={!menuOpen} className={`mobile-menu ${menuOpen ? "open" : ""}`}>
         {navLinks.map((l) => (
