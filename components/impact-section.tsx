@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const chapters = [
   {
@@ -72,6 +72,20 @@ const chapters = [
 
 export default function ImpactSection() {
   const [lightbox, setLightbox] = useState<{ src: string; caption: string } | null>(null);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.querySelector<HTMLButtonElement>(".lightbox-close")?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setLightbox(null);
+      if (event.key === "Tab") { event.preventDefault(); document.querySelector<HTMLButtonElement>(".lightbox-close")?.focus(); }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = previousOverflow; previousFocus?.focus(); };
+  }, [lightbox]);
 
   return (
     <section id="impact" style={{ padding: "8rem 0 4rem", position: "relative" }}>
@@ -153,7 +167,7 @@ export default function ImpactSection() {
         }
         @keyframes lbFadeIn { from { opacity: 0 } to { opacity: 1 } }
         .lightbox-img {
-          max-width: 90vw; max-height: 85vh;
+          max-width: 90vw; max-height: calc(100dvh - 160px);
           border-radius: 12px;
           box-shadow: 0 0 80px rgba(201,168,76,0.2), 0 30px 80px rgba(0,0,0,0.6);
           object-fit: contain;
@@ -164,7 +178,7 @@ export default function ImpactSection() {
           position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
           color: rgba(255,255,255,0.75); font-size: 0.85rem;
           letter-spacing: 0.04em; text-align: center;
-          max-width: 600px; padding: 0 1rem;
+          width:100%; max-width: 600px; padding: 0 1rem;
         }
         .lightbox-close {
           position: absolute; top: 1.25rem; right: 1.5rem;
@@ -195,11 +209,10 @@ export default function ImpactSection() {
         }
         .impact-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 1.5rem; max-width: 1000px; margin: 0 auto;
         }
-        .impact-card:nth-child(5) { grid-column: 2; }
-        .impact-card:nth-child(6) { grid-column: 3; }
+
         @media(max-width:800px){
           .impact-grid { grid-template-columns: repeat(2, 1fr); }
           .impact-card:nth-child(5), .impact-card:nth-child(6) { grid-column: auto; }
@@ -252,11 +265,11 @@ export default function ImpactSection() {
                   </div>
                   <div className={`photo-grid ${colClass}`}>
                     {ch.photos.map((p) => (
-                      <div key={p.src} className="photo-card" onClick={() => setLightbox(p)}>
+                      <button type="button" aria-label={p.caption} key={p.src} className="photo-card" onClick={() => setLightbox(p)}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={p.src} alt={p.caption} />
-                        <div className="photo-caption">{p.caption}</div>
-                      </div>
+                        <span className="photo-caption">{p.caption}</span>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -268,10 +281,10 @@ export default function ImpactSection() {
 
         {/* ── LIGHTBOX ── */}
         {lightbox && (
-          <div className="lightbox-overlay" onClick={() => setLightbox(null)}>
+          <div role="dialog" aria-modal="true" aria-label={lightbox.caption} className="lightbox-overlay" onClick={() => setLightbox(null)}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="lightbox-img" src={lightbox.src} alt={lightbox.caption} onClick={(e) => e.stopPropagation()} />
-            <button className="lightbox-close" onClick={() => setLightbox(null)}>✕</button>
+            <button aria-label="Close photo" className="lightbox-close" onClick={() => setLightbox(null)}>✕</button>
             {lightbox.caption && <p className="lightbox-caption">{lightbox.caption}</p>}
           </div>
         )}
@@ -312,7 +325,7 @@ export default function ImpactSection() {
             </ul>
             <h3 style={{ fontSize: "1.2rem", color: "white", marginBottom: "0.5rem" }}>This Year in Service</h3>
             <p style={{ color: "var(--silver)", fontSize: "0.95rem", lineHeight: "1.6" }}>
-              From packing lunches at the Fulshear Community Center every month to showing up at festivals, food drives, and school events across Fort Bend County — our members put in real hours for real people. Every number on this dashboard represents someone our club showed up for.
+              Members serve through food programs, community events, and school activities. Visit the calendar for confirmed dates, current volunteer opportunities, and sign-up details.
             </p>
           </div>
         </div>

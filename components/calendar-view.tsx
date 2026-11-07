@@ -45,9 +45,20 @@ export default function CalendarView() {
     if (!selectedEvent) return;
     const previousFocus = document.activeElement as HTMLElement | null;
     modalRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setSelectedEvent(null); };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedEvent(null);
+      if (event.key === "Tab") {
+        const controls = modalRef.current?.querySelectorAll<HTMLElement>('button, a[href], iframe');
+        if (!controls?.length) return;
+        const first = controls[0], last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    };
     document.addEventListener("keydown", closeOnEscape);
-    return () => { document.removeEventListener("keydown", closeOnEscape); previousFocus?.focus(); };
+    return () => { document.removeEventListener("keydown", closeOnEscape); document.body.style.overflow = previousOverflow; previousFocus?.focus(); };
   }, [selectedEvent]);
 
   const year = currentDate.getFullYear();
@@ -99,7 +110,7 @@ export default function CalendarView() {
         .cal-v-btn { padding: 0.65rem 2.2rem; border-radius: 40px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; color: #8899aa; background: transparent; border: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; text-transform: uppercase; }
         .cal-v-btn.active { background: linear-gradient(135deg, #1d4ed8, #3b82f6); color: white; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4); }
 
-        .cal-grid-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 2.5rem; align-items: start; }
+        .cal-grid-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
 
         .cal-glass { background: linear-gradient(160deg, rgba(18, 22, 42, 0.9), rgba(8, 12, 28, 0.97)); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; padding: 2rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05); transition: border-color 0.4s ease; position: relative; overflow: hidden; }
         .cal-glass::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
@@ -158,8 +169,8 @@ export default function CalendarView() {
         .cal-e-mon { font-size: 0.65rem; font-weight: 800; color: #c9a84c; text-transform: uppercase; margin-top: 5px; letter-spacing: 0.12em; }
 
         .cal-e-inf { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
-        .cal-e-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 0.4rem; }
-        .cal-e-nm { font-size: 0.95rem; font-weight: 800; color: white; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .cal-e-top { display: flex; flex-wrap:wrap; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 0.4rem; }
+        .cal-e-nm { font-size: 0.95rem; font-weight: 800; color: white; line-height: 1.3; overflow-wrap:anywhere; }
         .cal-e-bdg { font-size: 0.55rem; font-weight: 900; padding: 3px 10px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; flex-shrink: 0; }
         .cal-e-det { font-size: 0.75rem; color: rgba(255,255,255,0.5); display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .cal-e-det + .cal-e-det { margin-top: 2px; }
@@ -446,7 +457,7 @@ export default function CalendarView() {
         {selectedEvent && (
           <div className="cal-modal-dim" onClick={() => setSelectedEvent(null)}>
             <div className="cal-modal-box" role="dialog" aria-modal="true" aria-label={selectedEvent.title} ref={modalRef} onClick={e => e.stopPropagation()}>
-              <button className="cal-modal-cls" onClick={() => setSelectedEvent(null)} aria-label="Close">✕</button>
+              <button aria-label="Close event details" className="cal-modal-cls" onClick={() => setSelectedEvent(null)}>✕</button>
 
               {/* Map Area at Top */}
               <div className="cal-modal-map-area">
