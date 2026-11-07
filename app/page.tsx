@@ -16,7 +16,7 @@ const schoolinksSteps = [
   { step: "1", desc: "Log in via ClassLink and click on the \'Engage\' tab on the left sidebar.", img: "/schoolinks/step1.png" },
   { step: "2", desc: "Select \'Experience Tracking\' from the dropdown menu.", img: "/schoolinks/step2.png" },
   { step: "3", desc: "Find \'Volunteer Service Cord\' in Experience Tracking and click the blue \'+\' button to add an entry.", img: "/schoolinks/step3.png" },
-  { step: "4", desc: "Select Volunteer Service Cord, then enter the organization, supervisor email, date, hours/minutes, and a description of your service. Click Save and ask your supervisor to verify the email from info@schoolinks.com. Hours may take up to 30 minutes to appear after approval.", img: "/schoolinks/step4.png" },
+  { step: "4", desc: "Select Volunteer Service Cord, then enter the organization, supervisor email, date, hours/minutes, and a description of your service. Click Save and ask your supervisor to verify the email from info@schoolinks.com. Hours may take up to 30 minutes to appear after approval.", img: "/schoolinks/step4.png?v=entry-form-20261107" },
 ];
 
 // Custom style for centering the Step 3 image
