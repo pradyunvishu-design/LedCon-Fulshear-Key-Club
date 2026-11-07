@@ -2,18 +2,18 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const mousePos = useRef({ x: 0, y: 0 });
-
+  const router = useRouter();
 
   // ─── ADVANCED PARTICLE + AURORA CANVAS ───
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -360,9 +360,89 @@ export default function HeroSection() {
           50%      { opacity:0.8; }
         }
 
+        /* ── Hide hero until cinematic intro finishes ── */
+        #hero { transition: opacity 0.7s ease; }
+        body:not(.intro-done) #hero { opacity: 0; }
+
+        /* ───── NAV ───── */
+        .kc-nav {
+          position: fixed; top:0; left:0; right:0; z-index:100;
+          display:flex; align-items:center; justify-content:space-between;
+          padding:1.4rem 3rem;
+          transition: all 0.4s ease;
+          animation: navReveal 0.8s ease both;
+        }
+        .kc-nav.scrolled {
+          background: rgba(5,13,26,0.88);
+          backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+          border-bottom:1px solid rgba(201,168,76,0.2);
+          padding:0.9rem 3rem;
+        }
+        .kc-nav-logo {
+          font-size:1rem; font-weight:900; letter-spacing:0.12em;
+          text-transform:uppercase; color:var(--white); position:relative;
+        }
+        .kc-nav-logo span { color:var(--gold); }
+        .kc-nav-links { display:flex; gap:2.5rem; list-style:none; }
+        .kc-nav-links a {
+          font-size:0.72rem; font-weight:700; letter-spacing:0.14em;
+          text-transform:uppercase; color:var(--silver);
+          transition:color 0.2s; position:relative;
+        }
+        .kc-nav-links a::after {
+          content:''; position:absolute; bottom:-3px; left:0;
+          width:0; height:1px; background:var(--gold); transition:width 0.3s;
+        }
+        .kc-nav-links a:hover { color:var(--gold); }
+        .kc-nav-links a:hover::after { width:100%; }
+        .kc-hamburger {
+          display:none; flex-direction:column; gap:5px;
+          cursor:pointer; background:none; border:none; padding:4px;
+        }
+        .kc-hamburger span {
+          display:block; width:24px; height:2px;
+          background:var(--white); border-radius:2px; transition:all 0.3s;
+        }
+        @media(max-width:768px){
+          .kc-nav{ padding:1rem 1.5rem; }
+          .kc-nav.scrolled{ padding:0.75rem 1.5rem; }
+          .kc-nav-links{ display:none; }
+          .kc-hamburger{ display:flex; }
+          .mobile-menu{
+            position:fixed; inset:0;
+            background:rgba(5,13,26,0.97);
+            z-index:99; display:flex; flex-direction:column;
+            align-items:center; justify-content:center; gap:2rem;
+          }
+          .mobile-menu a{
+            font-size:1.5rem; font-weight:700; letter-spacing:0.15em;
+            text-transform:uppercase; color:var(--white); transition:color 0.2s;
+          }
+          .mobile-menu a:hover{ color:var(--gold); }
+        }
+
+        @media(max-width:600px){
+          .hero-logo-outer        { width:170px; height:170px; }
+          .logo-conic-ring        { width:162px; height:162px; }
+          .logo-ring-1            { width:158px; height:158px; }
+          .logo-ring-2            { width:190px; height:190px; }
+          .logo-ring-3            { width:212px; height:212px; }
+          .logo-ring-4            { width:235px; height:235px; }
+          .hero-logo-coin         { width:136px; height:136px; }
+          .coin-edge              { width:136px; height:136px; }
+          .hero-chargers-bg       { width:156px !important; height:156px !important; }
+          .coin-purple-halo       { width:170px; height:170px; }
+          .hero-title             { font-size: clamp(2.8rem, 14vw, 5rem); }
+          .hero-subtitle          { font-size: 0.8rem; }
+          .hero-district-label    { font-size: 0.58rem; letter-spacing: 0.1em; }
+          .hero-cta-group         { gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+          .hero-cta-primary,
+          .hero-cta-secondary     { font-size: 0.78rem; padding: 0.7rem 1.4rem; }
+        }
+
         /* ───── HERO ───── */
         .hero-section {
-          position:relative; width:100%; min-height:100svh; padding:96px 24px 32px;
+          position:relative; width:100vw; height:100vh;
           display:flex; flex-direction:column;
           align-items:center; justify-content:center; overflow:hidden;
           background: radial-gradient(ellipse 100% 90% at 50% 50%, #081530 0%, #020709 100%);
@@ -559,7 +639,7 @@ export default function HeroSection() {
           animation: fadeUpStagger 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: 1.2s;
         }
         .hero-title {
-          font-size: clamp(2.7rem, min(9vw, 11svh), 7rem);
+          font-size: clamp(4rem, 11vw, 9.5rem);
           font-weight:900; line-height:0.88;
           letter-spacing:-0.03em; margin-bottom:1.2rem;
           opacity:0; 
@@ -642,44 +722,24 @@ export default function HeroSection() {
         }
         .btn-hero-secondary:hover::before { transform:scaleX(1); }
 
-        /* Scale the complete composition with available screen height. */
-        .hero-content { width:100%; max-width:1100px; gap:12px; }
-        .hero-logo-entrance { margin-bottom:0; animation:none; }
-        .hero-logo-outer { width:clamp(112px, 20svh, 210px); height:clamp(112px, 20svh, 210px); }
-        .logo-conic-ring { width:96%; height:96%; }
-        .logo-ring-1 { width:94%; height:94%; }
-        .logo-ring-2 { width:107.5%; height:107.5%; }
-        .logo-ring-3 { width:124.5%; height:124.5%; }
-        .logo-ring-4 { width:140%; height:140%; }
-        .hero-logo-coin, .coin-edge { width:80%; height:80%; }
-        .coin-edge { width:100%; height:100%; }
-        .coin-purple-halo { width:95%; height:95%; }
-        .hero-chargers-bg { width:92.5% !important; height:92.5% !important; }
-        .hero-title, .hero-subtitle { margin-bottom:0; }
-        .hero-title { line-height:0.94; }
-        .hero-district-label { max-width:100%; font-size:0.65rem; letter-spacing:0.18em; }
-        .hero-subtitle { font-size:clamp(0.85rem, 1.4vw, 1rem); }
-        .hero-stats { color:var(--gold); font-weight:700; font-size:0.9rem; }
-        .hero-meeting { display:block; max-width:540px; padding:10px 20px; border:1px solid rgba(201,168,76,0.35); border-radius:12px; color:var(--silver); line-height:1.5; font-size:0.9rem; }
-        .hero-meeting:hover { border-color:var(--gold); background:rgba(201,168,76,0.06); }
-        .hero-title, .hero-subtitle, .hero-district-label, .hero-buttons { opacity:1; animation:none; }
-        .hero-title .line2 { animation:shimmerText 10s linear infinite; }
-        @media(max-height:740px) and (min-width:701px) {
-          .hero-section { padding-top:84px; padding-bottom:24px; }
-          .hero-content { gap:8px; }
-          .hero-logo-outer { width:17svh; height:17svh; }
-          .hero-title { font-size:clamp(2.7rem, 10svh, 6rem); }
-          .btn-hero-primary, .btn-hero-secondary { padding:0.7rem 1.6rem; }
+        /* Scroll hint */
+        .hero-scroll-entrance {
+          position:absolute; bottom:2.5rem; left:50%; z-index:2;
+          animation: fadeUpStagger 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: 2.2s;
         }
-        @media(max-width:600px) {
-          .hero-section { padding:92px 20px 32px; }
-          .hero-content { gap:16px; }
-          .hero-title { font-size:clamp(2.5rem, 12vw, 4.5rem); }
-          .hero-district-label { font-size:0.58rem; letter-spacing:0.12em; }
-          .hero-subtitle span { display:block; height:0; visibility:hidden; }
-          .hero-stats { font-size:0.8rem; }
-          .hero-meeting { font-size:0.85rem; }
-          .btn-hero-primary, .btn-hero-secondary { padding:0.8rem 1.4rem; }
+        .hero-scroll-hint {
+          display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+          animation:scrollBounce 2.5s infinite 3s; cursor:pointer;
+        }
+        .hero-scroll-hint span {
+          font-size:0.6rem; letter-spacing:0.22em; color:var(--silver);
+          opacity:0.45; text-transform:uppercase;
+        }
+        .hero-scroll-line {
+          width:1px; height:55px;
+          background:linear-gradient(to bottom, var(--gold), transparent);
+          opacity:0.6;
         }
       `}</style>
 
@@ -746,8 +806,8 @@ export default function HeroSection() {
             Building Tomorrow&apos;s Leaders
           </p>
 
-          <p className="hero-stats">240+ members · 1,925 service hours · 2026–2027</p>
-          <Link href="/calendar" className="hero-meeting">
+          <p style={{ color: "var(--gold)", marginBottom: "1rem", fontWeight: 700 }}>240+ members · 1,925 service hours · 2026–2027</p>
+          <Link href="/calendar" style={{ display: "block", maxWidth: "540px", margin: "0 auto 1.5rem", padding: "1rem", border: "1px solid rgba(201,168,76,0.35)", borderRadius: "12px", color: "var(--silver)", lineHeight: 1.6 }}>
             <strong style={{ color: "var(--gold)" }}>Next meeting: December 8, 2026 · 4:00 PM</strong><br />
             Library · Every other Tuesday
           </Link>
@@ -757,6 +817,15 @@ export default function HeroSection() {
           </div>
         </div>
 
+        <div className="hero-scroll-entrance">
+          <div
+            className="hero-scroll-hint"
+            onClick={() => router.push('/about')}
+          >
+            <span>Scroll</span>
+            <div className="hero-scroll-line" />
+          </div>
+        </div>
       </section>
     </>
   );
