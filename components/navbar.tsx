@@ -6,15 +6,27 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [passedLanding, setPassedLanding] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", fn);
+    const fn = () => {
+      setScrolled(window.scrollY > 40);
+      const hero = document.getElementById("hero");
+      // Once the landing section is passed, keep navigation visible on the way back up.
+      if (hero && hero.getBoundingClientRect().bottom <= 0) {
+        setPassedLanding(true);
+      }
+    };
+    window.addEventListener("scroll", fn, { passive: true });
+    window.addEventListener("resize", fn);
     fn(); // initialize
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", fn);
+      window.removeEventListener("resize", fn);
+    };
+  }, [pathname]);
 
   // Close menu on navigation
   useEffect(() => {
@@ -200,13 +212,14 @@ export default function Navbar() {
           .kc-nav { transform: translateY(calc(-100% - 40px)); }
           .kc-nav-reveal-zone:hover .kc-nav,
           .kc-nav-reveal-zone:focus-within .kc-nav,
+          .kc-nav-reveal-zone.pinned .kc-nav,
           .kc-nav-reveal-zone.menu-open .kc-nav { transform: translateY(0); }
         }
         @media (prefers-reduced-motion: reduce) {
           .kc-nav { transition: none; }
         }
       `}</style>
-      <div className={`kc-nav-reveal-zone${menuOpen ? " menu-open" : ""}`}>
+      <div className={`kc-nav-reveal-zone${menuOpen ? " menu-open" : ""}${passedLanding || pathname !== "/" ? " pinned" : ""}`}>
       <nav className={`kc-nav${scrolled ? " scrolled" : ""}`}>
         <canvas ref={navCanvasRef} className="nav-particle-canvas" />
         <Link href="/" className="kc-nav-logo" style={{position:"relative",zIndex:1}}>CFHS <span>·</span> KEY CLUB</Link>
