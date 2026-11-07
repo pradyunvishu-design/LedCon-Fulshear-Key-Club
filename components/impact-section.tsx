@@ -279,7 +279,7 @@ export default function ImpactSection() {
         {/* ── IMPACT DASHBOARD ── */}
         <div style={{ borderTop: "1px solid rgba(201,168,76,0.15)", paddingTop: "6rem" }}>
           <div className="impact-hero fade-in">
-            <p className="section-label" style={{ justifyContent: "center" }}>2025–2026 Service Year</p>
+            <p className="section-label" style={{ justifyContent: "center" }}>2026–2027 Service Year</p>
             <h2 className="impact-title">Service Impact <br/><span className="highlight">Dashboard.</span></h2>
             <p style={{ color: "var(--silver)", maxWidth: "500px", margin: "0 auto", lineHeight: "1.7", fontSize: "1.05rem" }}>
               Real data. Real impact. Tracking every hour, every project, and every community member we&apos;ve touched this year.
@@ -288,11 +288,11 @@ export default function ImpactSection() {
 
           <div className="impact-grid" style={{ marginBottom: "3rem" }}>
             {[
-              { val: "1,847", label: "Hours",         desc: "Total Service Hours" },
+              { val: "1,925", label: "Hours",         desc: "Total Service Hours" },
               { val: "32",    label: "Projects",      desc: "Service Events Completed" },
-              { val: "48",    label: "Members",       desc: "Active Members" },
-              { val: "~38",   label: "Avg Hours",     desc: "Per Member This Year" },
-              { val: "$4.2K", label: "Funds Raised",  desc: "For Charities & Causes" },
+              { val: "240+",    label: "Members",       desc: "Active Members" },
+              { val: "1st",   label: "Big Pitch",     desc: "ICON 2026 Competition" },
+              { val: "$6.5K", label: "Funds Raised",  desc: "For Charities & Causes" },
               { val: "12",    label: "Local Partners", desc: "Organizations Supported" },
             ].map((c, i) => (
               <div key={c.label} className="impact-card fade-in" style={{ transitionDelay: `${i * 0.1}s` }}>
@@ -304,6 +304,12 @@ export default function ImpactSection() {
           </div>
 
           <div style={{ maxWidth: "800px", margin: "0 auto", textAlign: "center", background: "rgba(201,168,76,0.05)", border: "1px solid rgba(201,168,76,0.2)", borderRadius: "16px", padding: "2rem" }}>
+            <h3 style={{ fontSize: "1.2rem", color: "white", marginBottom: "1rem" }}>Club Achievements</h3>
+            <ul style={{ color: "var(--gold)", lineHeight: 1.8, listStyle: "none", padding: 0, marginBottom: "1.5rem" }}>
+              <li>1st place in the Big Pitch Competition at ICON 2026</li>
+              <li>Highest Attendance at ICON 2026</li>
+              <li>$6,500+ raised for charities and community causes</li>
+            </ul>
             <h3 style={{ fontSize: "1.2rem", color: "white", marginBottom: "0.5rem" }}>This Year in Service</h3>
             <p style={{ color: "var(--silver)", fontSize: "0.95rem", lineHeight: "1.6" }}>
               From packing lunches at the Fulshear Community Center every month to showing up at festivals, food drives, and school events across Fort Bend County — our members put in real hours for real people. Every number on this dashboard represents someone our club showed up for.

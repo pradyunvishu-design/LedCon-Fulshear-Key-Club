@@ -1,66 +1,14 @@
+"use client";
+
+import { datedEvents as allEvents, recurringEvents, eventsForDate, serviceHourLogUrl, type ClubEvent as EventData } from "@/lib/club-events";
 import React, { useState, useEffect, useRef } from "react";
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-interface EventData {
-  title: string;
-  time: string;
-  loc: string;
-  type: string;
-  desc: string;
-}
-
-const allEvents: Record<string, EventData[]> = {
-  "2024-09-01": [{ title: "Lunches of Love", time: "Throughout the year", loc: "Fulshear Community Center, 8525 FM 359, Fulshear, TX 77441", type: "Recurring", desc: "Help pack and deliver lunches to families in need across the community." }],
-  "2024-09-13": [{ title: "Family Movie Night", time: "6:30 PM – 9:00 PM", loc: "Morgan Elementary, 32720 FM 1093, Fulshear, TX 77441", type: "Community", desc: "Enjoy a movie night with the community. Volunteers help set up seating, serve snacks, and clean up afterwards." }],
-  "2024-09-19": [{ title: "Painting and Pasta", time: "5:00 PM – 8:00 PM", loc: "21211 W Bellfort St, Richmond, TX 77406", type: "Community", desc: "A fun evening of painting and pasta for families. Help set up art stations and serve food." }],
-  "2024-09-20": [{ title: "Run Houston UH 10K & 5K", time: "7:00 AM – 11:00 AM", loc: "3874 Holman St, Houston, TX 77004", type: "Service", desc: "Volunteer passing out water and cheering on runners at the University of Houston." }],
-  "2024-10-01": [{ title: "Lunches of Love", time: "Throughout the year", loc: "Fulshear Community Center, 8525 FM 359, Fulshear, TX 77441", type: "Recurring", desc: "Help pack and deliver lunches to families in need across the community." }],
-  "2024-10-07": [{ title: "Pumpkin Patch Unloading", time: "8:00 AM – 12:00 PM", loc: "First United Methodist Church, 502 Hwy 36 S, Rosenberg, TX 77471", type: "Service", desc: "Help unload pumpkins for the annual church pumpkin patch fundraiser." }],
-  "2024-10-10": [{ title: "ARTreach Festival", time: "10:00 AM – 4:00 PM", loc: "6501 Memorial Dr, Houston, TX 77007", type: "Service", desc: "Volunteer at the ARTreach community arts festival in Houston." }],
-  "2024-10-11": [{ title: "Katy Rice Harvest Festival", time: "10:00 AM – 6:00 PM", loc: "5712 2nd St, Katy, TX 77493", type: "Community", desc: "Enjoy the harvest festival and help manage booths and activities." }, { title: "Pumpkin Patch", time: "9:00 AM – 1:00 PM", loc: "First United Methodist Church, 502 Hwy 36 S, Rosenberg, TX 77471", type: "Service", desc: "Help families pick pumpkins and manage the patch." }],
-  "2024-10-17": [{ title: "Movie Night", time: "6:30 PM – 9:00 PM", loc: "32720 FM 1093, Fulshear, TX 77441", type: "Community", desc: "Movie night at Morgan Elementary. Help with setup and refreshments." }],
-  "2024-10-18": [{ title: "DA Bike Ride for Survivors", time: "7:00 AM – 12:00 PM", loc: "Fort Bend County Fairgrounds, 4310 Hwy 36 S, Rosenberg, TX 77471", type: "Service", desc: "Support survivors at the annual District Attorney bike ride by volunteering at rest stops." }],
-  "2024-10-22": [{ title: "Bowie Fall Festival", time: "5:00 PM – 8:00 PM", loc: "2304 3rd St, Rosenberg, TX 77471", type: "Community", desc: "Help run carnival games and booths at the fall festival." }],
-  "2024-10-25": [{ title: "LOBT Trunk or Treat", time: "5:00 PM – 8:00 PM", loc: "11344 Rancho Bella Pkwy, Richmond, TX 77406", type: "Community", desc: "Trunk or treat in the Lakes of Bella Terra neighborhood. Decorate trunks and pass out candy." }, { title: "Fall Festival", time: "6:00 PM – 9:00 PM", loc: "Fulshear High School, 9302 Charger Way, Fulshear, TX 77441", type: "Community", desc: "The annual fall festival with games, food, and community fun." }],
-  "2024-11-01": [{ title: "Lunches of Love", time: "Throughout the year", loc: "Fulshear Community Center, 8525 FM 359, Fulshear, TX 77441", type: "Recurring", desc: "Help pack and deliver lunches to families in need across the community." }],
-  "2024-11-13": [{ title: "International Fest", time: "5:00 PM – 8:00 PM", loc: "21211 W Bellfort St, Richmond, TX 77406", type: "Community", desc: "Celebrate diversity at the international festival. Help decorate and run cultural booths." }],
-  "2024-11-15": [{ title: "Adopt a Highway", time: "8:00 AM – 11:00 AM", loc: "FM 1489, Simonton, TX 77476", type: "Service", desc: "Highway cleanup event. Gloves and trash bags are provided." }],
-  "2024-12-01": [{ title: "Cross Country Banquet", time: "6:00 PM – 8:30 PM", loc: "Fulshear High School, 9302 Charger Way, Fulshear, TX 77441", type: "Community", desc: "Celebrate the cross country season with athletes and families." }, { title: "Lunches of Love", time: "Throughout the year", loc: "Fulshear Community Center, 8525 FM 359, Fulshear, TX 77441", type: "Recurring", desc: "Help pack and deliver lunches to families in need across the community." }],
-  "2024-12-07": [{ title: "LOBT Christmas Event", time: "4:00 PM – 8:00 PM", loc: "Lakes of Bella Terra Clubhouse, 11344 Rancho Bella Pkwy, Richmond, TX 77406", type: "Community", desc: "Christmas celebration with Santa photos, hot cocoa, and holiday crafts." }],
-  "2024-12-13": [{ title: "Coastal Prairie Conservancy", time: "9:00 AM – 12:00 PM", loc: "Coastal Prairie Conservancy, 3000 Katy Hockley Cut Off Rd, Katy, TX 77493", type: "Service", desc: "Help with habitat restoration and trail maintenance at the conservancy." }],
-  "2024-12-16": [{ title: "Christmas Carols", time: "6:00 PM – 8:00 PM", loc: "21211 W Bellfort St, Richmond, TX 77406", type: "Community", desc: "Spread holiday cheer by singing carols at the community center." }],
-  "2025-01-01": [{ title: "Lunches of Love", time: "Throughout the year", loc: "Fulshear Community Center, 8525 FM 359, Fulshear, TX 77441", type: "Recurring", desc: "Help pack and deliver lunches to families in need across the community." }],
-  "2025-01-10": [{ title: "Advanced Academics UIL", time: "8:00 AM – 3:00 PM", loc: "4400 FM 359, Richmond, TX 77406", type: "Service", desc: "Volunteer at the UIL academic competition — help with registration and timing." }],
-  "2025-01-16": [{ title: "Melton Elementary Movie Night", time: "6:30 PM – 9:00 PM", loc: "21211 W Bellfort St, Richmond, TX 77406", type: "Community", desc: "Movie night at Melton Elementary. Set up, serve snacks, and clean up." }],
-  "2025-01-31": [{ title: "Houston Food Bank", time: "9:00 AM – 12:00 PM", loc: "535 Portwall St, Houston, TX 77029", type: "Service", desc: "Sort and package food at the Houston Food Bank distribution center." }],
-  "2025-02-01": [{ title: "Lunches of Love", time: "Throughout the year", loc: "Fulshear Community Center, 8525 FM 359, Fulshear, TX 77441", type: "Recurring", desc: "Help pack and deliver lunches to families in need across the community." }],
-  "2025-02-06": [{ title: "Father Daughter Dance", time: "6:00 PM – 9:00 PM", loc: "Morgan Elementary, 32720 FM 1093, Fulshear, TX 77441", type: "Community", desc: "Help set up decorations and manage photo booths at the dance." }],
-  "2025-02-07": [{ title: "Exposing Black Artistry", time: "6:00 PM – 9:00 PM", loc: "1522 Texas Pkwy, Missouri City, TX 77489", type: "Service", desc: "Support local artists at this cultural event celebrating Black artistry." }],
-  "2025-02-08": [{ title: "Katy Half Marathon & 5K", time: "6:00 AM – 11:00 AM", loc: "555 Katy Fort Bend Rd, Katy, TX 77494", type: "Service", desc: "Volunteer at water stations along the marathon route." }],
-  "2025-02-20": [{ title: "Daddy Daughter Dance", time: "6:00 PM – 9:00 PM", loc: "Lindsey Elementary, 2431 Joan Collier Trace, Katy, TX 77494", type: "Community", desc: "Help set up and photograph the Daddy Daughter Dance at Lindsey Elementary." }, { title: "Daddy Daughter Dance", time: "6:30 PM – 9:30 PM", loc: "Bowie Elementary, 2901 C A Johnson Dr, Rosenberg, TX 77471", type: "Community", desc: "Volunteer at the Bowie Elementary Daddy Daughter Dance." }],
-  "2025-02-27": [{ title: "Father Daughter Dance", time: "6:00 PM – 9:00 PM", loc: "21211 W Bellfort St, Richmond, TX 77406", type: "Community", desc: "Help coordinate the Father Daughter Dance at the community center." }],
-  "2025-03-01": [{ title: "Lunches of Love", time: "Throughout the year", loc: "Fulshear Community Center, 8525 FM 359, Fulshear, TX 77441", type: "Recurring", desc: "Help pack and deliver lunches to families in need across the community." }],
-  "2025-03-04": [{ title: "Wax Museum", time: "9:00 AM – 2:00 PM", loc: "Morgan Elementary, 32720 FM 1093, Fulshear, TX 77441", type: "Community", desc: "Help kids at the educational wax museum — assist with costume prep and crowd management." }],
-  "2025-03-07": [{ title: "Park Cleanup", time: "8:00 AM – 11:00 AM", loc: "Mary Jo Peckham Park, 5597 Gardenia Ln, Katy, TX 77493", type: "Service", desc: "Help keep our community parks beautiful! Bring water and wear closed-toe shoes." }],
-  "2025-03-24": [{ title: "Annual International Festival", time: "5:00 PM – 8:00 PM", loc: "Lindsey Elementary, 2431 Joan Collier Trace, Katy, TX 77494", type: "Community", desc: "Volunteer at the international festival — help set up cultural booths and serve food." }],
-  "2025-03-27": [{ title: "Easter Family Fun Day", time: "10:00 AM – 2:00 PM", loc: "Wendt Park Community Hall, 2100 5th St, Rosenberg, TX 77471", type: "Community", desc: "Help organize Easter egg hunts, games, and activities for families." }],
-  "2025-03-28": [{ title: "Bayou City Art Festival", time: "10:00 AM – 6:00 PM", loc: "Sam Houston Park, 1000 Bagby St, Houston, TX 77002", type: "Service", desc: "Volunteer at the Bayou City Art Festival — manage art booths and direct visitors." }],
-  "2025-04-01": [{ title: "Lunches of Love", time: "Throughout the year", loc: "Fulshear Community Center, 8525 FM 359, Fulshear, TX 77441", type: "Recurring", desc: "Help pack and deliver lunches to families in need across the community." }],
-  "2025-04-05": [{ title: "Spring Community Cleanup", time: "8:00 AM – 12:00 PM", loc: "Fulshear Heritage Park, 30530 2nd St, Fulshear, TX 77441", type: "Service", desc: "Join us for a spring cleanup of community trails and parks." }],
-  "2025-04-12": [{ title: "Earth Day Tree Planting", time: "9:00 AM – 1:00 PM", loc: "Cross Creek Ranch Nature Trail, 6450 Cross Creek Bend Ln, Fulshear, TX 77441", type: "Service", desc: "Celebrate Earth Day by planting native trees and shrubs along the nature trail." }],
-  "2025-04-19": [{ title: "Spring Carnival", time: "11:00 AM – 4:00 PM", loc: "Fulshear High School, 9302 Charger Way, Fulshear, TX 77441", type: "Community", desc: "Help run games, face painting, and food stands at the spring carnival." }],
-  "2025-05-01": [{ title: "Lunches of Love", time: "Throughout the year", loc: "Fulshear Community Center, 8525 FM 359, Fulshear, TX 77441", type: "Recurring", desc: "Help pack and deliver lunches to families in need across the community." }],
-  "2025-05-10": [{ title: "Mother's Day 5K Fun Run", time: "7:00 AM – 10:00 AM", loc: "Freedom Park, 511 Tenth St, Katy, TX 77493", type: "Service", desc: "Volunteer at the Mother's Day fun run — hand out medals and water." }],
-  "2025-05-17": [{ title: "End of Year Banquet", time: "6:00 PM – 9:00 PM", loc: "Fulshear High School, 9302 Charger Way, Fulshear, TX 77441", type: "Community", desc: "Celebrate the year's achievements with the Key Club. Awards, food, and fun!" }],
-  "2026-02-03": [{ title: "Key Club General Meeting", time: "4:00 PM – 5:00 PM", loc: "Fulshear High School · LGI Room", type: "Meeting", desc: "Monthly general meeting — 1st Tuesday of each month at 4:00 PM. All members required to attend." }],
-  "2026-03-03": [{ title: "Key Club General Meeting", time: "4:00 PM – 5:00 PM", loc: "Fulshear High School · LGI Room", type: "Meeting", desc: "Monthly general meeting — 1st Tuesday of each month at 4:00 PM. All members required to attend." }],
-  "2026-04-07": [{ title: "Key Club General Meeting", time: "4:00 PM – 5:00 PM", loc: "Fulshear High School · LGI Room", type: "Meeting", desc: "Monthly general meeting — 1st Tuesday of each month at 4:00 PM. All members required to attend." }],
-  "2026-05-05": [{ title: "Key Club General Meeting", time: "4:00 PM – 5:00 PM", loc: "Fulshear High School · LGI Room", type: "Meeting", desc: "Monthly general meeting — 1st Tuesday of each month at 4:00 PM. All members required to attend." }],
-};
 
 const TYPE_COLOR: Record<string, string> = {
+  Leadership: "#f97316",
   Meeting: "#3b82f6",
   Volunteer: "#eab308",
   Service: "#10b981",
@@ -69,6 +17,7 @@ const TYPE_COLOR: Record<string, string> = {
 };
 
 const TYPE_GRADIENT: Record<string, string> = {
+  Leadership: "linear-gradient(135deg, #f97316, #fdba74)",
   Meeting: "linear-gradient(135deg, #3b82f6, #60a5fa)",
   Volunteer: "linear-gradient(135deg, #eab308, #facc15)",
   Service: "linear-gradient(135deg, #10b981, #34d399)",
@@ -92,6 +41,15 @@ export default function CalendarView() {
     return () => observer.disconnect();
   }, [view, currentDate]);
 
+  useEffect(() => {
+    if (!selectedEvent) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    modalRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setSelectedEvent(null); };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => { document.removeEventListener("keydown", closeOnEscape); previousFocus?.focus(); };
+  }, [selectedEvent]);
+
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -108,27 +66,13 @@ export default function CalendarView() {
   };
   const goToToday = () => setCurrentDate(new Date());
 
-  // Match events by month+day across ALL years so every month shows its full history
-  const getEventsForDate = (day: number) => {
-    const suffix = `-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return Object.entries(allEvents)
-      .filter(([k]) => k.endsWith(suffix))
-      .flatMap(([, evs]) => evs);
-  };
-
+  const getEventsForDate = (day: number) => eventsForDate(year, month, day);
   const isToday = (day: number) => today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
-
   const sortedKeys = Object.keys(allEvents).sort();
-  const monthEvents = Array.from({ length: daysInMonth }).flatMap((_, i) => {
-    const day = i + 1;
-    const suffix = `-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return Object.entries(allEvents)
-      .filter(([k]) => k.endsWith(suffix))
-      .flatMap(([k, evs]) => evs.map(e => ({ ...e, date: k, dayNum: day })));
-  }).sort((a, b) => {
-    if (a.dayNum !== b.dayNum) return (a.dayNum ?? 0) - (b.dayNum ?? 0);
-    return a.date.localeCompare(b.date);
-  });
+  const monthPrefix = `${year}-${String(month + 1).padStart(2, "0")}-`;
+  const monthEvents = sortedKeys
+    .filter(key => key.startsWith(monthPrefix))
+    .flatMap(key => allEvents[key].map(event => ({ ...event, date: key, dayNum: Number(key.slice(-2)) })));
 
   const getMapUrl = (loc: string) => {
     return `https://maps.google.com/maps?q=${encodeURIComponent(loc)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
@@ -223,7 +167,7 @@ export default function CalendarView() {
         /* Modal */
         .cal-modal-dim { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: grid; place-items: center; z-index: 9999; opacity: 0; animation: calFadeIn 0.3s forwards; }
         @keyframes calFadeIn { to { opacity: 1; } }
-        .cal-modal-box { background: linear-gradient(180deg, rgba(18, 22, 40, 0.97), rgba(8, 12, 25, 0.99)); border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; padding: 0; max-width: 580px; width: 94%; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08); transform: translateY(20px); animation: calSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; overflow: hidden; }
+        .cal-modal-box { background: linear-gradient(180deg, rgba(18, 22, 40, 0.97), rgba(8, 12, 25, 0.99)); border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; padding: 0; max-height: 92vh; overflow-y: auto; max-width: 580px; width: 94%; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08); transform: translateY(20px); animation: calSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes calSlideUp { to { transform: translateY(0); } }
 
         .cal-modal-map-area { width: 100%; height: 220px; position: relative; background: rgba(0,0,0,0.3); }
@@ -246,7 +190,9 @@ export default function CalendarView() {
 
         .cal-modal-desc { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.95rem; color: rgba(255,255,255,0.75); line-height: 1.7; }
 
-        .cal-modal-actions { display: flex; gap: 0.8rem; margin-top: 1.5rem; }
+        .cal-schedule-note { color: #aab7c7; font-size: .9rem; line-height: 1.7; margin-bottom: 1.5rem; }
+        .cal-schedule-note a { color: #fde047; text-decoration: underline; }
+        .cal-modal-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.5rem; }
         .cal-modal-dir-btn { display: inline-flex; align-items: center; gap: 8px; padding: 0.7rem 1.5rem; border-radius: 14px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: none; transition: all 0.3s ease; border: none; cursor: pointer; }
         .cal-modal-dir-btn.primary { background: linear-gradient(135deg, #1d4ed8, #3b82f6); color: white; box-shadow: 0 4px 15px rgba(59,130,246,0.3); }
         .cal-modal-dir-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(59,130,246,0.4); }
@@ -330,6 +276,7 @@ export default function CalendarView() {
           <p>Browse upcoming meetings, volunteer events, and service opportunities in the Fulshear & Katy community.</p>
         </div>
 
+        <p className="cal-schedule-note">All times are Central Time. General meetings: every other Tuesday at 4:00 PM in the library. Next confirmed meeting: December 8, 2026.</p>
         <div className="cal-view-toggle">
           <button className={`cal-v-btn ${view === "month" ? "active" : ""}`} onClick={() => setView("month")}>Month</button>
           <button className={`cal-v-btn ${view === "list" ? "active" : ""}`} onClick={() => setView("list")}>All Events</button>
@@ -368,6 +315,10 @@ export default function CalendarView() {
                   return (
                     <div
                       key={day}
+                      role={evs.length ? "button" : undefined}
+                      tabIndex={evs.length ? 0 : undefined}
+                      aria-label={`${MONTHS[month]} ${day}, ${year}: ${evs.map(e => e.title).join(", ")}`}
+                      onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }}
                       className={`cal-d-cell${todayClass}${hasEventsClass}`}
                       onClick={() => evs.length > 0 && setSelectedEvent({ ...evs[0], date: `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`, dayNum: day })}
                       title={evs.length > 0 ? evs.map(e => e.title).join(', ') : undefined}
@@ -401,10 +352,10 @@ export default function CalendarView() {
               </div>
               <div className="cal-e-scrl">
                 {monthEvents.length > 0 ? monthEvents.map((e, i) => (
-                  <div key={i} className="cal-e-card" onClick={() => setSelectedEvent(e)} style={{ '--card-color': TYPE_COLOR[e.type] || '#fff' } as React.CSSProperties}>
+                  <div key={i} className="cal-e-card" role="button" tabIndex={0} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} onClick={() => setSelectedEvent(e)} style={{ '--card-color': TYPE_COLOR[e.type] || '#fff' } as React.CSSProperties}>
                     <style>{`.cal-e-card:hover::after { background: var(--card-color); }`}</style>
                     <div className="cal-e-date">
-                      <div className="cal-e-day">{e.dayNum}</div>
+                      <div className="cal-e-day">{e.dayNum}{e.endDate ? `–${Number(e.endDate.slice(-2))}` : ""}</div>
                       <div className="cal-e-mon">{MONTHS[month].substring(0, 3)} {e.date.split("-")[0]}</div>
                     </div>
                     <div className="cal-e-inf">
@@ -449,10 +400,10 @@ export default function CalendarView() {
                     <div className="cal-list-month-line" />
                   </div>
                   {events.map((e, i) => (
-                    <div key={i} className="cal-list-card" onClick={() => setSelectedEvent(e)}>
+                    <div key={i} className="cal-list-card" role="button" tabIndex={0} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); } }} onClick={() => setSelectedEvent(e)}>
                       <div className="cal-list-accent" style={{ background: TYPE_COLOR[e.type] || '#fff' }} />
                       <div className="cal-list-date">
-                        <div className="cal-list-day">{e.dayNum}</div>
+                        <div className="cal-list-day">{e.dayNum}{e.endDate ? `–${Number(e.endDate.slice(-2))}` : ""}</div>
                         <div className="cal-list-mon">{label.split(" ")[0].substring(0, 3)}</div>
                       </div>
                       <div className="cal-list-body">
@@ -473,10 +424,28 @@ export default function CalendarView() {
           </div>
         )}
 
+        <section aria-label="Year-round opportunities" className="cal-glass" style={{ marginTop: "2.5rem" }}>
+          <h2 style={{ color: "var(--gold)", marginBottom: "1rem" }}>Year-round opportunities</h2>
+          <p className="cal-schedule-note">Choose an available shift using each organization’s sign-up page. These opportunities do not have fixed club dates.</p>
+          {recurringEvents.map(event => (
+            <article key={event.title} style={{ marginBottom: "1.5rem", color: "var(--silver)", lineHeight: 1.7 }}>
+              <h3 style={{ color: "white" }}>{event.title}</h3>
+              <p>{event.time}</p>
+              <p>📍 {event.loc}</p>
+              <p>{event.desc}</p>
+              <div className="cal-modal-actions">
+                <a href={event.signupUrl} target="_blank" rel="noopener noreferrer" className="cal-modal-dir-btn primary">View sign-up</a>
+                <a href={event.sourceUrl} target="_blank" rel="noopener noreferrer" className="cal-modal-dir-btn secondary">Canvas details</a>
+              </div>
+            </article>
+          ))}
+          <p className="cal-schedule-note">After volunteering, submit your hours in both the <a href={serviceHourLogUrl} target="_blank" rel="noopener noreferrer">Key Club Service Hour Log</a> and <a href="/#schoolinks">SchooLinks</a>. Canvas links require a school login. Details reviewed November 7, 2026.</p>
+        </section>
+
         {/* Event Detail Modal */}
         {selectedEvent && (
           <div className="cal-modal-dim" onClick={() => setSelectedEvent(null)}>
-            <div className="cal-modal-box" ref={modalRef} onClick={e => e.stopPropagation()}>
+            <div className="cal-modal-box" role="dialog" aria-modal="true" aria-label={selectedEvent.title} ref={modalRef} onClick={e => e.stopPropagation()}>
               <button className="cal-modal-cls" onClick={() => setSelectedEvent(null)} aria-label="Close">✕</button>
 
               {/* Map Area at Top */}
@@ -512,11 +481,10 @@ export default function CalendarView() {
                 <div className="cal-modal-info-row">
                   <span className="cal-modal-info-icon">📅</span>
                   <span className="cal-modal-info-text">
-                    {selectedEvent.date ? (() => {
-                      const [y, m, d] = selectedEvent.date.split("-");
-                      const dt = new Date(+y, +m - 1, +d);
-                      return dt.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-                    })() : 'Date TBD'}
+                    {(() => {
+                      const format = (date: string) => new Date(date + "T12:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+                      return format(selectedEvent.startDate ?? selectedEvent.date) + (selectedEvent.endDate ? " – " + format(selectedEvent.endDate) : "");
+                    })()}
                   </span>
                 </div>
 
@@ -532,6 +500,10 @@ export default function CalendarView() {
 
                 <div className="cal-modal-desc">{selectedEvent.desc}</div>
 
+                <div className="cal-modal-actions">
+                  {selectedEvent.signupUrl && <a href={selectedEvent.signupUrl} target="_blank" rel="noopener noreferrer" className="cal-modal-dir-btn primary">View sign-up</a>}
+                  {selectedEvent.sourceUrl && <a href={selectedEvent.sourceUrl} target="_blank" rel="noopener noreferrer" className="cal-modal-dir-btn secondary">Canvas details</a>}
+                </div>
                 {selectedEvent.loc && !selectedEvent.loc.includes("Various") && (
                   <div className="cal-modal-actions">
                     <a

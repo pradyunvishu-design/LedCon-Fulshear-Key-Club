@@ -100,9 +100,11 @@ export default function DivisionSection() {
             </div>
             {[
               ["Division",          "Division 3S — T-O District"],
-              ["Lt. Governor",      "Meenakshiaayathi Chintalapally"],
+              ["Lt. Governor",      "Oswald Fernandez"],
               ["LTG Email",         "ltg3s@tokeyclub.com"],
-              ["District Governor", "Hannah Nguyen"],
+              ["Region",            "Region 12"],
+              ["Meetings",          "Library · Every other Tuesday · 4:00 PM"],
+              ["District Governor", "Bisan Abdalla — governor@tokeyclub.com"],
               ["Address",           "9302 Charger Way, Fulshear TX"],
               ["Phone",             "(832) 223-5000"],
             ].map(([k, v]) => (
