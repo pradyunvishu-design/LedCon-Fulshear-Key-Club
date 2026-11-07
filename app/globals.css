@@ -213,3 +213,13 @@ a { color: inherit; text-decoration: none; }
     transparent);
   margin: 0;
 }
+
+/* Keep content readable at laptop zoom levels and narrow widths. */
+html { scroll-padding-top:90px; }
+img { max-width:100%; }
+:focus-visible { outline:2px solid var(--gold-light); outline-offset:4px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior:auto; }
+  *, *::before, *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  .fade-in, .slide-in-left, .slide-in-right { opacity:1; transform:none; filter:none; }
+}
